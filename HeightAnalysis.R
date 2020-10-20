@@ -183,6 +183,9 @@ names(ht_stats) <- c("ID", "Species", "Treatment", "n", "MeanHeight", "SDHeight"
 # Remove HeightList since it has served its purpose
 remove(HeightList)
 
+# Prepare graphics device
+jpeg(filename = "Figure 1.jpeg", width = 826, height = 568, units = "px")
+
 # Graph mean heights
 ggplot(ht_stats, aes(x = Species, y = MeanHeight, fill = Treatment)) + 
   geom_bar(stat = "identity", position = position_dodge(0.7), width = 0.6) +
@@ -197,7 +200,8 @@ ggplot(ht_stats, aes(x = Species, y = MeanHeight, fill = Treatment)) +
         panel.grid.minor.x = element_blank(),
         panel.grid.minor.y = element_line())
 
-
+# Finalise graphics save
+dev.off()
 
 
 
@@ -225,16 +229,21 @@ HT.pdf <- function(NWHeight, WHeight){
 HT.pdfPlot <- function(HT_data, bottom){
   if(bottom == FALSE){
     plot(x = HT_data[, 1], y = HT_data[, 2], type = "l", xlim = c(0, 200), ylim = c(0, 0.03),
-         xaxt = "n", ylab = "Probability Density")
-    axis(side = 1, at = c(0, 50, 100, 150, 200), labels = FALSE)}
+         xaxt = "n", yaxt = "n", ylab = "Probability Density")
+    axis(side = 1, at = c(0, 50, 100, 150, 200), labels = FALSE)
+    axis(side = 2, at = c(0, 0.01, 0.02, 0.03), labels = TRUE)}
   if(bottom == TRUE){
     plot(x = HT_data[, 1], y = HT_data[, 2], type = "l", xlim = c(0, 200), ylim = c(0, 0.03),
-         xlab = "Flower Height (cm)", ylab = "Probability Density")}
+         xlab = "Flower Height (cm)", yaxt = "n", ylab = "Probability Density")
+    axis(side = 2, at = c(0, 0.01, 0.02, 0.03), labels = TRUE)}
   polygon(x = c(HT_data[, 1], rev(HT_data[, 1])), 
           y = c(HT_data[, 3], rev(HT_data[, 4])), col = alpha("black", alpha = 0.2), border = NA)
   lines(x = HT_data[, 1], y = HT_data[, 5], type = "l", col = "red")
   polygon(x = c(HT_data[, 1], rev(HT_data[, 1])), 
           y = c(HT_data[, 6], rev(HT_data[, 7])), col = alpha("red", alpha = 0.2), border = NA)}
+
+# Prepare graphics device
+jpeg(filename = "Figure 2.jpeg", width = 826, height = 568, units = "px")
 
 # Create blank page
 grid.newpage()
@@ -272,6 +281,10 @@ grid.segments(x0 = rep(0.813, 2), y0 = c(0.868, 0.898), x1 = rep(0.833, 2), y1 =
 grid.text(label = c("A", "B"), x = rep(0.11, 2), y = c(0.90, 0.47),
           hjust = 0, gp = gpar(cex = 1.1))
 popViewport()
+
+# Deactivate grid layout; finalise graphics save
+popViewport()
+dev.off()
 
 # Kolmogorov-Smirnov test for NW/W CN and NW/W CA
 # The NW and W height distributions display significant difference for CN and CA
@@ -407,6 +420,9 @@ WNW.pdfPlot <- function(WNW_data, bottom){
   polygon(x = c(WNW_data[, 1], rev(WNW_data[, 1])), 
           y = c(WNW_data[, 6], rev(WNW_data[, 7])), col = alpha("red", alpha = 0.2), border = NA)}
 
+# Prepare graphics device
+jpeg(filename = "Figure 3.jpeg", width = 826, height = 568, units = "px")
+
 # Create blank page
 grid.newpage()
 plot.new()
@@ -444,6 +460,10 @@ grid.text(label = c("A", "B"), x = rep(0.11, 2), y = c(0.90, 0.47),
           hjust = 0, gp = gpar(cex = 1.1))
 popViewport()
 
+# Deactivate grid layout; finalise graphics save
+popViewport()
+dev.off()
+
 # Kolmogorov-Smirnov test for NW/W CN and NW/W CA
 # The NW and W dispersal kernels display significant difference for CN and CA
 ks.test(hBoot_dat_WNW1[, 2], hBoot_dat_WNW1[, 5], alt = "two.sided")
@@ -454,14 +474,6 @@ ks.test(hBoot_dat_WNW2[, 2], hBoot_dat_WNW2[, 5], alt = "two.sided")
 
 
 ##### Plot dispersal kernels: mean height vs height distribution ------------------------------------------
-
-# Create blank page
-grid.newpage()
-plot.new()
-
-# Set grid layout and activate it
-gly <- grid.layout(2400, 800)
-pushViewport(viewport(layout = gly))
 
 # Function to calculate dispersal kernels with mean height or distribution of heights
 # For distribution, sample 500 release heights with 100 seed releases each, and repeat 10 times
@@ -484,7 +496,7 @@ MHD.pdf <- function(heights){
 MHD.pdfPlot <- function(PDF_Data, LColour, bNum, bLab){
   if(bNum == FALSE){
     plot(x = PDF_Data[, 1], y = PDF_Data[, 2], type = "l", col = LColour, xlim = c(0, 7), ylim = c(0, 0.6),
-                        xaxt = "n", ylab = "Probability Density")
+         xaxt = "n", ylab = "Probability Density")
     axis(side = 1, at = 0:7, labels = FALSE)}
   if(bNum == TRUE){
     plot(x = PDF_Data[, 1], y = PDF_Data[, 2], type = "l", col = "red", xlim = c(0, 7), ylim = c(0, 0.6),
@@ -494,6 +506,17 @@ MHD.pdfPlot <- function(PDF_Data, LColour, bNum, bLab){
   lines(x = PDF_Data[, 1], y = PDF_Data[, 5], type = "l", lty = 2, col = LColour)
   polygon(x = c(PDF_Data[, 1], rev(PDF_Data[, 1])), 
           y = c(PDF_Data[, 6], rev(PDF_Data[, 7])), col = alpha(LColour, alpha = 0.2), border = NA)}
+
+# Prepare graphics device
+jpeg(filename = "Figure 4.jpeg", width = 826, height = 568, units = "px")
+
+# Create blank page
+grid.newpage()
+plot.new()
+
+# Set grid layout and activate it
+gly <- grid.layout(2400, 800)
+pushViewport(viewport(layout = gly))
 
 # CN non-warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 1:600, layout.pos.col = 1:800))
@@ -542,6 +565,10 @@ grid.segments(x0 = rep(0.803, 4), y0 = c(0.857, 0.877, 0.897 , 0.917),
 grid.text(label = c("A", "B", "C", "D"), x = rep(0.11, 4), y = c(0.92, 0.71, 0.44, 0.23),
           hjust = 0, gp = gpar(cex = 1.1))
 popViewport()
+
+# Deactivate grid layout; finalise graphics save
+popViewport()
+dev.off()
 
 # Kolmogorov-Smirnov test for NW/W CN and NW/W CA
 # The NW and W dispersal kernels display significant difference for CN and CA
@@ -628,93 +655,3 @@ MHD.ddpPlot("CN", "W")
 MHD.ddpPlot("CA", "NW")
 MHD.ddpPlot("CA", "W")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-ggplot() +
-  stat_density(aes(x = WALD.h(10000, ht_CN_NW$Height)), bw = 0.05, geom = "line",  colour = "black", size = 1.1) +
-  stat_density(aes(x = WALD.h(10000, ht_CN_W$Height)), bw = 0.05, geom = "line", colour = "orange", size = 1.1) +
-  scale_x_continuous(expand = c(0, 0), limits = c(0.001, 15)) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, 0.55)) +
-  xlab("Dispersal Distance (m)") +
-  ylab("Probability Density") +
-  theme(panel.grid.major.x = element_blank(),
-        panel.grid.major.y = element_blank(),
-        panel.grid.minor.x = element_blank(),
-        panel.grid.minor.y = element_blank(),
-        panel.border = element_rect(colour = "black", fill = NA, size = 1),
-        panel.background = element_rect(fill = "white"))
-
-ggplot() +
-  stat_density(aes(x = WALD.h(10000, ht_CN_NW$Height)), bw = 0.05, geom = "line",  colour = "black", size = 1.1) +
-  stat_density(aes(x = WALD.h(10000, ht_CN_W$Height)), bw = 0.05, geom = "line", colour = "orange", size = 1.1) +
-  scale_x_continuous(expand = c(0, 0), limits = c(0.001, 100), trans = "log10") +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, 0.75)) +
-  xlab("Dispersal Distance (m)") +
-  ylab("Probability Density") +
-  theme(panel.grid.major.x = element_blank(),
-        panel.grid.major.y = element_blank(),
-        panel.grid.minor.x = element_blank(),
-        panel.grid.minor.y = element_blank(),
-        panel.border = element_rect(colour = "black", fill = NA, size = 1),
-        panel.background = element_rect(fill = "white"))
-
-
-
-
-
-
-
-
-
-
-
-plot(density(WALD.h(10000, ht_CN_NW$Height), from = 0, to = 50, bw = 0.05), xlim = c(0, 5))
-lines(density(WALD.h(10000, ht_CN_W$Height), from = 0, to = 50, bw = 0.05), col = "orange")
-
-
-
-
-log10Tck <- function(side, type){
-  lim <- switch(side, 
-                x = par('usr')[1:2],
-                y = par('usr')[3:4],
-                stop("side argument must be 'x' or 'y'"))
-  at <- floor(lim[1]) : ceiling(lim[2])
-  return(switch(type, 
-                minor = outer(1:9, 10^(min(at):max(at))),
-                major = 10^at,
-                stop("type argument must be 'major' or 'minor'")
-  ))
-}
-
-
-
-plot(density(WALD.h(10000, ht_CN_NW$Height), from = 0, to = 100, bw = 0.001), log = "x", xlim = c(0.01, 50), las = 1, axes = FALSE)
-axis(1, at=log10Tck('x','major'), tcl= 0.2)
-axis(1, at=log10Tck('x','minor'), tcl= 0.1, labels=NA)
-axis(2)
-lines(density(WALD.h(10000, ht_CN_W$Height), from = 0, to = 100, bw = 0.001), col = "orange")
-box()
-
-
-
-
-plot(density(WALD.h(10000, ht_CA_NW$Height), from = 0, to = 100, bw = 0.05), xlim = c(0, 20))
-#plot(density(WALD.h(10000, ht_CA_NW$Height), from = 0, to = 100, bw = 0.05), log = "x", las = 1)
-lines(density(WALD.h(10000, ht_CA_W$Height), from = 0, to = 100, bw = 0.05), col = "orange")
