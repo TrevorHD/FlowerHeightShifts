@@ -173,7 +173,7 @@ HeightList <- list(ht_CN_NW$Height, ht_CN_W$Height, ht_CA_NW$Height, ht_CA_W$Hei
 ht_stats <- data.frame(matrix(rep(NA, 28), nrow = 4))
 ht_stats[, 1] <- c("CN-NW", "CN-W", "CA-NW", "CA-W")
 ht_stats[, 2] <- c(rep("CN", 2), rep("CA", 2))
-ht_stats[, 3] <- rep(c("NW", "W"), 2)
+ht_stats[, 3] <- rep(c("Not Warmed", "Warmed"), 2)
 ht_stats[, 4] <- sapply(HeightList, length)
 ht_stats[, 5] <- sapply(HeightList, mean)
 ht_stats[, 6] <- sapply(HeightList, sd)
@@ -192,16 +192,26 @@ ggplot(ht_stats, aes(x = Species, y = MeanHeight, fill = Treatment)) +
   geom_errorbar(aes(ymin = MeanHeight - SEHeight, ymax = MeanHeight + SEHeight), 
                 width = 0.3, position = position_dodge(0.7)) +
   coord_cartesian(ylim = c(70, 120)) +
-  scale_fill_manual(values = c("gray72", "gray30")) +
+  scale_fill_manual(values = c("gray30", "red")) +
   xlab("Species") +
   ylab("Mean Flower Height (cm)") +
   theme(panel.grid.major.x = element_blank(),
-        panel.grid.major.y = element_line(),
+        panel.grid.major.y = element_line(colour = "gray90"),
         panel.grid.minor.x = element_blank(),
-        panel.grid.minor.y = element_line())
+        panel.grid.minor.y = element_blank(),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1),
+        panel.background = element_rect(fill = "white"),
+        legend.background	= element_blank(),
+        legend.position = c(0.08, 0.925),
+        axis.text.y = element_text(size = 12),
+        axis.title.y = element_text(size = 14, margin = margin(t = 0, r = 10, b = 0, l = 0)),
+        axis.text.x = element_text(size = 12),
+        axis.title.x = element_text(size = 14))
 
 # Finalise graphics save
 dev.off()
+
+
 
 
 
@@ -260,6 +270,9 @@ par(new = TRUE)
 par(mar = c(2, 4, 2, 1))
 hBoot_dat_HD1 <- HT.pdf(ht_CN_NW$Height, ht_CN_W$Height)
 HT.pdfPlot(hBoot_dat_HD1, bottom = FALSE)
+#abline(v = c(subset(ht_stats, Species == "CN" & Treatment == "Not Warmed")$MeanHeight,
+#             subset(ht_stats, Species == "CN" & Treatment == "Warmed")$MeanHeight),
+#       col = c("black", "red"), lty = c(2, 2))
 popViewport()
 
 # CA non-warmed vs warmed
@@ -269,7 +282,12 @@ par(new = TRUE)
 par(mar = c(4, 4, 0, 1))
 hBoot_dat_HD2 <- HT.pdf(ht_CA_NW$Height, ht_CA_W$Height)
 HT.pdfPlot(hBoot_dat_HD2, bottom = TRUE)
+#abline(v = c(subset(ht_stats, Species == "CA" & Treatment == "Not Warmed")$MeanHeight,
+#             subset(ht_stats, Species == "CA" & Treatment == "Warmed")$MeanHeight),
+#       col = c("black", "red"), lty = c(2, 2))
 popViewport()
+
+# Note: commented out code above adds a vertical line at the mean
 
 # Create legend
 grid.text(label = c("Warmed", "Not Warmed"), x = rep(0.84, 2), y = c(0.87, 0.90),
@@ -508,7 +526,7 @@ MHD.pdfPlot <- function(PDF_Data, LColour, bNum, bLab){
           y = c(PDF_Data[, 6], rev(PDF_Data[, 7])), col = alpha(LColour, alpha = 0.2), border = NA)}
 
 # Prepare graphics device
-jpeg(filename = "Figure 4.jpeg", width = 826, height = 568, units = "px")
+jpeg(filename = "Figure 4.jpeg", width = 826, height = 825, units = "px")
 
 # Create blank page
 grid.newpage()
