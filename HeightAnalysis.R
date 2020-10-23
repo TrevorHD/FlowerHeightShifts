@@ -346,11 +346,11 @@ WALD.b <- function(n, H){
   # Let n be the number of simulation replications
   # Let H be the seed release height
   
-  # Mean wind speed
-  Um <- WSValuesMean
+  # Simulate wind speeds from empirical distribution of wind speeds
+  Um <- rnorm(n, sample(WSValues, size = n, replace = TRUE), WSValues_PDF$bw)
   
-  # Mean terminal velocity
-  f <- TVValuesMean
+  # Simulate terminal velocities from empirical distribution of terminal velocities
+  f <- rnorm(n, sample(TVValues, size = n, replace = TRUE), TVValues_PDF$bw)
   
   # Calculate ustar, the friction velocity
   ustar <- K*Um*(log((zm - d)/z0))^(-1)
@@ -405,16 +405,16 @@ WALD.h <- function(n, h){
 
 # Set up function to create a single sample and estimate PDF
 WALD.hBoot <- function(heights, hDist){
-  if(hDist == TRUE){hList <- WALD.h(500, heights)}
-  if(hDist == FALSE){hList <- na.omit(as.numeric(WALD.b(50000, mean(heights))))}
+  if(hDist == TRUE){hList <- WALD.h(100, heights)}
+  if(hDist == FALSE){hList <- na.omit(as.numeric(WALD.b(10000, mean(heights))))}
   hList.dens <- approxfun(density(hList))
   return(hList.dens(seq(0, 8, by = 0.01)))}
 
 # Function to bootstrap dispersal kernels and estimate 95% bootstrap interval
-# For each kernel sample 500 release heights with 100 seed releases each, and repeat 10 times
+# For each kernel sample 100 release heights with 100 seed releases each, and repeat 1000 times
 WNW.pdf <- function(NWHeight, WHeight){
-  hBoot_1 <- data.frame(replicate(10, WALD.hBoot(NWHeight, hDist = TRUE), simplify = "matrix"))
-  hBoot_2 <- data.frame(replicate(10, WALD.hBoot(WHeight, hDist = TRUE), simplify = "matrix"))
+  hBoot_1 <- data.frame(replicate(1000, WALD.hBoot(NWHeight, hDist = TRUE), simplify = "matrix"))
+  hBoot_2 <- data.frame(replicate(1000, WALD.hBoot(WHeight, hDist = TRUE), simplify = "matrix"))
   return(data.frame(seq(0, 8, by = 0.01),
                     apply(X = hBoot_1, MARGIN = 1, FUN = mean),
                     apply(X = hBoot_1, MARGIN = 1, FUN = quantile, probs = 0.025),
@@ -494,12 +494,12 @@ ks.test(hBoot_dat_WNW2[, 2], hBoot_dat_WNW2[, 5], alt = "two.sided")
 ##### Plot dispersal kernels: mean height vs height distribution ------------------------------------------
 
 # Function to calculate dispersal kernels with mean height or distribution of heights
-# For distribution, sample 500 release heights with 100 seed releases each, and repeat 10 times
-# For mean, simulate 50000 seed release events, and repeat 10 times
-# Either way, each bootstrap has 50000 seed release events and is repeated 10 times
+# For distribution, sample 100 release heights with 100 seed releases each, and repeat 1000 times
+# For mean, simulate 10000 seed release events, and repeat 1000 times
+# Either way, each bootstrap has 50000 seed release events and is repeated 1000 times
 MHD.pdf <- function(heights){
-  hBoot_1 <- data.frame(replicate(10, WALD.hBoot(heights, hDist = TRUE), simplify = "matrix"))
-  hBoot_2 <- data.frame(replicate(10, WALD.hBoot(heights/100, hDist = FALSE), simplify = "matrix"))
+  hBoot_1 <- data.frame(replicate(1000, WALD.hBoot(heights, hDist = TRUE), simplify = "matrix"))
+  hBoot_2 <- data.frame(replicate(1000, WALD.hBoot(heights/100, hDist = FALSE), simplify = "matrix"))
   return(data.frame(seq(0, 8, by = 0.01),
                     apply(X = hBoot_1, MARGIN = 1, FUN = mean),
                     apply(X = hBoot_1, MARGIN = 1, FUN = quantile, probs = 0.025),
