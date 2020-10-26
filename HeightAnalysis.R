@@ -491,6 +491,70 @@ ks.test(hBoot_dat_WNW2[, 2], hBoot_dat_WNW2[, 5], alt = "two.sided")
 
 
 
+##### Analyse dispersal kernels: warmed vs not warmed tail-end dispersal distances ------------------------
+
+# Set up function to create bootstrapped sample and canculate nth percentiles
+WALD.hBoot2 <- function(heights, hDist){
+  if(hDist == TRUE){hList <- WALD.h(100, heights)}
+  if(hDist == FALSE){hList <- na.omit(as.numeric(WALD.b(10000, mean(heights))))}
+  return(quantile(hList, probs = c(0.9, 0.95, 0.99, 0.999)))}
+
+# Function to calculate nth percentile dispersal distances, particularly on right tail
+# For distribution, sample 100 release heights with 100 seed releases each, and repeat 1000 times
+# For mean, simulate 10000 seed release events, and repeat 1000 times
+# Either way, each bootstrap has 10000 seed release events and is repeated 1000 times
+WNW.rtail <- function(NWHeight, WHeight, Species){
+  hBoot_1 <- data.frame(replicate(1000, WALD.hBoot2(NWHeight, hDist = TRUE), simplify = "matrix"))
+  hBoot_2 <- data.frame(replicate(1000, WALD.hBoot2(WHeight, hDist = TRUE), simplify = "matrix"))
+  hBoot_dat <- data.frame(cbind(rep(c(90, 95, 99, 99.9), 2), c(rep("Not Warmed", 4), rep("Warmed", 4))), 
+                          rep(Species, 8),
+                          c(apply(X = hBoot_1, MARGIN = 1, FUN = mean),
+                            apply(X = hBoot_2, MARGIN = 1, FUN = mean)),
+                          c(apply(X = hBoot_1, MARGIN = 1, FUN = quantile, probs = 0.025),
+                            apply(X = hBoot_2, MARGIN = 1, FUN = quantile, probs = 0.025)),
+                          c(apply(X = hBoot_1, MARGIN = 1, FUN = quantile, probs = 0.975),
+                            apply(X = hBoot_2, MARGIN = 1, FUN = quantile, probs = 0.975)),
+                          row.names = NULL)
+  names(hBoot_dat) <- c("DistancePercentile", "Treatment", "Species", "Mean", "Lower", "Upper")
+  return(hBoot_dat)}
+
+# Plot the dispersal percentiles and the corresponding distances
+# Error bars indicate the range in which 95% of the bootstrapped simulations are
+# Points indicate mean values
+WNW.rtailPlot <- function(data, Species){
+  ggplot(data, aes(x = DistancePercentile, y = Mean, fill = Treatment)) + 
+    geom_bar(stat = "identity", position = position_dodge(0.7), width = 0.6) +
+    geom_errorbar(aes(ymin = Lower, ymax = Upper), 
+                  width = 0.3, position = position_dodge(0.7)) +
+    coord_cartesian(ylim = c(0, 80)) +
+    scale_fill_manual(values = c("gray30", "red")) +
+    xlab("Dispersal Distance Percentile") +
+    ylab("Dispersal Distance (m)") +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major.y = element_line(colour = "gray90"),
+          panel.grid.minor.x = element_blank(),
+          panel.grid.minor.y = element_blank(),
+          panel.border = element_rect(colour = "black", fill = NA, size = 1),
+          panel.background = element_rect(fill = "white"),
+          legend.background	= element_blank(),
+          legend.position = c(0.08, 0.925),
+          axis.text.y = element_text(size = 12),
+          axis.title.y = element_text(size = 14, margin = margin(t = 0, r = 10, b = 0, l = 0)),
+          axis.text.x = element_text(size = 12),
+          axis.title.x = element_text(size = 14))}
+
+# Plot for CN warmed vs unwarmed
+hboot_dat_RT1 <- WNW.rtail(ht_CN_NW$Height, ht_CN_W$Height, "CN")
+WNW.rtailPlot(hboot_dat_RT1, "CN")
+
+# Plot for CA warmed vs unwarmed
+hboot_dat_RT2 <- WNW.rtail(ht_CA_NW$Height, ht_CA_W$Height, "CA")
+WNW.rtailPlot(hboot_dat_RT2, "CA")
+
+
+
+
+
 ##### Plot dispersal kernels: mean height vs height distribution ------------------------------------------
 
 # Function to calculate dispersal kernels with mean height or distribution of heights
