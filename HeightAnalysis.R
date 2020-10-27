@@ -26,15 +26,30 @@ data_ht <- read.xlsx(file.choose(), sheetName = "Flowers")
 # Analyses below will focus on warmed (W) vs not warmed (NW)
 
 # Exclude partially-warmed (PW) treatments from analyses because we are not interested in them
-data_ht_xPW <- subset(data_ht, TRT != "PW")
+# Examine heights for only flowers
+data_ht <- subset(data_ht, TRT != "PW" & (Type == "f" | Type == "s"))
 
 # Grab values for CN flower heights, for each treatment group
-ht_CN_NW <- subset(data_ht, Species == "CN" & TRT == "NW" & (Type == "f" | Type == "s"))
-ht_CN_W <- subset(data_ht, Species == "CN" & TRT == "W" & (Type == "f" | Type == "s"))
+ht_CN_NW <- subset(data_ht, Species == "CN" & TRT == "NW")
+ht_CN_W <- subset(data_ht, Species == "CN" & TRT == "W")
 
 # Grab values for CA flower heights, for each treatment group
-ht_CA_NW <- subset(data_ht, Species == "CA" & TRT == "NW" & (Type == "f" | Type == "s"))
-ht_CA_W <- subset(data_ht, Species == "CA" & TRT == "W" & (Type == "f" | Type == "s"))
+ht_CA_NW <- subset(data_ht, Species == "CA" & TRT == "NW")
+ht_CA_W <- subset(data_ht, Species == "CA" & TRT == "W")
+
+# Get maximum flower heights for each plant
+data_ht %>% 
+  subset(Type == "f" | Type == "s") %>% 
+  group_by(Row, Group, Plant, Species, TRT) %>% 
+  summarise(max = max(Height)) -> data_ht_max
+
+# Grab values for CN max flower heights, for each treatment group
+ht_CN_NW_max <- subset(data_ht_max, Species == "CN" & TRT == "NW")
+ht_CN_W_max <- subset(data_ht_max, Species == "CN" & TRT == "W")
+
+# Grab values for CA max flower heights, for each treatment group
+ht_CA_NW_max <- subset(data_ht_max, Species == "CA" & TRT == "NW")
+ht_CA_W_max <- subset(data_ht_max, Species == "CA" & TRT == "W")
 
 
 
@@ -90,7 +105,7 @@ qqline(ht_CN_W$Height)
 
 # Use Levene's Test to assess if there are differences in variance between groups
 # Test indicates that there is not significant difference in variance
-leveneTest(Height ~ TRT, data = subset(data_ht_xPW, Species == "CN" & (Type == "f" | Type == "s")))
+leveneTest(Height ~ TRT, data = subset(data_ht, Species == "CN" & (Type == "f" | Type == "s")))
 
 # We will perform Student's t-test (equal variance) on warmed vs non-warmed treatments
 # The test should be fine given only minor deviations from normality
@@ -152,7 +167,7 @@ qqline(ht_CA_W$Height)
 
 # Use Levene's Test to assess if there are differences in variance between groups
 # Test indicates that there is significant difference in variance
-leveneTest(Height ~ TRT, data = subset(data_ht_xPW, Species == "CA" & (Type == "f" | Type == "s")))
+leveneTest(Height ~ TRT, data = subset(data_ht, Species == "CA" & (Type == "f" | Type == "s")))
 
 # We will perform Welch's t-test (unequal variance) on warmed vs non-warmed treatments
 # The test should be fine given only minor deviations from normality
@@ -383,6 +398,7 @@ WALD.h <- function(n, h){
   # Use 100 replicates for each height
   nr <- 100
   
+  # Get PDF of heights
   h_PDF <- density(h)
   
   # Generate normally-distributed release heights, and convert cm to m too
@@ -404,17 +420,16 @@ WALD.h <- function(n, h){
 ##### Plot dispersal kernels: warmed vs not warmed --------------------------------------------------------
 
 # Set up function to create a single sample and estimate PDF
-WALD.hBoot <- function(heights, hDist){
-  if(hDist == TRUE){hList <- WALD.h(100, heights)}
-  if(hDist == FALSE){hList <- na.omit(as.numeric(WALD.b(10000, mean(heights))))}
+WALD.hBoot <- function(heights){
+  hList <- WALD.h(100, heights)
   hList.dens <- approxfun(density(hList))
   return(hList.dens(seq(0, 8, by = 0.01)))}
 
 # Function to bootstrap dispersal kernels and estimate 95% bootstrap interval
 # For each kernel sample 100 release heights with 100 seed releases each, and repeat 1000 times
 WNW.pdf <- function(NWHeight, WHeight){
-  hBoot_1 <- data.frame(replicate(1000, WALD.hBoot(NWHeight, hDist = TRUE), simplify = "matrix"))
-  hBoot_2 <- data.frame(replicate(1000, WALD.hBoot(WHeight, hDist = TRUE), simplify = "matrix"))
+  hBoot_1 <- data.frame(replicate(1000, WALD.hBoot(NWHeight), simplify = "matrix"))
+  hBoot_2 <- data.frame(replicate(1000, WALD.hBoot(WHeight), simplify = "matrix"))
   return(data.frame(seq(0, 8, by = 0.01),
                     apply(X = hBoot_1, MARGIN = 1, FUN = mean),
                     apply(X = hBoot_1, MARGIN = 1, FUN = quantile, probs = 0.025),
@@ -494,9 +509,8 @@ ks.test(hBoot_dat_WNW2[, 2], hBoot_dat_WNW2[, 5], alt = "two.sided")
 ##### Analyse dispersal kernels: warmed vs not warmed tail-end dispersal distances ------------------------
 
 # Set up function to create bootstrapped sample and canculate nth percentiles
-WALD.hBoot2 <- function(heights, hDist){
-  if(hDist == TRUE){hList <- WALD.h(100, heights)}
-  if(hDist == FALSE){hList <- na.omit(as.numeric(WALD.b(10000, mean(heights))))}
+WALD.hBoot2 <- function(heights){
+  hList <- WALD.h(100, heights)
   return(quantile(hList, probs = c(0.9, 0.95, 0.99, 0.999)))}
 
 # Function to calculate nth percentile dispersal distances, particularly on right tail
@@ -504,8 +518,8 @@ WALD.hBoot2 <- function(heights, hDist){
 # For mean, simulate 10000 seed release events, and repeat 1000 times
 # Either way, each bootstrap has 10000 seed release events and is repeated 1000 times
 WNW.rtail <- function(NWHeight, WHeight, Species){
-  hBoot_1 <- data.frame(replicate(1000, WALD.hBoot2(NWHeight, hDist = TRUE), simplify = "matrix"))
-  hBoot_2 <- data.frame(replicate(1000, WALD.hBoot2(WHeight, hDist = TRUE), simplify = "matrix"))
+  hBoot_1 <- data.frame(replicate(1000, WALD.hBoot2(NWHeight), simplify = "matrix"))
+  hBoot_2 <- data.frame(replicate(1000, WALD.hBoot2(WHeight), simplify = "matrix"))
   hBoot_dat <- data.frame(cbind(rep(c(90, 95, 99, 99.9), 2), c(rep("Not Warmed", 4), rep("Warmed", 4))), 
                           rep(Species, 8),
                           c(apply(X = hBoot_1, MARGIN = 1, FUN = mean),
@@ -555,15 +569,15 @@ WNW.rtailPlot(hboot_dat_RT2, "CA")
 
 
 
-##### Plot dispersal kernels: mean height vs height distribution ------------------------------------------
+##### Plot dispersal kernels: max height vs height distribution -------------------------------------------
 
 # Function to calculate dispersal kernels with mean height or distribution of heights
 # For distribution, sample 100 release heights with 100 seed releases each, and repeat 1000 times
 # For mean, simulate 10000 seed release events, and repeat 1000 times
 # Either way, each bootstrap has 50000 seed release events and is repeated 1000 times
-MHD.pdf <- function(heights){
-  hBoot_1 <- data.frame(replicate(1000, WALD.hBoot(heights, hDist = TRUE), simplify = "matrix"))
-  hBoot_2 <- data.frame(replicate(1000, WALD.hBoot(heights/100, hDist = FALSE), simplify = "matrix"))
+MHD.pdf <- function(heights, maxheights){
+  hBoot_1 <- data.frame(replicate(1000, WALD.hBoot(heights), simplify = "matrix"))
+  hBoot_2 <- data.frame(replicate(1000, WALD.hBoot(maxheights), simplify = "matrix"))
   return(data.frame(seq(0, 8, by = 0.01),
                     apply(X = hBoot_1, MARGIN = 1, FUN = mean),
                     apply(X = hBoot_1, MARGIN = 1, FUN = quantile, probs = 0.025),
@@ -575,19 +589,19 @@ MHD.pdf <- function(heights){
 # Function to plot the dispersal kernels
 # Bands indicate the range in which 95% of the bootstrapped simulations are
 # Lines indicate mean values
-MHD.pdfPlot <- function(PDF_Data, LColour, bNum, bLab){
+MHD.pdfPlot <- function(PDF_Data, LColour, PColour, bNum, bLab){
   if(bNum == FALSE){
     plot(x = PDF_Data[, 1], y = PDF_Data[, 2], type = "l", col = LColour, xlim = c(0, 7), ylim = c(0, 0.6),
          xaxt = "n", ylab = "Probability Density")
     axis(side = 1, at = 0:7, labels = FALSE)}
   if(bNum == TRUE){
-    plot(x = PDF_Data[, 1], y = PDF_Data[, 2], type = "l", col = "red", xlim = c(0, 7), ylim = c(0, 0.6),
+    plot(x = PDF_Data[, 1], y = PDF_Data[, 2], type = "l", col = LColour, xlim = c(0, 7), ylim = c(0, 0.6),
          xlab = ifelse(bLab == TRUE, "Dispersal Distance (m)", NA), ylab = "Probability Density")}
   polygon(x = c(PDF_Data[, 1], rev(PDF_Data[, 1])), 
           y = c(PDF_Data[, 3], rev(PDF_Data[, 4])), col = alpha(LColour, alpha = 0.2), border = NA)
-  lines(x = PDF_Data[, 1], y = PDF_Data[, 5], type = "l", lty = 2, col = LColour)
+  lines(x = PDF_Data[, 1], y = PDF_Data[, 5], type = "l", lty = 3, col = PColour)
   polygon(x = c(PDF_Data[, 1], rev(PDF_Data[, 1])), 
-          y = c(PDF_Data[, 6], rev(PDF_Data[, 7])), col = alpha(LColour, alpha = 0.2), border = NA)}
+          y = c(PDF_Data[, 6], rev(PDF_Data[, 7])), col = alpha(PColour, alpha = 0.2), border = NA)}
 
 # Prepare graphics device
 jpeg(filename = "Figure 4.jpeg", width = 826, height = 825, units = "px")
@@ -605,8 +619,8 @@ pushViewport(vp = viewport(layout.pos.row = 1:600, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
 par(mar = c(1.1, 4, 2.9, 1))
-hBoot_dat_MHD1 <- MHD.pdf(ht_CN_NW$Height)
-MHD.pdfPlot(hBoot_dat_MHD1, "black", bNum = FALSE, bLab = FALSE)
+hBoot_dat_MHD1 <- MHD.pdf(ht_CN_NW$Height, ht_CN_NW_max$max)
+MHD.pdfPlot(hBoot_dat_MHD1, "black", "gray48", bNum = FALSE, bLab = FALSE)
 popViewport()
 
 # CN warmed: mean vs distribution
@@ -614,8 +628,8 @@ pushViewport(vp = viewport(layout.pos.row = 600:1200, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
 par(mar = c(3, 4, 1, 1))
-hBoot_dat_MHD2 <- MHD.pdf(ht_CN_W$Height)
-MHD.pdfPlot(hBoot_dat_MHD2, "red", bNum = TRUE, bLab = FALSE)
+hBoot_dat_MHD2 <- MHD.pdf(ht_CN_W$Height, ht_CN_W_max$max)
+MHD.pdfPlot(hBoot_dat_MHD2, "red2", "indianred1", bNum = TRUE, bLab = FALSE)
 popViewport()
 
 # CA non-warmed: mean vs distribution
@@ -623,8 +637,8 @@ pushViewport(vp = viewport(layout.pos.row = 1200:1800, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
 par(mar = c(2, 4, 2, 1))
-hBoot_dat_MHD3 <- MHD.pdf(ht_CA_NW$Height)
-MHD.pdfPlot(hBoot_dat_MHD3, "black", bNum = FALSE, bLab = FALSE)
+hBoot_dat_MHD3 <- MHD.pdf(ht_CA_NW$Height, ht_CA_NW_max$max)
+MHD.pdfPlot(hBoot_dat_MHD3, "black", "gray48", bNum = FALSE, bLab = FALSE)
 popViewport()
 
 # CA warmed: mean vs distribution
@@ -632,16 +646,16 @@ pushViewport(vp = viewport(layout.pos.row = 1800:2400, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
 par(mar = c(4, 4, 0, 1))
-hBoot_dat_MHD4 <- MHD.pdf(ht_CA_W$Height)
-MHD.pdfPlot(hBoot_dat_MHD4, "red", bNum = TRUE, bLab = TRUE)
+hBoot_dat_MHD4 <- MHD.pdf(ht_CA_W$Height, ht_CA_W_max$max)
+MHD.pdfPlot(hBoot_dat_MHD4, "red2", "indianred1", bNum = TRUE, bLab = TRUE)
 popViewport()
 
 # Create legend
-grid.text(label = c("Dist. Height (W)", "Dist. Height (NW)", "Mean Height (W)", "Mean Height (NW)"), 
+grid.text(label = c("Dist. Height (W)", "Dist. Height (NW)", "Max Height (W)", "Max Height (NW)"), 
           x = rep(0.83, 4), y = c(0.86, 0.88, 0.90 , 0.92), hjust = 0, gp = gpar(cex = 0.8))
 grid.segments(x0 = rep(0.803, 4), y0 = c(0.857, 0.877, 0.897 , 0.917), 
               x1 = rep(0.823, 4), y1 = c(0.857, 0.877, 0.897 , 0.917),
-              gp = gpar(col = rep(c("black", "red"), 2), lty = c(1, 1, 2, 2)))
+              gp = gpar(col = rep(c("red2", "black"), 2), lty = c(1, 1, 3, 3)))
 
 # Create figure labels
 grid.text(label = c("A", "B", "C", "D"), x = rep(0.11, 4), y = c(0.92, 0.71, 0.44, 0.23),
@@ -665,75 +679,59 @@ ks.test(hBoot_dat_MHD4[, 2], hBoot_dat_MHD4[, 5], alt = "two.sided")
 
 ##### Analyse dispersal kernels: tail-end dispersal distances ---------------------------------------------
 
-# Set up function to create bootstrapped sample
-WALD.hBoot2 <- function(heights, hDist){
-  if(hDist == TRUE){hList <- WALD.h(500, heights)}
-  if(hDist == FALSE){hList <- na.omit(as.numeric(WALD.b(50000, mean(heights))))}
-  return(hList)}
-
 # Function to calculate nth percentile dispersal distances, particularly on right tail
-# For distribution, sample 500 release heights with 100 seed releases each, and repeat 1000 times
-# For mean, simulate 50000 seed release events, and repeat 1000 times
-# Either way, each bootstrap has 50000 seed release events and is repeated 1000 times
-# More bootstraps than last time since right-tail dispersal events can be hard to detect
-MHD.ddp <- function(heights, Species, TRT){
-  hBoot_1 <- data.frame(replicate(1000, WALD.hBoot2(heights, hDist = TRUE), simplify = "matrix"))
-  hBoot_2 <- data.frame(replicate(1000, WALD.hBoot2(heights/100, hDist = FALSE), simplify = "matrix"))
-  hBoot_dat <- t(data.frame(apply(X = hBoot_1, MARGIN = 2, FUN = quantile, probs = 0.9),
-                            apply(X = hBoot_1, MARGIN = 2, FUN = quantile, probs = 0.95),
-                            apply(X = hBoot_1, MARGIN = 2, FUN = quantile, probs = 0.99),
-                            apply(X = hBoot_1, MARGIN = 2, FUN = quantile, probs = 0.999),
-                            apply(X = hBoot_1, MARGIN = 2, FUN = quantile, probs = 0.9999),
-                            apply(X = hBoot_2, MARGIN = 2, FUN = quantile, probs = 0.9),
-                            apply(X = hBoot_2, MARGIN = 2, FUN = quantile, probs = 0.95),
-                            apply(X = hBoot_2, MARGIN = 2, FUN = quantile, probs = 0.99),
-                            apply(X = hBoot_2, MARGIN = 2, FUN = quantile, probs = 0.999),
-                            apply(X = hBoot_2, MARGIN = 2, FUN = quantile, probs = 0.9999)))
-  hBoot_dat <- data.frame(cbind(rep(c(90, 95, 99, 99.9, 99.99), 2), c(rep("HD", 5), rep("M", 5))), 
-                          rep(Species, 10), rep(TRT, 10),
-                          apply(X = hBoot_dat, MARGIN = 1, FUN = quantile, probs = 0.025),
-                          apply(X = hBoot_dat, MARGIN = 1, FUN = mean),
-                          apply(X = hBoot_dat, MARGIN = 1, FUN = quantile, probs = 0.975),
+# For distribution, sample 100 release heights with 100 seed releases each, and repeat 1000 times
+# For mean, simulate 10000 seed release events, and repeat 1000 times
+# Either way, each bootstrap has 10000 seed release events and is repeated 1000 times
+MHD.rtail <- function(distHeight, maxHeight, Species){
+  hBoot_1 <- data.frame(replicate(1000, WALD.hBoot2(distHeight), simplify = "matrix"))
+  hBoot_2 <- data.frame(replicate(1000, WALD.hBoot2(maxHeight), simplify = "matrix"))
+  hBoot_dat <- data.frame(cbind(rep(c(90, 95, 99, 99.9), 2), c(rep("Dist. Height", 4), rep("Max. Height", 4))), 
+                          rep(Species, 8),
+                          c(apply(X = hBoot_1, MARGIN = 1, FUN = mean),
+                            apply(X = hBoot_2, MARGIN = 1, FUN = mean)),
+                          c(apply(X = hBoot_1, MARGIN = 1, FUN = quantile, probs = 0.025),
+                            apply(X = hBoot_2, MARGIN = 1, FUN = quantile, probs = 0.025)),
+                          c(apply(X = hBoot_1, MARGIN = 1, FUN = quantile, probs = 0.975),
+                            apply(X = hBoot_2, MARGIN = 1, FUN = quantile, probs = 0.975)),
                           row.names = NULL)
-  names(hBoot_dat) <- c("DistancePercentile", "MHD", "Species", "TRT", "Lower", "Mean", "Upper")
+  names(hBoot_dat) <- c("DistancePercentile", "Heights", "Species", "Mean", "Lower", "Upper")
   return(hBoot_dat)}
 
 # Plot the dispersal percentiles and the corresponding distances
 # Error bars indicate the range in which 95% of the bootstrapped simulations are
 # Points indicate mean values
-MHD.ddpPlot <- function(species, trt){
-  ggplot(subset(hBoot_dat_DAll, Species == species & TRT == trt), 
-         aes(x = DistancePercentile, y = Mean, colour = MHD)) +
-    geom_point() +
-    geom_errorbar(aes(ymin = Lower, ymax = Upper), width = 0.1) +
-    coord_cartesian(ylim = c(3, 25)) +
-    scale_colour_manual(values = c("gray60", "gray20")) +
+MHD.rtailPlot <- function(data, LColour, PColour){
+  ggplot(data, aes(x = DistancePercentile, y = Mean, fill = Heights)) + 
+    geom_bar(stat = "identity", position = position_dodge(0.7), width = 0.6) +
+    geom_errorbar(aes(ymin = Lower, ymax = Upper), 
+                  width = 0.3, position = position_dodge(0.7)) +
+    coord_cartesian(ylim = c(0, 85)) +
+    scale_fill_manual(values = c(LColour, PColour)) +
     xlab("Dispersal Distance Percentile") +
-    ylab("Dispersal Distance") +
+    ylab("Dispersal Distance (m)") +
     theme(panel.grid.major.x = element_blank(),
-          panel.grid.major.y = element_line(),
+          panel.grid.major.y = element_line(colour = "gray90"),
           panel.grid.minor.x = element_blank(),
-          panel.grid.minor.y = element_line())}
+          panel.grid.minor.y = element_blank(),
+          panel.border = element_rect(colour = "black", fill = NA, size = 1),
+          panel.background = element_rect(fill = "white"),
+          legend.background	= element_blank(),
+          legend.position = c(0.08, 0.925),
+          axis.text.y = element_text(size = 12),
+          axis.title.y = element_text(size = 14, margin = margin(t = 0, r = 10, b = 0, l = 0)),
+          axis.text.x = element_text(size = 12),
+          axis.title.x = element_text(size = 14))}
 
-# CN non-warmed: mean vs distribution
-hBoot_dat_D1 <- MHD.ddp(ht_CN_NW$Height, "CN", "NW")
+# Plot CN non-warmed: mean vs distribution
+MHD.rtailPlot(MHD.rtail(ht_CN_NW$Height, ht_CN_NW_max$max, "CN"), "gray30", "gray57")
 
-# CN warmed: mean vs distribution
-hBoot_dat_D2 <- MHD.ddp(ht_CN_W$Height, "CN", "W")
+# Plot CN warmed: mean vs distribution
+MHD.rtailPlot(MHD.rtail(ht_CN_W$Height, ht_CN_W_max$max, "CN"), "red3", "indianred1")
 
-# CA non-warmed: mean vs distribution
-hBoot_dat_D3 <- MHD.ddp(ht_CA_NW$Height, "CA", "NW")
+# Plot CA non-warmed: mean vs distribution
+MHD.rtailPlot(MHD.rtail(ht_CA_NW$Height, ht_CA_NW_max$max, "CA"), "gray30", "gray57")
 
-# CA warmed: mean vs distribution
-hBoot_dat_D4 <- MHD.ddp(ht_CA_W$Height, "CA", "W")
-
-# Make GGPlot for CN and CA
-# Connected lines with points (and 95%) for each percentile
-hBoot_dat_DAll <- rbind(hBoot_dat_D1, hBoot_dat_D2, hBoot_dat_D3, hBoot_dat_D4)
-
-# Plot the data
-MHD.ddpPlot("CN", "NW")
-MHD.ddpPlot("CN", "W")
-MHD.ddpPlot("CA", "NW")
-MHD.ddpPlot("CA", "W")
+# Plot CA warmed: mean vs distribution
+MHD.rtailPlot(MHD.rtail(ht_CA_W$Height, ht_CA_W_max$max, "CA"), "red3", "indianred1")
 
