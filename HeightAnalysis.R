@@ -194,6 +194,7 @@ ht_stats[, 5] <- sapply(HeightList, mean)
 ht_stats[, 6] <- sapply(HeightList, sd)
 ht_stats[, 7] <- sapply(HeightList, function(x) {sd(x)/sqrt(length(x))})
 names(ht_stats) <- c("ID", "Species", "Treatment", "n", "MeanHeight", "SDHeight", "SEHeight")
+ht_stats$Species <- factor(ht_stats$Species, levels = c("CN", "CA"))
 
 # Remove HeightList since it has served its purpose
 remove(HeightList)
