@@ -59,8 +59,7 @@ ht_CA_W_max <- subset(data_ht_max, Species == "CA" & TRT == "W")
 
 # Examine effect of treatment using LME model, with row and group as random effects
 # Using Gaussian link function (default)
-mod_CN <- lmer(Height ~ TRT + (1|Row) + (1|Group), 
-               data = subset(data_ht_xPW, Species == "CN" & (Type == "f" | Type == "s")))
+mod_CN <- lmer(Height ~ TRT + (1|Row) + (1|Group), data = subset(data_ht, Species == "CN"))
 
 # Warming treatment fixed effect is significant
 # Note: ANOVA and t-test on TRT are equivalent for only 2 levels (NW and W)
@@ -85,7 +84,7 @@ qqline(ranef(mod_CN)$Row$`(Intercept)`)
 shapiro.test(ranef(mod_CN)$Row$`(Intercept)`)
 
 # Residual variances are homogeneous at alpha of 0.05
-leveneTest(residuals(mod_CN) ~ subset(data_ht_xPW, Species == "CN" & (Type == "f" | Type == "s"))$TRT)
+leveneTest(residuals(mod_CN) ~ subset(data_ht, Species == "CN" )$TRT)
 
 # Assumptions for the LME model are satisfied
 # Now look at normality of each treatment group
@@ -105,7 +104,7 @@ qqline(ht_CN_W$Height)
 
 # Use Levene's Test to assess if there are differences in variance between groups
 # Test indicates that there is not significant difference in variance
-leveneTest(Height ~ TRT, data = subset(data_ht, Species == "CN" & (Type == "f" | Type == "s")))
+leveneTest(Height ~ TRT, data = subset(data_ht, Species == "CN"))
 
 # We will perform Student's t-test (equal variance) on warmed vs non-warmed treatments
 # The test should be fine given only minor deviations from normality
@@ -121,13 +120,11 @@ t.test(ht_CN_W$Height, ht_CN_NW$Height, alt = "two.sided", var.equal = TRUE)
 
 # Examine effect of treatment using LME model, with row and group as random effects
 # Using Gaussian link function (default)
-mod_CA <- lmer(Height ~ TRT + (1|Row) + (1|Group), 
-               data = subset(data_ht_xPW, Species == "CA" & (Type == "f" | Type == "s")))
+mod_CA <- lmer(Height ~ TRT + (1|Row) + (1|Group), data = subset(data_ht, Species == "CA"))
 
 # Singular fit; Row random effect makes no contribution, so remove it
 summary(mod_CA)
-mod_CA <- lmer(Height ~ TRT + (1|Group), 
-               data = subset(data_ht_xPW, Species == "CA" & (Type == "f" | Type == "s")))
+mod_CA <- lmer(Height ~ TRT + (1|Group), data = subset(data_ht, Species == "CA"))
 
 # Warming treatment fixed effect is significant
 # Note: ANOVA and t-test on TRT are equivalent for only 2 levels (NW and W)
@@ -148,7 +145,7 @@ shapiro.test(ranef(mod_CA)$Group$`(Intercept)`)
 
 # Residual variances are not quite homogeneous at alpha of 0.05
 # Slightly problematic for the LME model
-leveneTest(residuals(mod_CA) ~ subset(data_ht_xPW, Species == "CA" & (Type == "f" | Type == "s"))$TRT)
+leveneTest(residuals(mod_CA) ~ subset(data_ht, Species == "CA")$TRT)
 
 # Now look at normality of each treatment group
 
@@ -167,7 +164,7 @@ qqline(ht_CA_W$Height)
 
 # Use Levene's Test to assess if there are differences in variance between groups
 # Test indicates that there is significant difference in variance
-leveneTest(Height ~ TRT, data = subset(data_ht, Species == "CA" & (Type == "f" | Type == "s")))
+leveneTest(Height ~ TRT, data = subset(data_ht, Species == "CA"))
 
 # We will perform Welch's t-test (unequal variance) on warmed vs non-warmed treatments
 # The test should be fine given only minor deviations from normality
@@ -512,7 +509,7 @@ ks.test(hBoot_dat_WNW2[, 2], hBoot_dat_WNW2[, 5], alt = "two.sided")
 # Set up function to create bootstrapped sample and canculate nth percentiles
 WALD.hBoot2 <- function(heights){
   hList <- WALD.h(100, heights)
-  return(quantile(hList, probs = c(0.9, 0.95, 0.99, 0.999)))}
+  return(quantile(hList, probs = seq(0.9500, 0.9999, by = 0.0001)))}
 
 # Function to calculate nth percentile dispersal distances, particularly on right tail
 # For distribution, sample 100 release heights with 100 seed releases each, and repeat 1000 times
@@ -521,8 +518,8 @@ WALD.hBoot2 <- function(heights){
 WNW.rtail <- function(NWHeight, WHeight, Species){
   hBoot_1 <- data.frame(replicate(1000, WALD.hBoot2(NWHeight), simplify = "matrix"))
   hBoot_2 <- data.frame(replicate(1000, WALD.hBoot2(WHeight), simplify = "matrix"))
-  hBoot_dat <- data.frame(cbind(rep(c(90, 95, 99, 99.9), 2), c(rep("Not Warmed", 4), rep("Warmed", 4))), 
-                          rep(Species, 8),
+  hBoot_dat <- data.frame(cbind(rep(seq(0.9500, 0.9999, by = 0.0001), 2), c(rep("Not Warmed", 500), rep("Warmed", 500))), 
+                          rep(Species, 1000),
                           c(apply(X = hBoot_1, MARGIN = 1, FUN = mean),
                             apply(X = hBoot_2, MARGIN = 1, FUN = mean)),
                           c(apply(X = hBoot_1, MARGIN = 1, FUN = quantile, probs = 0.025),
@@ -535,36 +532,67 @@ WNW.rtail <- function(NWHeight, WHeight, Species){
 
 # Plot the dispersal percentiles and the corresponding distances
 # Error bars indicate the range in which 95% of the bootstrapped simulations are
-# Points indicate mean values
-WNW.rtailPlot <- function(data, Species){
-  ggplot(data, aes(x = DistancePercentile, y = Mean, fill = Treatment)) + 
-    geom_bar(stat = "identity", position = position_dodge(0.7), width = 0.6) +
-    geom_errorbar(aes(ymin = Lower, ymax = Upper), 
-                  width = 0.3, position = position_dodge(0.7)) +
-    coord_cartesian(ylim = c(0, 80)) +
-    scale_fill_manual(values = c("gray30", "red")) +
-    xlab("Dispersal Distance Percentile") +
-    ylab("Dispersal Distance (m)") +
-    theme(panel.grid.major.x = element_blank(),
-          panel.grid.major.y = element_line(colour = "gray90"),
-          panel.grid.minor.x = element_blank(),
-          panel.grid.minor.y = element_blank(),
-          panel.border = element_rect(colour = "black", fill = NA, size = 1),
-          panel.background = element_rect(fill = "white"),
-          legend.background	= element_blank(),
-          legend.position = c(0.08, 0.925),
-          axis.text.y = element_text(size = 12),
-          axis.title.y = element_text(size = 14, margin = margin(t = 0, r = 10, b = 0, l = 0)),
-          axis.text.x = element_text(size = 12),
-          axis.title.x = element_text(size = 14))}
+# Lines indicate mean values
+WNW.rtailPlot <- function(rtail_data, bottom){
+  rtail_data[, 1] <- as.numeric(as.character(rtail_data[, 1]))
+  rtNW <- subset(rtail_data, Treatment == "Not Warmed")
+  rtW <- subset(rtail_data, Treatment == "Warmed")
+  if(bottom == FALSE){
+    plot(x = rtNW[, 1], y = rtNW[, 4], type = "l", xlim = c(0.95, 1), ylim = c(0, 80),
+         xaxt = "n", ylab = "Dispersal Distance (m)")
+    axis(side = 1, at = seq(0.95, 1, by = 0.01), labels = FALSE)}
+  if(bottom == TRUE){
+    plot(x = rtNW[, 1], y = rtNW[, 4], type = "l", xlim = c(0.95, 1), ylim = c(0, 80),
+         xlab = "Dispersal Quantile", ylab = "Dispersal Distance (m)")}
+  polygon(x = c(rtNW[, 1], rev(rtNW[, 1])), 
+          y = c(rtNW[, 5], rev(rtNW[, 6])), col = alpha("black", alpha = 0.2), border = NA)
+  lines(x = rtW[, 1], y = rtW[, 4], type = "l", col = "red")
+  polygon(x = c(rtW[, 1], rev(rtW[, 1])), 
+          y = c(rtW[, 5], rev(rtW[, 6])), col = alpha("red", alpha = 0.2), border = NA)}
 
-# Plot for CN warmed vs unwarmed
+# Prepare graphics device
+jpeg(filename = "Figure 4.jpeg", width = 826, height = 568, units = "px")
+
+# Create blank page
+grid.newpage()
+plot.new()
+
+# Set grid layout and activate it
+gly <- grid.layout(1200, 800)
+pushViewport(viewport(layout = gly))
+
+# CN non-warmed vs warmed
+pushViewport(vp = viewport(layout.pos.row = 1:600, layout.pos.col = 1:800))
+par(fig = gridFIG())
+par(new = TRUE)
+par(mar = c(2, 4, 2, 1))
 hboot_dat_RT1 <- WNW.rtail(ht_CN_NW$Height, ht_CN_W$Height, "CN")
-WNW.rtailPlot(hboot_dat_RT1, "CN")
+WNW.rtailPlot(hboot_dat_RT1, bottom = FALSE)
+popViewport()
 
-# Plot for CA warmed vs unwarmed
+# CA non-warmed vs warmed
+pushViewport(vp = viewport(layout.pos.row = 600:1200, layout.pos.col = 1:800))
+par(fig = gridFIG())
+par(new = TRUE)
+par(mar = c(4, 4, 0, 1))
 hboot_dat_RT2 <- WNW.rtail(ht_CA_NW$Height, ht_CA_W$Height, "CA")
-WNW.rtailPlot(hboot_dat_RT2, "CA")
+WNW.rtailPlot(hboot_dat_RT2, bottom = TRUE)
+popViewport()
+
+# Create legend
+grid.text(label = c("Warmed", "Not Warmed"), x = rep(0.84, 2), y = c(0.87, 0.90),
+          hjust = 0, gp = gpar(cex = 0.8))
+grid.segments(x0 = rep(0.813, 2), y0 = c(0.868, 0.898), x1 = rep(0.833, 2), y1 = c(0.868, 0.898),
+              gp = gpar(col = c("red", "black")))
+
+# Create figure labels
+grid.text(label = c("A", "B"), x = rep(0.11, 2), y = c(0.90, 0.47),
+          hjust = 0, gp = gpar(cex = 1.1))
+popViewport()
+
+# Deactivate grid layout; finalise graphics save
+popViewport()
+dev.off()
 
 
 
@@ -605,7 +633,7 @@ MHD.pdfPlot <- function(PDF_Data, LColour, PColour, bNum, bLab){
           y = c(PDF_Data[, 6], rev(PDF_Data[, 7])), col = alpha(PColour, alpha = 0.2), border = NA)}
 
 # Prepare graphics device
-jpeg(filename = "Figure 4.jpeg", width = 826, height = 825, units = "px")
+jpeg(filename = "Figure 5.jpeg", width = 826, height = 825, units = "px")
 
 # Create blank page
 grid.newpage()
@@ -687,8 +715,8 @@ ks.test(hBoot_dat_MHD4[, 2], hBoot_dat_MHD4[, 5], alt = "two.sided")
 MHD.rtail <- function(distHeight, maxHeight, Species){
   hBoot_1 <- data.frame(replicate(1000, WALD.hBoot2(distHeight), simplify = "matrix"))
   hBoot_2 <- data.frame(replicate(1000, WALD.hBoot2(maxHeight), simplify = "matrix"))
-  hBoot_dat <- data.frame(cbind(rep(c(90, 95, 99, 99.9), 2), c(rep("Dist. Height", 4), rep("Max. Height", 4))), 
-                          rep(Species, 8),
+  hBoot_dat <- data.frame(cbind(rep(seq(0.9500, 0.9999, by = 0.0001), 2), c(rep("Dist. Height", 500), rep("Max. Height", 500))), 
+                          rep(Species, 1000),
                           c(apply(X = hBoot_1, MARGIN = 1, FUN = mean),
                             apply(X = hBoot_2, MARGIN = 1, FUN = mean)),
                           c(apply(X = hBoot_1, MARGIN = 1, FUN = quantile, probs = 0.025),
@@ -701,38 +729,84 @@ MHD.rtail <- function(distHeight, maxHeight, Species){
 
 # Plot the dispersal percentiles and the corresponding distances
 # Error bars indicate the range in which 95% of the bootstrapped simulations are
-# Points indicate mean values
-MHD.rtailPlot <- function(data, LColour, PColour){
-  ggplot(data, aes(x = DistancePercentile, y = Mean, fill = Heights)) + 
-    geom_bar(stat = "identity", position = position_dodge(0.7), width = 0.6) +
-    geom_errorbar(aes(ymin = Lower, ymax = Upper), 
-                  width = 0.3, position = position_dodge(0.7)) +
-    coord_cartesian(ylim = c(0, 85)) +
-    scale_fill_manual(values = c(LColour, PColour)) +
-    xlab("Dispersal Distance Percentile") +
-    ylab("Dispersal Distance (m)") +
-    theme(panel.grid.major.x = element_blank(),
-          panel.grid.major.y = element_line(colour = "gray90"),
-          panel.grid.minor.x = element_blank(),
-          panel.grid.minor.y = element_blank(),
-          panel.border = element_rect(colour = "black", fill = NA, size = 1),
-          panel.background = element_rect(fill = "white"),
-          legend.background	= element_blank(),
-          legend.position = c(0.08, 0.925),
-          axis.text.y = element_text(size = 12),
-          axis.title.y = element_text(size = 14, margin = margin(t = 0, r = 10, b = 0, l = 0)),
-          axis.text.x = element_text(size = 12),
-          axis.title.x = element_text(size = 14))}
+# Lines indicate mean values
+MHD.rtailPlot <- function(rtail_data, LColour, PColour, bNum, bLab){
+  rtail_data[, 1] <- as.numeric(as.character(rtail_data[, 1]))
+  rtDH <- subset(rtail_data, Heights == "Dist. Height")
+  rtMH <- subset(rtail_data, Heights == "Max. Height")
+  if(bNum == FALSE){
+    plot(x = rtDH[, 1], y = rtDH[, 4], type = "l", col = LColour, xlim = c(0.95, 1), ylim = c(0, 80),
+         xaxt = "n", ylab = "Dispersal Distance (m)")
+    axis(side = 1, at = seq(0.95, 1, by = 0.01), labels = FALSE)}
+  if(bNum == TRUE){
+    plot(x = rtDH[, 1], y = rtDH[, 4], type = "l", col = LColour, xlim = c(0.95, 1), ylim = c(0, 80),
+         xlab = ifelse(bLab == TRUE, "Dispersal Quantile", NA), ylab = "Dispersal Distance (m)")}
+  polygon(x = c(rtDH[, 1], rev(rtDH[, 1])), 
+          y = c(rtDH[, 5], rev(rtDH[, 6])), col = alpha(LColour, alpha = 0.2), border = NA)
+  lines(x = rtMH[, 1], y = rtMH[, 4], type = "l", lty = 3, col = PColour)
+  polygon(x = c(rtMH[, 1], rev(rtMH[, 1])), 
+          y = c(rtMH[, 5], rev(rtMH[, 6])), col = alpha(PColour, alpha = 0.2), border = NA)}
 
-# Plot CN non-warmed: mean vs distribution
-MHD.rtailPlot(MHD.rtail(ht_CN_NW$Height, ht_CN_NW_max$max, "CN"), "gray30", "gray57")
+# Prepare graphics device
+jpeg(filename = "Figure 6.jpeg", width = 826, height = 825, units = "px")
 
-# Plot CN warmed: mean vs distribution
-MHD.rtailPlot(MHD.rtail(ht_CN_W$Height, ht_CN_W_max$max, "CN"), "red3", "indianred1")
+# Create blank page
+grid.newpage()
+plot.new()
 
-# Plot CA non-warmed: mean vs distribution
-MHD.rtailPlot(MHD.rtail(ht_CA_NW$Height, ht_CA_NW_max$max, "CA"), "gray30", "gray57")
+# Set grid layout and activate it
+gly <- grid.layout(2400, 800)
+pushViewport(viewport(layout = gly))
 
-# Plot CA warmed: mean vs distribution
-MHD.rtailPlot(MHD.rtail(ht_CA_W$Height, ht_CA_W_max$max, "CA"), "red3", "indianred1")
+# CN non-warmed: mean vs distribution
+pushViewport(vp = viewport(layout.pos.row = 1:600, layout.pos.col = 1:800))
+par(fig = gridFIG())
+par(new = TRUE)
+par(mar = c(1.1, 4, 2.9, 1))
+hBoot_dat_rtMHD1 <- MHD.rtail(ht_CN_NW$Height, ht_CN_NW_max$max, "CN")
+MHD.rtailPlot(hBoot_dat_rtMHD1, "black", "gray48", bNum = FALSE, bLab = FALSE)
+popViewport()
+
+# CN warmed: mean vs distribution
+pushViewport(vp = viewport(layout.pos.row = 600:1200, layout.pos.col = 1:800))
+par(fig = gridFIG())
+par(new = TRUE)
+par(mar = c(3, 4, 1, 1))
+hBoot_dat_rtMHD2 <- MHD.rtail(ht_CN_W$Height, ht_CN_W_max$max, "CN")
+MHD.rtailPlot(hBoot_dat_rtMHD2, "red2", "indianred1", bNum = TRUE, bLab = FALSE)
+popViewport()
+
+# CA non-warmed: mean vs distribution
+pushViewport(vp = viewport(layout.pos.row = 1200:1800, layout.pos.col = 1:800))
+par(fig = gridFIG())
+par(new = TRUE)
+par(mar = c(2, 4, 2, 1))
+hBoot_dat_rtMHD3 <- MHD.rtail(ht_CA_NW$Height, ht_CA_NW_max$max, "CA")
+MHD.rtailPlot(hBoot_dat_rtMHD3, "black", "gray48", bNum = FALSE, bLab = FALSE)
+popViewport()
+
+# CA warmed: mean vs distribution
+pushViewport(vp = viewport(layout.pos.row = 1800:2400, layout.pos.col = 1:800))
+par(fig = gridFIG())
+par(new = TRUE)
+par(mar = c(4, 4, 0, 1))
+hBoot_dat_rtMHD4 <- MHD.rtail(ht_CA_W$Height, ht_CA_W_max$max, "CA")
+MHD.rtailPlot(hBoot_dat_rtMHD4, "red2", "indianred1", bNum = TRUE, bLab = TRUE)
+popViewport()
+
+# Create legend
+grid.text(label = c("Dist. Height (W)", "Dist. Height (NW)", "Max Height (W)", "Max Height (NW)"), 
+          x = rep(0.83, 4), y = c(0.86, 0.88, 0.90 , 0.92), hjust = 0, gp = gpar(cex = 0.8))
+grid.segments(x0 = rep(0.803, 4), y0 = c(0.857, 0.877, 0.897 , 0.917), 
+              x1 = rep(0.823, 4), y1 = c(0.857, 0.877, 0.897 , 0.917),
+              gp = gpar(col = rep(c("red2", "black"), 2), lty = c(1, 1, 3, 3)))
+
+# Create figure labels
+grid.text(label = c("A", "B", "C", "D"), x = rep(0.11, 4), y = c(0.92, 0.71, 0.44, 0.23),
+          hjust = 0, gp = gpar(cex = 1.1))
+popViewport()
+
+# Deactivate grid layout; finalise graphics save
+popViewport()
+dev.off()
 
