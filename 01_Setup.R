@@ -294,9 +294,9 @@ ds.ccdfBoot <- function(h1, h2, type){
                           apply(X = hBoot_2, MARGIN = 1, FUN = quantile, probs = 0.025),
                           apply(X = hBoot_2, MARGIN = 1, FUN = quantile, probs = 0.975))
   if(type == "WNW"){
-    names(hBoot_dat <- c("Distance", "NW_Mean", "NW_Lower", "NW_Upper", "W_Mean", "W_Lower", "W_Upper"))}
+    names(hBoot_dat) <- c("Distance", "NW_Mean", "NW_Lower", "NW_Upper", "W_Mean", "W_Lower", "W_Upper")}
   if(type == "MHD"){
-    names(hBoot_dat <- c("Distance", "HD_Mean", "HD_Lower", "HD_Upper", "M_Mean", "M_Lower", "M_Upper"))}
+    names(hBoot_dat) <- c("Distance", "HD_Mean", "HD_Lower", "HD_Upper", "M_Mean", "M_Lower", "M_Upper")}
   return(hBoot_dat)}
 
 # Function to plot bootstrapped CCDF, with mean line and 95% band
@@ -339,9 +339,9 @@ ds.ccdfRatioBoot <- function(h1, h2, type){
                           apply(X = hBoot_a, MARGIN = 1, FUN = quantile.exinf, probs = 0.025),
                           apply(X = hBoot_a, MARGIN = 1, FUN = quantile.exinf, probs = 0.975))
   if(type == "WNW"){
-    names(hBoot_dat <- c("Distance", "WNW_MeanRatio", "WNW_LowerRatio", "WNW_UpperRatio"))}
+    names(hBoot_dat) <- c("Distance", "WNW_MeanRatio", "WNW_LowerRatio", "WNW_UpperRatio")}
   if(type == "MHD"){
-    names(hBoot_dat <- c("Distance", "MHD_MeanRatio", "MHD_LowerRatio", "MHD_UpperRatio"))}
+    names(hBoot_dat) <- c("Distance", "MHD_MeanRatio", "MHD_LowerRatio", "MHD_UpperRatio")}
   return(hBoot_dat)}
 
 # Function to plot bootstrapped CCDF ratio, with mean line and 95% band
