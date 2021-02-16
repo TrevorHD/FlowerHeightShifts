@@ -354,7 +354,8 @@ ds.ccdfRatioBoot.plot <- function(bootData, bottom){
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 60), ylim = c(0, 4),
          xlab = "Dispersal Distance (m)", ylab = "W/NW CCDF Ratio")}
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
-          y = c(bootData[, 3], rev(bootData[, 4])), col = alpha("black", alpha = 0.2), border = NA)}
+          y = c(bootData[, 3], rev(bootData[, 4])), col = alpha("black", alpha = 0.2), border = NA)
+  abline(h = 1, lty = 3)}
 
 # Bootstrap CCDF ratios for NW/W CN and NW/W CA heights
 hBoot_WNW1_CCDFRatio <- ds.ccdfRatioBoot(ht_CN_NW$Height, ht_CN_W$Height, "WNW")
@@ -493,7 +494,8 @@ ds.ccdfRatioBoot.plot2 <- function(bootData, bNum, bLab){
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 60), ylim = c(0, 4),
          xlab = ifelse(bLab == TRUE, "Dispersal Distance (m)", NA), ylab = "M/HD CCDF Ratio")}
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
-          y = c(bootData[, 3], rev(bootData[, 4])), col = alpha("black", alpha = 0.2), border = NA)}
+          y = c(bootData[, 3], rev(bootData[, 4])), col = alpha("black", alpha = 0.2), border = NA)
+  abline(h = 1, lty = 3)}
 
 # Bootstrap CCDF ratios for M/HD CN and M/HD CA dispersal kernels
 hBoot_MHD1_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_W$Height, ht_CN_W_max$max, "MHD")
