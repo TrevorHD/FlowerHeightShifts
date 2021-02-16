@@ -76,7 +76,7 @@ grid.segments(x0 = rep(0.813, 2), y0 = c(0.868, 0.898), x1 = rep(0.833, 2), y1 =
               gp = gpar(col = c("red", "black")))
 
 # Create figure labels
-grid.text(label = c("A", "B"), x = rep(0.11, 2), y = c(0.90, 0.47),
+grid.text(label = c("(A) Carduus nutans", "(B) Carduus acanthoides"), x = rep(0.08, 2), y = c(0.93, 0.48),
           hjust = 0, gp = gpar(cex = 1.1))
 popViewport()
 
@@ -124,7 +124,7 @@ grid.segments(x0 = rep(0.813, 2), y0 = c(0.868, 0.898), x1 = rep(0.833, 2), y1 =
               gp = gpar(col = c("red", "black")))
 
 # Create figure labels
-grid.text(label = c("A", "B"), x = rep(0.11, 2), y = c(0.90, 0.47),
+grid.text(label = c("(A) Carduus nutans", "(B) Carduus acanthoides"), x = rep(0.08, 2), y = c(0.93, 0.48),
           hjust = 0, gp = gpar(cex = 1.1))
 popViewport()
 
@@ -172,7 +172,7 @@ grid.segments(x0 = rep(0.813, 2), y0 = c(0.868, 0.898), x1 = rep(0.833, 2), y1 =
               gp = gpar(col = c("red", "black")))
 
 # Create figure labels
-grid.text(label = c("A", "B"), x = rep(0.11, 2), y = c(0.90, 0.47),
+grid.text(label = c("(A) Carduus nutans", "(B) Carduus acanthoides"), x = rep(0.08, 2), y = c(0.93, 0.48),
           hjust = 0, gp = gpar(cex = 1.1))
 popViewport()
 
@@ -213,14 +213,8 @@ par(mar = c(4, 4, 0, 1))
 ds.ccdfRatioBoot.plot(hBoot_WNW2_CCDFRatio, bottom = TRUE)
 popViewport()
 
-# Create legend
-grid.text(label = c("Warmed", "Not Warmed"), x = rep(0.84, 2), y = c(0.87, 0.90),
-          hjust = 0, gp = gpar(cex = 0.8))
-grid.segments(x0 = rep(0.813, 2), y0 = c(0.868, 0.898), x1 = rep(0.833, 2), y1 = c(0.868, 0.898),
-              gp = gpar(col = c("red", "black")))
-
 # Create figure labels
-grid.text(label = c("A", "B"), x = rep(0.11, 2), y = c(0.90, 0.47),
+grid.text(label = c("(A) Carduus nutans", "(B) Carduus acanthoides"), x = rep(0.08, 2), y = c(0.93, 0.48),
           hjust = 0, gp = gpar(cex = 1.1))
 popViewport()
 
@@ -268,7 +262,7 @@ grid.segments(x0 = rep(0.813, 2), y0 = c(0.868, 0.898), x1 = rep(0.833, 2), y1 =
               gp = gpar(col = c("red", "black")))
 
 # Create figure labels
-grid.text(label = c("A", "B"), x = rep(0.11, 2), y = c(0.90, 0.47),
+grid.text(label = c("(A) Carduus nutans", "(B) Carduus acanthoides"), x = rep(0.08, 2), y = c(0.93, 0.48),
           hjust = 0, gp = gpar(cex = 1.1))
 popViewport()
 
@@ -333,7 +327,9 @@ grid.segments(x0 = rep(0.803, 4), y0 = c(0.857, 0.877, 0.897 , 0.917),
               gp = gpar(col = rep(c("red2", "black"), 2), lty = c(1, 1, 3, 3)))
 
 # Create figure labels
-grid.text(label = c("A", "B", "C", "D"), x = rep(0.11, 4), y = c(0.92, 0.71, 0.44, 0.23),
+grid.text(label = c("(A) Carduus nutans, unwarmed", "(B) Carduus nutans, warmed",
+                    "(C) Carduus acanthoides, unwarmed", "(D) Carduus acanthoides, warmed"), 
+          x = rep(0.08, 4), y = c(0.933, 0.715, 0.45, 0.235),
           hjust = 0, gp = gpar(cex = 1.1))
 popViewport()
 
@@ -398,7 +394,9 @@ grid.segments(x0 = rep(0.803, 4), y0 = c(0.857, 0.877, 0.897 , 0.917),
               gp = gpar(col = rep(c("red2", "black"), 2), lty = c(1, 1, 3, 3)))
 
 # Create figure labels
-grid.text(label = c("A", "B", "C", "D"), x = rep(0.11, 4), y = c(0.92, 0.71, 0.44, 0.23),
+grid.text(label = c("(A) Carduus nutans, unwarmed", "(B) Carduus nutans, warmed",
+                    "(C) Carduus acanthoides, unwarmed", "(D) Carduus acanthoides, warmed"), 
+          x = rep(0.08, 4), y = c(0.933, 0.715, 0.45, 0.235),
           hjust = 0, gp = gpar(cex = 1.1))
 popViewport()
 
@@ -455,15 +453,10 @@ par(mar = c(4, 4, 0, 1))
 ds.ccdfRatioBoot.plot2(hBoot_MHD4_ccdfRatio, bNum = TRUE, bLab = TRUE)
 popViewport()
 
-# Create legend
-grid.text(label = c("Dist. Height (W)", "Dist. Height (NW)", "Max Height (W)", "Max Height (NW)"), 
-          x = rep(0.83, 4), y = c(0.86, 0.88, 0.90 , 0.92), hjust = 0, gp = gpar(cex = 0.8))
-grid.segments(x0 = rep(0.803, 4), y0 = c(0.857, 0.877, 0.897 , 0.917), 
-              x1 = rep(0.823, 4), y1 = c(0.857, 0.877, 0.897 , 0.917),
-              gp = gpar(col = rep(c("red2", "black"), 2), lty = c(1, 1, 3, 3)))
-
 # Create figure labels
-grid.text(label = c("A", "B", "C", "D"), x = rep(0.11, 4), y = c(0.92, 0.71, 0.44, 0.23),
+grid.text(label = c("(A) Carduus nutans, unwarmed", "(B) Carduus nutans, warmed",
+                    "(C) Carduus acanthoides, unwarmed", "(D) Carduus acanthoides, warmed"), 
+          x = rep(0.08, 4), y = c(0.933, 0.715, 0.45, 0.235),
           hjust = 0, gp = gpar(cex = 1.1))
 popViewport()
 
@@ -528,7 +521,9 @@ grid.segments(x0 = rep(0.803, 4), y0 = c(0.857, 0.877, 0.897 , 0.917),
               gp = gpar(col = rep(c("red2", "black"), 2), lty = c(1, 1, 3, 3)))
 
 # Create figure labels
-grid.text(label = c("A", "B", "C", "D"), x = rep(0.11, 4), y = c(0.92, 0.71, 0.44, 0.23),
+grid.text(label = c("(A) Carduus nutans, unwarmed", "(B) Carduus nutans, warmed",
+                    "(C) Carduus acanthoides, unwarmed", "(D) Carduus acanthoides, warmed"), 
+          x = rep(0.08, 4), y = c(0.933, 0.715, 0.45, 0.235),
           hjust = 0, gp = gpar(cex = 1.1))
 popViewport()
 
