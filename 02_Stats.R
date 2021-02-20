@@ -176,6 +176,16 @@ subset(hboot_WNW2_rtail, DistancePercentile == 0.99 & Treatment == "Warmed")
 
 ##### [F4.1] Estimate max height vs height distribution PDF (dispersal kernels) ---------------------------
 
+# Mean dispersal distance for kernel, along with 95% bootstrap interval on mean
+ds.mean(ht_CN_NW$Height)
+ds.mean(ht_CN_W$Height)
+ds.mean(ht_CA_NW$Height)
+ds.mean(ht_CA_W$Height)
+ds.mean(ht_CN_NW_max$max)
+ds.mean(ht_CN_W_max$max)
+ds.mean(ht_CA_NW_max$max)
+ds.mean(ht_CA_W_max$max)
+
 # Kolmogorov-Smirnov test for NW/W CN and NW/W CA
 # The NW and W dispersal kernels display significant difference for CN and CA
 ks.test(hBoot_MHD1_pdf[, 2], hBoot_MHD1_pdf[, 5], alt = "two.sided")
@@ -202,26 +212,26 @@ hBoot_MHD4_ccdfRatio[hBoot_MHD4_ccdfRatio[, 1] == 50, ]
 ##### [F4.4] Estimate max height vs height distribution right tail dispersal percentile distances ---------
 
 # Mean 95th and 99th percentiles for CN unwarmed
-subset(hboot_MHD1_rtail, DistancePercentile == 0.95 & Treatment == "Dist. Height")
-subset(hboot_MHD1_rtail, DistancePercentile == 0.95 & Treatment == "Max. Height")
-subset(hboot_MHD1_rtail, DistancePercentile == 0.99 & Treatment == "Dist. Height")
-subset(hboot_MHD1_rtail, DistancePercentile == 0.99 & Treatment == "Max. Height")
+subset(hBoot_MHD1_rtail, DistancePercentile == 0.95 & Heights == "Dist. Height")
+subset(hBoot_MHD1_rtail, DistancePercentile == 0.95 & Heights == "Max. Height")
+subset(hBoot_MHD1_rtail, DistancePercentile == 0.99 & Heights == "Dist. Height")
+subset(hBoot_MHD1_rtail, DistancePercentile == 0.99 & Heights == "Max. Height")
 
 # Mean 95th and 99th percentiles for CN warmed
-subset(hboot_MHD2_rtail, DistancePercentile == 0.95 & Treatment == "Dist. Height")
-subset(hboot_MHD2_rtail, DistancePercentile == 0.95 & Treatment == "Max. Height")
-subset(hboot_MHD2_rtail, DistancePercentile == 0.99 & Treatment == "Dist. Height")
-subset(hboot_MHD2_rtail, DistancePercentile == 0.99 & Treatment == "Max. Height")
+subset(hBoot_MHD2_rtail, DistancePercentile == 0.95 & Heights == "Dist. Height")
+subset(hBoot_MHD2_rtail, DistancePercentile == 0.95 & Heights == "Max. Height")
+subset(hBoot_MHD2_rtail, DistancePercentile == 0.99 & Heights == "Dist. Height")
+subset(hBoot_MHD2_rtail, DistancePercentile == 0.99 & Heights == "Max. Height")
 
 # Mean 95th and 99th percentiles for CA unwarmed
-subset(hboot_MHD3_rtail, DistancePercentile == 0.95 & Treatment == "Dist. Height")
-subset(hboot_MHD3_rtail, DistancePercentile == 0.95 & Treatment == "Max. Height")
-subset(hboot_MHD3_rtail, DistancePercentile == 0.99 & Treatment == "Dist. Height")
-subset(hboot_MHD3_rtail, DistancePercentile == 0.99 & Treatment == "Max. Height")
+subset(hBoot_MHD3_rtail, DistancePercentile == 0.95 & Heights == "Dist. Height")
+subset(hBoot_MHD3_rtail, DistancePercentile == 0.95 & Heights == "Max. Height")
+subset(hBoot_MHD3_rtail, DistancePercentile == 0.99 & Heights == "Dist. Height")
+subset(hBoot_MHD3_rtail, DistancePercentile == 0.99 & Heights == "Max. Height")
 
 # Mean 95th and 99th percentiles for CA warmed
-subset(hboot_MHD4_rtail, DistancePercentile == 0.95 & Treatment == "Dist. Height")
-subset(hboot_MHD4_rtail, DistancePercentile == 0.95 & Treatment == "Max. Height")
-subset(hboot_MHD4_rtail, DistancePercentile == 0.99 & Treatment == "Dist. Height")
-subset(hboot_MHD4_rtail, DistancePercentile == 0.99 & Treatment == "Max. Height")
+subset(hBoot_MHD4_rtail, DistancePercentile == 0.95 & Heights == "Dist. Height")
+subset(hBoot_MHD4_rtail, DistancePercentile == 0.95 & Heights == "Max. Height")
+subset(hBoot_MHD4_rtail, DistancePercentile == 0.99 & Heights == "Dist. Height")
+subset(hBoot_MHD4_rtail, DistancePercentile == 0.99 & Heights == "Max. Height")
 
