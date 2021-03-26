@@ -147,6 +147,41 @@ WALD.h <- function(n, h){
 
 
 
+##### [WIP] Calculate Vincent average rather than average on linear pool ----------------------------------
+
+# Calculate Vincent averages for height distribution
+mean.vincent <- function(hBoot){
+  
+  # Calculate CDF from PDF
+  cdf <- function(coldata){
+    return(cumsum(coldata/sum(coldata)))}
+  cdf_values <- as.data.frame(apply(X = hBoot, MARGIN = 2, FUN = cdf))
+  
+  # Get height for each quantile
+  quantiles <- function(coldata){
+    quantile_data <- data.frame(cbind(seq(0, 200, by = 0.1), coldata))
+    return(approx(quantile_data[, 2], quantile_data[, 1], seq(0, 1, by = 0.005), yleft = 0, yright = 200)$y)}
+  
+  # Calculate Vincent average for heights across each quantile
+  cdf_quantiles <- data.frame(apply(X = cdf_values, MARGIN = 2, FUN = quantiles))
+  cdf_quantiles <- apply(X = cdf_quantiles, MARGIN = 1, FUN = mean)
+  
+  # Return average distribution   
+  return(cdf_quantiles)}
+
+# Test plotting for Vincent average
+# Fit seems to be slightly off; need to fix this
+hBoot_1 <- data.frame(replicate(1000, ht.pdf(sample(ht_CN_NW$Height, size = 500, replace = TRUE))))
+plot(seq(0, 200, by = 0.1), hBoot_1[, 1], type = "l", ylim = c(0, 0.022),
+     col = rgb(red = 0, green = 0, blue = 0, alpha = 0.03))
+for(i in 2:1000){
+  lines(seq(0, 200, by = 0.1), hBoot_1[, i], col = rgb(red = 0, green = 0, blue = 0, alpha = 0.03))}
+lines(density(mean.vincent(hBoot_1)), col = "red", lwd = 1.8)
+
+
+
+
+
 ##### [F1] Calculate mean heights for each treatment/species combination ----------------------------------
 
 # Put data into list to easily use vectorised functions
