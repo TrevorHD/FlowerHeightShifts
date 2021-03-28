@@ -149,24 +149,6 @@ WALD.h <- function(n, h){
 
 ##### [WIP] Calculate Vincent average rather than average on linear pool ----------------------------------
 
-
-
-# Test plotting for Vincent average (red) versus linear pooling (blue)
-# Fit seems to be slightly off; need to fix this
-hBoot_1 <- data.frame(replicate(1000, ht.pdf(sample(ht_CN_NW$Height, size = 500, replace = TRUE))))
-plot(seq(0, 200, by = 0.1), hBoot_1[, 1], type = "l", ylim = c(0, 0.023), xlab = "Flower Height",
-     ylab = "Probability Density", col = rgb(red = 0, green = 0, blue = 0, alpha = 0.03))
-for(i in 2:1000){
-  lines(seq(0, 200, by = 0.1), hBoot_1[, i], col = rgb(red = 0, green = 0, blue = 0, alpha = 0.03))}
-lines(density(mean.vincent(hBoot_1), from = 0, to = 200), col = "red", lwd = 1.8)
-lines(seq(0, 200, by = 0.1), apply(X = hBoot_1, MARGIN = 1, FUN = mean), col = "lightblue", lwd = 1.8)
-
-
-
-
-
-
-
 # Calculate Vincent averages for height distribution
 mean.vincent <- function(hBoot){
   
@@ -187,26 +169,20 @@ mean.vincent <- function(hBoot){
   # Return average distribution   
   return(cdf_quantiles)}
 
+# Redefine ds.pdf to put caps on dispersal kernels (only for plotting)
 ds.pdf <- function(heights){
   hList <- WALD.h(100, heights)
   hList.dens <- approxfun(density(hList, from = 0, to = 8))
   return(hList.dens(seq(0, 8, by = 0.01)))}
 
+# Plot dispersal kernels, linear pool, and Vincent average
 hBoot_1 <- data.frame(replicate(1000, ds.pdf(ht_CN_NW$Height), simplify = "matrix"))
 plot(seq(0, 8, by = 0.01), hBoot_1[, 1], type = "l", ylim = c(0, 0.5), xlab = "Distance (m)",
      ylab = "Probability Density", col = rgb(red = 0, green = 0, blue = 0, alpha = 0.03))
 for(i in 2:1000){
   lines(seq(0, 8, by = 0.01), hBoot_1[, i], col = rgb(red = 0, green = 0, blue = 0, alpha = 0.03))}
 lines(density(mean.vincent(hBoot_1), from = 0.04, to = 8, bw = 0.05), col = "red", lwd = 1.8)
-#lines(seq(0, 8, by = 0.01), apply(X = hBoot_1, MARGIN = 1, FUN = mean), col = "lightblue", lwd = 1.8)
-
-
-
-
-
-
-
-
+lines(seq(0, 8, by = 0.01), apply(X = hBoot_1, MARGIN = 1, FUN = mean), col = "lightblue", lwd = 1.8)
 
 
 
