@@ -3,7 +3,7 @@ Analysis of how increases in ambient temperature affect the distribution of flow
 
 # Files
 
-**HeightAnalysis** *(.R)* - The code used to analyse the data and generate visualisations. 
+## Data
 
 **ThistleData** *(.xlsx)* - Data including flower heights and stages from the experimental thistles.
 
@@ -12,3 +12,15 @@ Analysis of how increases in ambient temperature affect the distribution of flow
 **Weather1** *(.csv)* - Weather data from the study site, with wind speeds used to model seed dispersal.
 
 **Weather2** *(.csv)* -  Weather data from the study site, with wind speeds used to model seed dispersal.
+
+## Scripts
+
+**01_Setup** *(.R)* - Code used to load in data and define functions for analysis and plotting.
+
+**02_Stats** *(.R)* - Code used for various statistical analyses on the data.
+
+**03_Plots** *(.R)* - Code used for plotting figures.
+
+## Writing
+
+**WarmingHeightMS** *(.docx)* - Manuscript for this research.
