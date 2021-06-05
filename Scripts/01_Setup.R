@@ -14,16 +14,16 @@ library(lmerTest)
 set.seed(19854)
 
 # Load in raw weather data
-data_ws1 <- read.csv("Weather1.csv")
-data_ws2 <- read.csv("Weather2.csv")
+data_ws1 <- read.csv("../Data/Weather1.csv")
+data_ws2 <- read.csv("../Data/Weather2.csv")
 
 # Load in terminal velocity data
 # Use ambient TVs since we're only examining warming effects on height distribution
-data_tv <- read.csv("SeedDropData.csv")
+data_tv <- read.csv("../Data/SeedDropData.csv")
 data_tv <- subset(data_tv, Warming == "A")
 
 # Load height data as xlsx
-data_ht <- read.xlsx(file.choose(), sheetName = "Flowers")
+data_ht <- read.xlsx("../Data/ThistleData.xlsx", sheetName = "Flowers")
 
 # Note: we are only including flowers (f) and seed heads (s), not buds (b)
 # We are also interested in only warmed (W) and not warmed (NW)
