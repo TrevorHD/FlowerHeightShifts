@@ -24,6 +24,14 @@ An analysis of experimental results examining how increases in ambient temperatu
 
 **03_Plots** *(.R)* - Code used for plotting figures.
 
+## Media
+
+**Presentation** *(.pptx)* - A PowerPoint presentation (for ESA 2021) regarding this research.
+
+**Transcript** *(.docx)* - A transcript of the recorded presentation in docx format.
+
+**Transcript** *(.pdf)* - A transcript of the recorded presentation in PDF format.
+
 ## Writing
 
 **WarmingHeightMS** *(.docx)* - Manuscript for this research.
