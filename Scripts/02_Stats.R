@@ -133,10 +133,10 @@ ks.test(hBoot_HD2[, 2], hBoot_HD2[, 5], alt = "two.sided")
 ##### [F3.1] Estimate warmed vs not warmed PDF (dispersal kernels) ----------------------------------------
 
 # Mean dispersal distance for kernel, along with 95% bootstrap interval on mean
-ds.mean(ht_CN_NW$Height)
-ds.mean(ht_CN_W$Height)
-ds.mean(ht_CA_NW$Height)
-ds.mean(ht_CA_W$Height)
+ds.mean(ht_CN_NW$Height, "CN")
+ds.mean(ht_CN_W$Height, "CN")
+ds.mean(ht_CA_NW$Height, "CA")
+ds.mean(ht_CA_W$Height, "CA")
 
 # Kolmogorov-Smirnov test for NW/W CN and NW/W CA
 # The NW and W dispersal kernels display significant difference for CN and CA
@@ -178,14 +178,14 @@ subset(hboot_WNW2_rtail, DistancePercentile == 0.99 & Treatment == "Warmed")
 ##### [F4.1] Estimate max height vs height distribution PDF (dispersal kernels) ---------------------------
 
 # Mean dispersal distance for kernel, along with 95% bootstrap interval on mean
-ds.mean(ht_CN_NW$Height)
-ds.mean(ht_CN_W$Height)
-ds.mean(ht_CA_NW$Height)
-ds.mean(ht_CA_W$Height)
-ds.mean(ht_CN_NW_max$max)
-ds.mean(ht_CN_W_max$max)
-ds.mean(ht_CA_NW_max$max)
-ds.mean(ht_CA_W_max$max)
+ds.mean(ht_CN_NW$Height, "CN")
+ds.mean(ht_CN_W$Height, "CN")
+ds.mean(ht_CA_NW$Height, "CA")
+ds.mean(ht_CA_W$Height, "CA")
+ds.mean(ht_CN_NW_max$max, "CN")
+ds.mean(ht_CN_W_max$max, "CN")
+ds.mean(ht_CA_NW_max$max, "CA")
+ds.mean(ht_CA_W_max$max, "CA")
 
 # Kolmogorov-Smirnov test for NW/W CN and NW/W CA
 # The NW and W dispersal kernels display significant difference for CN and CA

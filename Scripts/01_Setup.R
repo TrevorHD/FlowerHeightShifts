@@ -235,7 +235,7 @@ ds.pdf <- function(heights, species){
 
 # Function to calculate mean dispersal distance for entire kernel
 # Also calculates 95% bootstrap interval on mean
-ds.mean <- function(h){
+ds.mean <- function(h, species){
   hList <- replicate(1000, mean(WALD.h(100, h, species)))
   return(c(mean(hList), quantile(hList, c(0.025, 0.975))))}
 
