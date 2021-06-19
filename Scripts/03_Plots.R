@@ -32,7 +32,7 @@ dev.off()
 
 
 
-##### [F2.1] Plot height distribution PDF with 95% bootstrap interval -------------------------------------
+##### [F2] Plot height distribution PDF with 95% bootstrap interval ---------------------------------------
 
 # Prepare graphics device
 jpeg(filename = "Figure 2.1.jpeg", width = 826, height = 568, units = "px")
@@ -74,62 +74,6 @@ grid.text(label = c("Warmed", "Not Warmed"), x = rep(0.84, 2), y = c(0.87, 0.90)
           hjust = 0, gp = gpar(cex = 0.8))
 grid.segments(x0 = rep(0.813, 2), y0 = c(0.868, 0.898), x1 = rep(0.833, 2), y1 = c(0.868, 0.898),
               gp = gpar(col = c("red", "black")))
-
-# Create figure labels
-grid.text(label = c("(A) Carduus nutans", "(B) Carduus acanthoides"), x = rep(0.08, 2), y = c(0.93, 0.48),
-          hjust = 0, gp = gpar(cex = 1.1))
-popViewport()
-
-# Deactivate grid layout; finalise graphics save
-popViewport()
-dev.off()
-
-
-
-
-
-##### [F2.2] Same as above, but plot individual replicates and include Vincent average --------------------
-
-# Prepare graphics device
-jpeg(filename = "Figure 2.2.jpeg", width = 826, height = 568, units = "px")
-
-# Create blank page
-grid.newpage()
-plot.new()
-
-# Set grid layout and activate it
-gly <- grid.layout(1200, 800)
-pushViewport(viewport(layout = gly))
-
-# CN non-warmed vs warmed
-pushViewport(vp = viewport(layout.pos.row = 1:600, layout.pos.col = 1:800))
-par(fig = gridFIG())
-par(new = TRUE)
-par(mar = c(2, 4, 2, 1))
-ht.pdfBoot.plot2(hBoot_HD1_2, bottom = FALSE)
-#abline(v = c(subset(ht_stats, Species == "CN" & Treatment == "Not Warmed")$MeanHeight,
-#             subset(ht_stats, Species == "CN" & Treatment == "Warmed")$MeanHeight),
-#       col = c("black", "red"), lty = c(2, 2))
-popViewport()
-
-# CA non-warmed vs warmed
-pushViewport(vp = viewport(layout.pos.row = 600:1200, layout.pos.col = 1:800))
-par(fig = gridFIG())
-par(new = TRUE)
-par(mar = c(4, 4, 0, 1))
-ht.pdfBoot.plot2(hBoot_HD2_2, bottom = TRUE)
-#abline(v = c(subset(ht_stats, Species == "CA" & Treatment == "Not Warmed")$MeanHeight,
-#             subset(ht_stats, Species == "CA" & Treatment == "Warmed")$MeanHeight),
-#       col = c("black", "red"), lty = c(2, 2))
-popViewport()
-
-# Note: commented out code above adds a vertical line at the mean
-
-# Create legend
-grid.text(label = c("Vincent Average", "Linear Average", "Warmed", "Not Warmed"), x = rep(0.84, 4),
-          y = c(0.81, 0.84, 0.87, 0.90), hjust = 0, gp = gpar(cex = 0.8))
-grid.segments(x0 = rep(0.813, 2), y0 = c(0.808, 0.838, 0.868, 0.898), x1 = rep(0.833, 4),
-              y1 = c(0.808, 0.838, 0.868, 0.898), gp = gpar(col = c("gold", "deepskyblue", "red", "black")))
 
 # Create figure labels
 grid.text(label = c("(A) Carduus nutans", "(B) Carduus acanthoides"), x = rep(0.08, 2), y = c(0.93, 0.48),

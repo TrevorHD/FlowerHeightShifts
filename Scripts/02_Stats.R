@@ -174,6 +174,7 @@ subset(hboot_WNW2_rtail, DistancePercentile == 0.99 & Treatment == "Warmed")
 
 
 
+
 ##### [F4.1] Estimate max height vs height distribution PDF (dispersal kernels) ---------------------------
 
 # Mean dispersal distance for kernel, along with 95% bootstrap interval on mean
