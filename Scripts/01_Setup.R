@@ -10,9 +10,6 @@ library(SuppDists)
 library(lme4)
 library(lmerTest)
 
-# Set seed for (pseudo) RNG
-set.seed(19854)
-
 # Load in raw weather data
 data_ws1 <- read.csv("../Data/Weather1.csv")
 data_ws2 <- read.csv("../Data/Weather2.csv")
@@ -180,7 +177,7 @@ remove(HeightList)
 
 
 
-##### [F2.1] Estimate height distribution PDF with 95% bootstrap interval ---------------------------------
+##### [F2] Estimate height distribution PDF with 95% bootstrap interval -----------------------------------
 
 # Set up function to estimate PDF for a bootstrapped sample
 ht.pdf <- function(heights){
@@ -217,6 +214,9 @@ ht.pdfBoot.plot <- function(bootData, bottom){
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 6], rev(bootData[, 7])), col = alpha("red", alpha = 0.2), border = NA)}
 
+# Set seed for (pseudo) RNG
+set.seed(19854)
+
 # Bootstrap PDFs for NW/W CN and NW/W CA heights
 hBoot_HD1 <- ht.pdfBoot(ht_CN_NW$Height, ht_CN_W$Height)
 hBoot_HD2 <- ht.pdfBoot(ht_CA_NW$Height, ht_CA_W$Height)
@@ -225,88 +225,25 @@ hBoot_HD2 <- ht.pdfBoot(ht_CA_NW$Height, ht_CA_W$Height)
 
 
 
-##### [F2.2] Same as above, but plot individual replicates and include Vincent average --------------------
-
-# Calculate Vincent averages for height distribution
-mean.vincent <- function(hBoot){
-  cdf <- function(coldata){
-    return(cumsum(coldata/sum(coldata)))}
-  cdf_values <- as.data.frame(apply(X = hBoot, MARGIN = 2, FUN = cdf))
-  quantiles <- function(coldata){
-    quantile_data <- data.frame(cbind(seq(0, 200, by = 0.1), coldata))
-    return(approx(quantile_data[, 2], quantile_data[, 1], seq(0, 1, by = 0.0001), yleft = 0, yright = 200)$y)}
-  cdf_quantiles <- data.frame(apply(X = cdf_values, MARGIN = 2, FUN = quantiles))
-  cdf_quantiles <- apply(X = cdf_quantiles, MARGIN = 1, FUN = mean) 
-  return(cdf_quantiles)}
-
-ht.pdfBoot2 <- function(h1, h2){
-  hBoot_1 <- data.frame(replicate(1000, ht.pdf(sample(h1, size = 500, replace = TRUE))))
-  hBoot_2 <- data.frame(replicate(1000, ht.pdf(sample(h2, size = 500, replace = TRUE))))
-  return(list(data.frame(seq(0, 200, by = 0.1),
-                    apply(X = hBoot_1, MARGIN = 1, FUN = mean),
-                    apply(X = hBoot_2, MARGIN = 1, FUN = mean)),
-              hBoot_1, hBoot_2,
-              mean.vincent(hBoot_1),
-              mean.vincent(hBoot_2)))}
-
-# Function to plot bootstrapped height distributions
-# Includes linear pool (blue) and Vincent average (yellow)
-ht.pdfBoot.plot2 <- function(bootData, bottom){
-  if(bottom == FALSE){
-    plot(x = bootData[[1]][, 1], y = bootData[[2]][, 1], type = "l", xlim = c(0, 200), ylim = c(0, 0.03),
-         xaxt = "n", yaxt = "n", ylab = "Probability Density",
-         col = rgb(red = 0, green = 0, blue = 0, alpha = 0.03))
-    lines(bootData[[1]][, 1], bootData[[3]][, 1], col = rgb(red = 1, green = 0.23, blue = 0.23, alpha = 0.03))
-    for(i in 2:1000){
-      lines(bootData[[1]][, 1], bootData[[2]][, i], col = rgb(red = 0, green = 0, blue = 0, alpha = 0.03))
-      lines(bootData[[1]][, 1], bootData[[3]][, i], col = rgb(red = 1, green = 0.23, blue = 0.23, alpha = 0.03))}
-    lines(density(bootData[[4]], from = 0, to = 200), col = "gold", lwd = 1.8)
-    lines(density(bootData[[5]], from = 0, to = 200), col = "gold", lwd = 1.8)
-    lines(bootData[[1]][, 1], bootData[[1]][, 2], col = "deepskyblue", lwd = 1.8)
-    lines(bootData[[1]][, 1], bootData[[1]][, 3], col = "deepskyblue", lwd = 1.8)
-    axis(side = 1, at = c(0, 50, 100, 150, 200), labels = FALSE)
-    axis(side = 2, at = c(0, 0.01, 0.02, 0.03), labels = TRUE)}
-  if(bottom == TRUE){
-    plot(x = bootData[[1]][, 1], y = bootData[[2]][, 1], type = "l", xlim = c(0, 200), ylim = c(0, 0.03),
-         xlab = "Flower Height (cm)", yaxt = "n", ylab = "Probability Density",
-         col = rgb(red = 0.4, green = 0, blue = 0, alpha = 0.03))
-    lines(bootData[[1]][, 1], bootData[[3]][, 1], col = rgb(red = 1, green = 0.23, blue = 0.23, alpha = 0.03))
-    for(i in 2:1000){
-      lines(bootData[[1]][, 1], bootData[[2]][, i], col = rgb(red = 0, green = 0, blue = 0, alpha = 0.03))
-      lines(bootData[[1]][, 1], bootData[[3]][, i], col = rgb(red = 1, green = 0.23, blue = 0.23, alpha = 0.03))}
-    lines(density(bootData[[4]], from = 0, to = 200), col = "gold", lwd = 1.8)
-    lines(density(bootData[[5]], from = 0, to = 200), col = "gold", lwd = 1.8)
-    lines(bootData[[1]][, 1], bootData[[1]][, 2], col = "deepskyblue", lwd = 1.8)
-    lines(bootData[[1]][, 1], bootData[[1]][, 3], col = "deepskyblue", lwd = 1.8)
-    axis(side = 2, at = c(0, 0.01, 0.02, 0.03), labels = TRUE)}}
-
-# Bootstrap PDFs for NW/W CN and NW/W CA heights
-hBoot_HD1_2 <- ht.pdfBoot2(ht_CN_NW$Height, ht_CN_W$Height)
-hBoot_HD2_2 <- ht.pdfBoot2(ht_CA_NW$Height, ht_CA_W$Height)
-
-
-
-
-
 ##### [F3.1] Estimate warmed vs not warmed PDF (dispersal kernels) ----------------------------------------
 
 # Set up function to create a single sample and estimate PDF
-ds.pdf <- function(heights){
-  hList <- WALD.h(100, heights)
+ds.pdf <- function(heights, species){
+  hList <- WALD.h(100, heights, species)
   hList.dens <- approxfun(density(hList))
   return(hList.dens(seq(0, 8, by = 0.01)))}
 
 # Function to calculate mean dispersal distance for entire kernel
 # Also calculates 95% bootstrap interval on mean
 ds.mean <- function(h){
-  hList <- replicate(1000, mean(WALD.h(100, h)))
+  hList <- replicate(1000, mean(WALD.h(100, h, species)))
   return(c(mean(hList), quantile(hList, c(0.025, 0.975))))}
 
 # Function to bootstrap dispersal kernels and estimate 95% bootstrap interval
 # For each kernel sample 100 release heights with 100 seed releases each, and repeat 1000 times
-ds.pdfBoot <- function(h1, h2, type){
-  hBoot_1 <- data.frame(replicate(1000, ds.pdf(h1), simplify = "matrix"))
-  hBoot_2 <- data.frame(replicate(1000, ds.pdf(h2), simplify = "matrix"))
+ds.pdfBoot <- function(h1, h2, type, species){
+  hBoot_1 <- data.frame(replicate(1000, ds.pdf(h1, species), simplify = "matrix"))
+  hBoot_2 <- data.frame(replicate(1000, ds.pdf(h2, species), simplify = "matrix"))
   hBoot_dat <- data.frame(seq(0, 8, by = 0.01),
                           apply(X = hBoot_1, MARGIN = 1, FUN = mean),
                           apply(X = hBoot_1, MARGIN = 1, FUN = quantile, probs = 0.025),
@@ -335,9 +272,12 @@ ds.pdfBoot.plot <- function(bootData, bottom){
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 6], rev(bootData[, 7])), col = alpha("red", alpha = 0.2), border = NA)}
 
+# Set seed for (pseudo) RNG
+set.seed(18364)
+
 # Bootstrap PDFs for NW/W CN and NW/W CA dispersal kernels
-hBoot_WNW1_pdf <- ds.pdfBoot(ht_CN_NW$Height, ht_CN_W$Height, "WNW")
-hBoot_WNW2_pdf <- ds.pdfBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW")
+hBoot_WNW1_pdf <- ds.pdfBoot(ht_CN_NW$Height, ht_CN_W$Height, "WNW", "CN")
+hBoot_WNW2_pdf <- ds.pdfBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW", "CA")
 
 
 
@@ -346,8 +286,8 @@ hBoot_WNW2_pdf <- ds.pdfBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW")
 ##### [F3.2] Estimate warmed vs not warmed CCDF -----------------------------------------------------------
 
 # Set up function to create a single sample and estimate CCDF
-ds.ccdf <- function(heights){
-  hList <- sort(WALD.h(100, heights))
+ds.ccdf <- function(heights, species){
+  hList <- sort(WALD.h(100, heights, species))
   hList.exceed <- function(cutoff){
     return(length(hList[hList >= cutoff])/length(hList))}
   hList.ccdf <- approxfun(hList, sapply(hList, hList.exceed), yleft = 1, yright = 0)
@@ -355,9 +295,9 @@ ds.ccdf <- function(heights){
 
 # Function to bootstrap CCDF and estimate 95% bootstrap interval
 # For each CCDF sample 100 release heights with 100 seed releases each, and repeat 1000 times
-ds.ccdfBoot <- function(h1, h2, type){
-  hBoot_1 <- data.frame(replicate(1000, ds.ccdf(h1), simplify = "matrix"))
-  hBoot_2 <- data.frame(replicate(1000, ds.ccdf(h2), simplify = "matrix"))
+ds.ccdfBoot <- function(h1, h2, type, species){
+  hBoot_1 <- data.frame(replicate(1000, ds.ccdf(h1, species), simplify = "matrix"))
+  hBoot_2 <- data.frame(replicate(1000, ds.ccdf(h2, species), simplify = "matrix"))
   hBoot_dat <- data.frame(seq(0, 60, by = 0.01),
                           apply(X = hBoot_1, MARGIN = 1, FUN = mean),
                           apply(X = hBoot_1, MARGIN = 1, FUN = quantile, probs = 0.025),
@@ -386,9 +326,12 @@ ds.ccdfBoot.plot <- function(bootData, bottom){
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 6], rev(bootData[, 7])), col = alpha("red", alpha = 0.2), border = NA)}
 
+# Set seed for (pseudo) RNG
+set.seed(62947)
+
 # Bootstrap CCDFs for NW/W CN and NW/W CA heights
-hBoot_WNW1_ccdf <- ds.ccdfBoot(ht_CN_NW$Height, ht_CN_W$Height, "WNW")
-hBoot_WNW2_ccdf <- ds.ccdfBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW")
+hBoot_WNW1_ccdf <- ds.ccdfBoot(ht_CN_NW$Height, ht_CN_W$Height, "WNW", "CN")
+hBoot_WNW2_ccdf <- ds.ccdfBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW", "CA")
 
 
 
@@ -398,9 +341,9 @@ hBoot_WNW2_ccdf <- ds.ccdfBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW")
 
 # Function to bootstrap CCDF ratio and estimate 95% bootstrap interval
 # For each CCDF sample 100 release heights with 100 seed releases each, and repeat 1000 times
-ds.ccdfRatioBoot <- function(h1, h2, type){
-  hBoot_1 <- data.frame(replicate(1000, ds.ccdf(h1), simplify = "matrix"))
-  hBoot_2 <- data.frame(replicate(1000, ds.ccdf(h2), simplify = "matrix"))
+ds.ccdfRatioBoot <- function(h1, h2, type, species){
+  hBoot_1 <- data.frame(replicate(1000, ds.ccdf(h1, species), simplify = "matrix"))
+  hBoot_2 <- data.frame(replicate(1000, ds.ccdf(h2, species), simplify = "matrix"))
   hBoot_a <- hBoot_2/hBoot_1
   mean.exinf <- function(x){
     return(mean(x[!is.infinite(x)]))}
@@ -429,9 +372,12 @@ ds.ccdfRatioBoot.plot <- function(bootData, bottom){
           y = c(bootData[, 3], rev(bootData[, 4])), col = alpha("black", alpha = 0.2), border = NA)
   abline(h = 1, lty = 3)}
 
+# Set seed for (pseudo) RNG
+set.seed(56284)
+
 # Bootstrap CCDF ratios for NW/W CN and NW/W CA heights
-hBoot_WNW1_CCDFRatio <- ds.ccdfRatioBoot(ht_CN_NW$Height, ht_CN_W$Height, "WNW")
-hBoot_WNW2_CCDFRatio <- ds.ccdfRatioBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW")
+hBoot_WNW1_CCDFRatio <- ds.ccdfRatioBoot(ht_CN_NW$Height, ht_CN_W$Height, "WNW", "CN")
+hBoot_WNW2_CCDFRatio <- ds.ccdfRatioBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW", "CA")
 
 
 
@@ -440,19 +386,20 @@ hBoot_WNW2_CCDFRatio <- ds.ccdfRatioBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW")
 ##### [F3.4] Estimate warmed vs not right tail dispersal percentile distances -----------------------------
 
 # Set up function to create bootstrapped sample and canculate nth percentiles
-ds.rtail <- function(heights){
-  hList <- WALD.h(100, heights)
+ds.rtail <- function(heights, species){
+  hList <- WALD.h(100, heights, species)
   return(quantile(hList, probs = seq(0.9500, 0.9999, by = 0.0001)))}
 
 # Function to calculate nth percentile dispersal distances, particularly on right tail
 # For distribution, sample 100 release heights with 100 seed releases each, and repeat 1000 times
 # For mean, simulate 10000 seed release events, and repeat 1000 times
 # Either way, each bootstrap has 10000 seed release events and is repeated 1000 times
-ds.rtailBootWNW <- function(h1, h2, Species){
-  hBoot_1 <- data.frame(replicate(1000, ds.rtail(h1), simplify = "matrix"))
-  hBoot_2 <- data.frame(replicate(1000, ds.rtail(h2), simplify = "matrix"))
-  hBoot_dat <- data.frame(cbind(rep(seq(0.9500, 0.9999, by = 0.0001), 2), c(rep("Not Warmed", 500), rep("Warmed", 500))), 
-                          rep(Species, 1000),
+ds.rtailBootWNW <- function(h1, h2, species){
+  hBoot_1 <- data.frame(replicate(1000, ds.rtail(h1, species), simplify = "matrix"))
+  hBoot_2 <- data.frame(replicate(1000, ds.rtail(h2, species), simplify = "matrix"))
+  hBoot_dat <- data.frame(cbind(rep(seq(0.9500, 0.9999, by = 0.0001), 2),
+                                c(rep("Not Warmed", 500), rep("Warmed", 500))), 
+                          rep(species, 1000),
                           c(apply(X = hBoot_1, MARGIN = 1, FUN = mean),
                             apply(X = hBoot_2, MARGIN = 1, FUN = mean)),
                           c(apply(X = hBoot_1, MARGIN = 1, FUN = quantile, probs = 0.025),
@@ -482,6 +429,9 @@ ds.rtailBootWNW.plot <- function(bootData, bottom){
   lines(x = rtW[, 1], y = rtW[, 4], type = "l", col = "red")
   polygon(x = c(rtW[, 1], rev(rtW[, 1])), 
           y = c(rtW[, 5], rev(rtW[, 6])), col = alpha("red", alpha = 0.2), border = NA)}
+
+# Set seed for (pseudo) RNG
+set.seed(70472)
 
 # Bootstrap right tail dispersal percentile distances for NW/W CN and NW/W CA heights
 hboot_WNW1_rtail <- ds.rtailBootWNW(ht_CN_NW$Height, ht_CN_W$Height, "CN")
@@ -515,11 +465,14 @@ ds.pdfBoot.plot2 <- function(bootData, LColour, PColour, bNum, bLab){
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 6], rev(bootData[, 7])), col = alpha(PColour, alpha = 0.2), border = NA)}
 
+# Set seed for (pseudo) RNG
+set.seed(28472)
+
 # Bootstrap PDFs for M/HD CN and M/HD CA dispersal kernels
-hBoot_MHD1_pdf <- ds.pdfBoot(ht_CN_NW$Height, ht_CN_NW_max$max, "MHD")
-hBoot_MHD2_pdf <- ds.pdfBoot(ht_CN_W$Height, ht_CN_W_max$max, "MHD")
-hBoot_MHD3_pdf <- ds.pdfBoot(ht_CA_NW$Height, ht_CA_NW_max$max, "MHD")
-hBoot_MHD4_pdf <- ds.pdfBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD")
+hBoot_MHD1_pdf <- ds.pdfBoot(ht_CN_NW$Height, ht_CN_NW_max$max, "MHD", "CN")
+hBoot_MHD2_pdf <- ds.pdfBoot(ht_CN_W$Height, ht_CN_W_max$max, "MHD", "CN")
+hBoot_MHD3_pdf <- ds.pdfBoot(ht_CA_NW$Height, ht_CA_NW_max$max, "MHD", "CA")
+hBoot_MHD4_pdf <- ds.pdfBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD", "CA")
 
 
 
@@ -544,11 +497,14 @@ ds.ccdfBoot.plot2 <- function(bootData, LColour, PColour, bNum, bLab){
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 5], rev(bootData[, 6])), col = alpha(PColour, alpha = 0.2), border = NA)}
 
+# Set seed for (pseudo) RNG
+set.seed(93748)
+
 # Bootstrap CCDFs for M/HD CN and M/HD CA
-hBoot_MHD1_ccdf <- ds.ccdfBoot(ht_CN_NW$Height, ht_CN_NW_max$max, "MHD")
-hBoot_MHD2_ccdf <- ds.ccdfBoot(ht_CN_W$Height, ht_CN_W_max$max, "MHD")
-hBoot_MHD3_ccdf <- ds.ccdfBoot(ht_CA_NW$Height, ht_CA_NW_max$max, "MHD")
-hBoot_MHD4_ccdf <- ds.ccdfBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD")
+hBoot_MHD1_ccdf <- ds.ccdfBoot(ht_CN_NW$Height, ht_CN_NW_max$max, "MHD", "CN")
+hBoot_MHD2_ccdf <- ds.ccdfBoot(ht_CN_W$Height, ht_CN_W_max$max, "MHD", "CN")
+hBoot_MHD3_ccdf <- ds.ccdfBoot(ht_CA_NW$Height, ht_CA_NW_max$max, "MHD", "CA")
+hBoot_MHD4_ccdf <- ds.ccdfBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD", "CA")
 
 
 
@@ -569,11 +525,14 @@ ds.ccdfRatioBoot.plot2 <- function(bootData, bNum, bLab){
           y = c(bootData[, 3], rev(bootData[, 4])), col = alpha("black", alpha = 0.2), border = NA)
   abline(h = 1, lty = 3)}
 
+# Set seed for (pseudo) RNG
+set.seed(44492)
+
 # Bootstrap CCDF ratios for M/HD CN and M/HD CA dispersal kernels
-hBoot_MHD1_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_W$Height, ht_CN_W_max$max, "MHD")
-hBoot_MHD2_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_NW$Height, ht_CN_NW_max$max, "MHD")
-hBoot_MHD3_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD")
-hBoot_MHD4_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_NW$Height, ht_CA_NW_max$max, "MHD")
+hBoot_MHD1_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_W$Height, ht_CN_W_max$max, "MHD", "CN")
+hBoot_MHD2_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_NW$Height, ht_CN_NW_max$max, "MHD", "CN")
+hBoot_MHD3_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD", "CA")
+hBoot_MHD4_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_NW$Height, ht_CA_NW_max$max, "MHD", "CA")
 
 
 
@@ -588,7 +547,8 @@ hBoot_MHD4_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_NW$Height, ht_CA_NW_max$max, "MHD
 ds.rtailBootMHD <- function(distHeight, maxHeight, Species){
   hBoot_1 <- data.frame(replicate(1000, ds.rtail(distHeight), simplify = "matrix"))
   hBoot_2 <- data.frame(replicate(1000, ds.rtail(maxHeight), simplify = "matrix"))
-  hBoot_dat <- data.frame(cbind(rep(seq(0.9500, 0.9999, by = 0.0001), 2), c(rep("Dist. Height", 500), rep("Max. Height", 500))), 
+  hBoot_dat <- data.frame(cbind(rep(seq(0.9500, 0.9999, by = 0.0001), 2),
+                                c(rep("Dist. Height", 500), rep("Max. Height", 500))), 
                           rep(Species, 1000),
                           c(apply(X = hBoot_1, MARGIN = 1, FUN = mean),
                             apply(X = hBoot_2, MARGIN = 1, FUN = mean)),
@@ -620,6 +580,10 @@ ds.rtailBootMHD.plot <- function(rtail_data, LColour, PColour, bNum, bLab){
   polygon(x = c(rtMH[, 1], rev(rtMH[, 1])), 
           y = c(rtMH[, 5], rev(rtMH[, 6])), col = alpha(PColour, alpha = 0.2), border = NA)}
 
+# Set seed for (pseudo) RNG
+set.seed(91748)
+
+# Bootstrap right tail dispersal percentile distances for max and dist NW/W CN and NW/W CA heights
 hBoot_MHD1_rtail <- ds.rtailBootMHD(ht_CN_NW$Height, ht_CN_NW_max$max, "CN")
 hBoot_MHD2_rtail <- ds.rtailBootMHD(ht_CN_W$Height, ht_CN_W_max$max, "CN")
 hBoot_MHD3_rtail <- ds.rtailBootMHD(ht_CA_NW$Height, ht_CA_NW_max$max, "CA")
