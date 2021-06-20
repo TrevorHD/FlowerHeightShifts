@@ -132,6 +132,9 @@ ks.test(hBoot_HD2[, 2], hBoot_HD2[, 5], alt = "two.sided")
 
 ##### [F3.1] Estimate warmed vs not warmed PDF (dispersal kernels) ----------------------------------------
 
+# Set seed for (pseudo) RNG
+set.seed(18364)
+
 # Mean dispersal distance for kernel, along with 95% bootstrap interval on mean
 ds.mean(ht_CN_NW$Height, "CN")
 ds.mean(ht_CN_W$Height, "CN")
@@ -149,6 +152,9 @@ ks.test(hBoot_WNW2_pdf[, 2], hBoot_WNW2_pdf[, 5], alt = "two.sided")
 
 ##### [F3.3] Estimate warmed vs not warmed CCDF ratios ----------------------------------------------------
 
+# Set seed for (pseudo) RNG
+set.seed(56284)
+
 # Ratios at 50 m for CN and CA
 hBoot_WNW1_CCDFRatio[hBoot_WNW1_CCDFRatio[, 1] == 50, ]
 hBoot_WNW2_CCDFRatio[hBoot_WNW1_CCDFRatio[, 1] == 50, ]
@@ -158,6 +164,9 @@ hBoot_WNW2_CCDFRatio[hBoot_WNW1_CCDFRatio[, 1] == 50, ]
 
 
 ##### [F3.4] Estimate warmed vs not right tail dispersal percentile distances -----------------------------
+
+# Set seed for (pseudo) RNG
+set.seed(70472)
 
 # Mean 95th and 99th percentiles for CN
 subset(hboot_WNW1_rtail, DistancePercentile == 0.95 & Treatment == "Not Warmed")
@@ -176,6 +185,9 @@ subset(hboot_WNW2_rtail, DistancePercentile == 0.99 & Treatment == "Warmed")
 
 
 ##### [F4.1] Estimate max height vs height distribution PDF (dispersal kernels) ---------------------------
+
+# Set seed for (pseudo) RNG
+set.seed(28472)
 
 # Mean dispersal distance for kernel, along with 95% bootstrap interval on mean
 ds.mean(ht_CN_NW$Height, "CN")
@@ -200,6 +212,9 @@ ks.test(hBoot_MHD4_pdf[, 2], hBoot_MHD4_pdf[, 5], alt = "two.sided")
 
 ##### [F4.3] Plot max height vs height distribution CCDF ratio --------------------------------------------
 
+# Set seed for (pseudo) RNG
+set.seed(44492)
+
 # Ratios at 50 m for CN and CA
 hBoot_MHD1_ccdfRatio[hBoot_MHD1_ccdfRatio[, 1] == 50, ]
 hBoot_MHD2_ccdfRatio[hBoot_MHD2_ccdfRatio[, 1] == 50, ]
@@ -211,6 +226,9 @@ hBoot_MHD4_ccdfRatio[hBoot_MHD4_ccdfRatio[, 1] == 50, ]
 
 
 ##### [F4.4] Estimate max height vs height distribution right tail dispersal percentile distances ---------
+
+# Set seed for (pseudo) RNG
+set.seed(91748)
 
 # Mean 95th and 99th percentiles for CN unwarmed
 subset(hBoot_MHD1_rtail, DistancePercentile == 0.95 & Heights == "Dist. Height")
