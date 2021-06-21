@@ -49,7 +49,6 @@ pushViewport(viewport(layout = gly))
 pushViewport(vp = viewport(layout.pos.row = 1:600, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(2, 4, 2, 1))
 ht.pdfBoot.plot(hBoot_HD1, bottom = FALSE)
 #abline(v = c(subset(ht_stats, Species == "CN" & Treatment == "Not Warmed")$MeanHeight,
 #             subset(ht_stats, Species == "CN" & Treatment == "Warmed")$MeanHeight),
@@ -60,7 +59,6 @@ popViewport()
 pushViewport(vp = viewport(layout.pos.row = 600:1200, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(4, 4, 0, 1))
 ht.pdfBoot.plot(hBoot_HD2, bottom = TRUE)
 #abline(v = c(subset(ht_stats, Species == "CA" & Treatment == "Not Warmed")$MeanHeight,
 #             subset(ht_stats, Species == "CA" & Treatment == "Warmed")$MeanHeight),
@@ -91,7 +89,7 @@ dev.off()
 ##### [F3.1] Estimate warmed vs not warmed PDF (dispersal kernels) ----------------------------------------
 
 # Prepare graphics device
-jpeg(filename = "Figure 3.1.jpeg", width = 826, height = 568, units = "px")
+tiff(filename = "Figure 3.1.tif", width = 3304, height = 2272, units = "px", res = 800, compression = "lzw")
 
 # Create blank page
 grid.newpage()
@@ -105,7 +103,6 @@ pushViewport(viewport(layout = gly))
 pushViewport(vp = viewport(layout.pos.row = 1:600, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(2, 4, 2, 1))
 ds.pdfBoot.plot(hBoot_WNW1_pdf, bottom = FALSE)
 popViewport()
 
@@ -113,19 +110,18 @@ popViewport()
 pushViewport(vp = viewport(layout.pos.row = 600:1200, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(4, 4, 0, 1))
 ds.pdfBoot.plot(hBoot_WNW2_pdf, bottom = TRUE)
 popViewport()
 
 # Create legend
-grid.text(label = c("Warmed", "Not Warmed"), x = rep(0.84, 2), y = c(0.87, 0.90),
-          hjust = 0, gp = gpar(cex = 0.8))
-grid.segments(x0 = rep(0.813, 2), y0 = c(0.868, 0.898), x1 = rep(0.833, 2), y1 = c(0.868, 0.898),
-              gp = gpar(col = c("red", "black")))
+grid.text(label = c("Not Warmed", "Warmed"), x = rep(0.834, 2), y = c(0.918, 0.885),
+          hjust = 0, gp = gpar(cex = 0.5))
+grid.segments(x0 = rep(0.806, 2), y0 = c(0.918, 0.885), x1 = rep(0.826, 2), y1 = c(0.918, 0.885),
+              gp = gpar(col = c("black", "red")))
 
 # Create figure labels
-grid.text(label = c("(A) Carduus nutans", "(B) Carduus acanthoides"), x = rep(0.08, 2), y = c(0.93, 0.48),
-          hjust = 0, gp = gpar(cex = 1.1))
+grid.text(label = c(expression("(A)" ~ italic("C. nutans")), expression("(B)" ~ italic("C. acanthoides"))),
+          x = rep(0.096, 2), y = c(0.918, 0.471), hjust = 0, gp = gpar(cex = 0.5))
 popViewport()
 
 # Deactivate grid layout; finalise graphics save
@@ -139,7 +135,7 @@ dev.off()
 ##### [F3.2] Plot warmed vs not warmed CCDF ---------------------------------------------------------------
 
 # Prepare graphics device
-jpeg(filename = "Figure 3.2.jpeg", width = 826, height = 568, units = "px")
+tiff(filename = "Figure 3.2.tif", width = 3304, height = 2272, units = "px", res = 800, compression = "lzw")
 
 # Create blank page
 grid.newpage()
@@ -153,7 +149,6 @@ pushViewport(viewport(layout = gly))
 pushViewport(vp = viewport(layout.pos.row = 1:600, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(2, 4, 2, 1))
 ds.ccdfBoot.plot(hBoot_WNW1_ccdf, bottom = FALSE)
 popViewport()
 
@@ -161,20 +156,18 @@ popViewport()
 pushViewport(vp = viewport(layout.pos.row = 600:1200, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(4, 4, 0, 1))
 ds.ccdfBoot.plot(hBoot_WNW2_ccdf, bottom = TRUE)
 popViewport()
 
 # Create legend
-grid.text(label = c("Warmed", "Not Warmed"), x = rep(0.84, 2), y = c(0.87, 0.90),
-          hjust = 0, gp = gpar(cex = 0.8))
-grid.segments(x0 = rep(0.813, 2), y0 = c(0.868, 0.898), x1 = rep(0.833, 2), y1 = c(0.868, 0.898),
-              gp = gpar(col = c("red", "black")))
+grid.text(label = c("Not Warmed", "Warmed"), x = rep(0.834, 2), y = c(0.918, 0.885),
+          hjust = 0, gp = gpar(cex = 0.5))
+grid.segments(x0 = rep(0.806, 2), y0 = c(0.918, 0.885), x1 = rep(0.826, 2), y1 = c(0.918, 0.885),
+              gp = gpar(col = c("black", "red")))
 
 # Create figure labels
-grid.text(label = c("(A) Carduus nutans", "(B) Carduus acanthoides"), x = rep(0.08, 2), y = c(0.93, 0.48),
-          hjust = 0, gp = gpar(cex = 1.1))
-popViewport()
+grid.text(label = c(expression("(A)" ~ italic("C. nutans")), expression("(B)" ~ italic("C. acanthoides"))),
+          x = rep(0.096, 2), y = c(0.918, 0.471), hjust = 0, gp = gpar(cex = 0.5))
 
 # Deactivate grid layout; finalise graphics save
 popViewport()
@@ -187,7 +180,7 @@ dev.off()
 ##### [F3.3] Plot warmed vs not warmed CCDF ratios --------------------------------------------------------
 
 # Prepare graphics device
-jpeg(filename = "Figure 3.3.jpeg", width = 826, height = 568, units = "px")
+tiff(filename = "Figure 3.3.tif", width = 3304, height = 2272, units = "px", res = 800, compression = "lzw")
 
 # Create blank page
 grid.newpage()
@@ -201,7 +194,6 @@ pushViewport(viewport(layout = gly))
 pushViewport(vp = viewport(layout.pos.row = 1:600, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(2, 4, 2, 1))
 ds.ccdfRatioBoot.plot(hBoot_WNW1_CCDFRatio, bottom = FALSE)
 popViewport()
 
@@ -209,14 +201,12 @@ popViewport()
 pushViewport(vp = viewport(layout.pos.row = 600:1200, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(4, 4, 0, 1))
 ds.ccdfRatioBoot.plot(hBoot_WNW2_CCDFRatio, bottom = TRUE)
 popViewport()
 
 # Create figure labels
-grid.text(label = c("(A) Carduus nutans", "(B) Carduus acanthoides"), x = rep(0.08, 2), y = c(0.93, 0.48),
-          hjust = 0, gp = gpar(cex = 1.1))
-popViewport()
+grid.text(label = c(expression("(A)" ~ italic("C. nutans")), expression("(B)" ~ italic("C. acanthoides"))),
+          x = rep(0.096, 2), y = c(0.918, 0.471), hjust = 0, gp = gpar(cex = 0.5))
 
 # Deactivate grid layout; finalise graphics save
 popViewport()
@@ -229,7 +219,7 @@ dev.off()
 ##### [F3.4] Plot warmed vs not right tail dispersal percentile distances ---------------------------------
 
 # Prepare graphics device
-jpeg(filename = "Figure 3.4.jpeg", width = 826, height = 568, units = "px")
+tiff(filename = "Figure 3.4.tif", width = 3304, height = 2272, units = "px", res = 800, compression = "lzw")
 
 # Create blank page
 grid.newpage()
@@ -243,7 +233,6 @@ pushViewport(viewport(layout = gly))
 pushViewport(vp = viewport(layout.pos.row = 1:600, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(2, 4, 2, 1))
 ds.rtailBootWNW.plot(hboot_WNW1_rtail, bottom = FALSE)
 popViewport()
 
@@ -251,20 +240,18 @@ popViewport()
 pushViewport(vp = viewport(layout.pos.row = 600:1200, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(4, 4, 0, 1))
 ds.rtailBootWNW.plot(hboot_WNW2_rtail, bottom = TRUE)
 popViewport()
 
 # Create legend
-grid.text(label = c("Warmed", "Not Warmed"), x = rep(0.84, 2), y = c(0.87, 0.90),
-          hjust = 0, gp = gpar(cex = 0.8))
-grid.segments(x0 = rep(0.813, 2), y0 = c(0.868, 0.898), x1 = rep(0.833, 2), y1 = c(0.868, 0.898),
-              gp = gpar(col = c("red", "black")))
+grid.text(label = c("Not Warmed", "Warmed"), x = rep(0.834, 2), y = c(0.635, 0.602),
+          hjust = 0, gp = gpar(cex = 0.5))
+grid.segments(x0 = rep(0.806, 2), y0 = c(0.635, 0.602), x1 = rep(0.826, 2), y1 = c(0.635, 0.602),
+              gp = gpar(col = c("black", "red")))
 
 # Create figure labels
-grid.text(label = c("(A) Carduus nutans", "(B) Carduus acanthoides"), x = rep(0.08, 2), y = c(0.93, 0.48),
-          hjust = 0, gp = gpar(cex = 1.1))
-popViewport()
+grid.text(label = c(expression("(A)" ~ italic("C. nutans")), expression("(B)" ~ italic("C. acanthoides"))),
+          x = rep(0.096, 2), y = c(0.918, 0.471), hjust = 0, gp = gpar(cex = 0.5))
 
 # Deactivate grid layout; finalise graphics save
 popViewport()

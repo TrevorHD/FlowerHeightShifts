@@ -276,13 +276,22 @@ ds.pdfBoot <- function(h1, h2, type, species, ks.only = FALSE){
 
 # Function to plot bootstrapped dispersal kernels, with mean line and 95% band
 ds.pdfBoot.plot <- function(bootData, bottom){
+  par(cex.axis = 0.45, tcl = -0.2)
   if(bottom == FALSE){
+    par(mar = c(1, 1.75, 0.75, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 7), ylim = c(0, 0.6),
-         xaxt = "n", ylab = "Probability Density")
-    axis(side = 1, at = 0:7, labels = FALSE)}
+         xaxt = "n", yaxt = "n")
+    axis(side = 1, at = 0:7, labels = FALSE)
+    axis(side = 2, at = c(0, 0.2, 0.4, 0.6), labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "Probability density", cex = 0.6)}
   if(bottom == TRUE){
+    par(mar = c(1.75, 1.75, 0, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 7), ylim = c(0, 0.6),
-         xlab = "Dispersal Distance (m)", ylab = "Probability Density")}
+         xaxt = "n", yaxt = "n")
+    axis(side = 1, at = 0:7, labels = TRUE, mgp = c(0, 0, 0))
+    mtext(side = 1, line = 0.75, "Dispersal distance (m)", cex = 0.6)
+    axis(side = 2, at = c(0, 0.2, 0.4, 0.6), labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "Probability density", cex = 0.6)}
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 3], rev(bootData[, 4])), col = alpha("black", alpha = 0.2), border = NA)
   lines(x = bootData[, 1], y = bootData[, 5], type = "l", col = "red")
@@ -330,13 +339,22 @@ ds.ccdfBoot <- function(h1, h2, type, species){
 
 # Function to plot bootstrapped CCDF, with mean line and 95% band
 ds.ccdfBoot.plot <- function(bootData, bottom){
+  par(cex.axis = 0.45, tcl = -0.2)
   if(bottom == FALSE){
-    plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 60), ylim = c(0, 1),
-         xaxt = "n", ylab = "Complement of Cumulative Probability")
-    axis(side = 1, at = seq(0, 60, by = 10), labels = FALSE)}
+    par(mar = c(1, 1.75, 0.75, 0.75))
+    plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 30), ylim = c(0, 1),
+         xaxt = "n", yaxt = "n")
+    axis(side = 1, at = seq(0, 30, by = 5), labels = FALSE)
+    axis(side = 2, at = c(0, 0.25, 0.5, 0.75, 1), labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "1 - Cumulative probability", cex = 0.6)}
   if(bottom == TRUE){
-    plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 60), ylim = c(0, 1),
-         xlab = "Dispersal Distance (m)", ylab = "Complement of Cumulative Probability")}
+    par(mar = c(1.75, 1.75, 0, 0.75))
+    plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 30), ylim = c(0, 1),
+         xaxt = "n", yaxt = "n")
+    axis(side = 1, at = seq(0, 30, by = 5), labels = TRUE, mgp = c(0, 0, 0))
+    mtext(side = 1, line = 0.75, "Dispersal distance (m)", cex = 0.6)
+    axis(side = 2, at = c(0, 0.25, 0.5, 0.75, 1), labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "1 - Cumulative probability", cex = 0.6)}
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 3], rev(bootData[, 4])), col = alpha("black", alpha = 0.2), border = NA)
   lines(x = bootData[, 1], y = bootData[, 5], type = "l", col = "red")
@@ -378,13 +396,22 @@ ds.ccdfRatioBoot <- function(h1, h2, type, species){
 
 # Function to plot bootstrapped CCDF ratio, with mean line and 95% band
 ds.ccdfRatioBoot.plot <- function(bootData, bottom){
+  par(cex.axis = 0.45, tcl = -0.2)
   if(bottom == FALSE){
+    par(mar = c(1, 1.75, 0.75, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 60), ylim = c(0, 4),
-         xaxt = "n", ylab = "W/NW CCDF Ratio")
-    axis(side = 1, at = seq(0, 60, by = 10), labels = FALSE)}
+         xaxt = "n", yaxt = "n")
+    axis(side = 1, at = seq(0, 60, by = 10), labels = FALSE)
+    axis(side = 2, at = 0:4, labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "W/NW CCDF Ratio", cex = 0.6)}
   if(bottom == TRUE){
+    par(mar = c(1.75, 1.75, 0, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 60), ylim = c(0, 4),
-         xlab = "Dispersal Distance (m)", ylab = "W/NW CCDF Ratio")}
+         xaxt = "n", yaxt = "n")
+    axis(side = 1, at = seq(0, 60, by = 10), labels = TRUE, mgp = c(0, 0, 0))
+    mtext(side = 1, line = 0.75, "Dispersal distance (m)", cex = 0.6)
+    axis(side = 2, at = 0:4, labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "W/NW CCDF Ratio", cex = 0.6)}
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 3], rev(bootData[, 4])), col = alpha("black", alpha = 0.2), border = NA)
   abline(h = 1, lty = 3)}
@@ -434,13 +461,22 @@ ds.rtailBootWNW.plot <- function(bootData, bottom){
   bootData[, 1] <- as.numeric(as.character(bootData[, 1]))
   rtNW <- subset(bootData, Treatment == "Not Warmed")
   rtW <- subset(bootData, Treatment == "Warmed")
+  par(cex.axis = 0.45, tcl = -0.2)
   if(bottom == FALSE){
+    par(mar = c(1, 1.75, 0.75, 0.75))
     plot(x = rtNW[, 1], y = rtNW[, 4], type = "l", xlim = c(0.95, 1), ylim = c(0, 80),
-         xaxt = "n", ylab = "Dispersal Distance (m)")
-    axis(side = 1, at = seq(0.95, 1, by = 0.01), labels = FALSE)}
+         xaxt = "n", yaxt = "n")
+    axis(side = 1, at = seq(0.95, 1, by = 0.01), labels = FALSE)
+    axis(side = 2, at = c(0, 20, 40, 60, 80), labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "Dispersal distance (m)", cex = 0.6)}
   if(bottom == TRUE){
+    par(mar = c(1.75, 1.75, 0, 0.75))
     plot(x = rtNW[, 1], y = rtNW[, 4], type = "l", xlim = c(0.95, 1), ylim = c(0, 80),
-         xlab = "Dispersal Quantile", ylab = "Dispersal Distance (m)")}
+         xaxt = "n", yaxt = "n")
+    axis(side = 1, at = seq(0.95, 1, by = 0.01), labels = TRUE, mgp = c(0, 0, 0))
+    mtext(side = 1, line = 0.75, "Dispersal percentile", cex = 0.6)
+    axis(side = 2, at = c(0, 20, 40, 60, 80), labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "Dispersal distance (m)", cex = 0.6)}
   polygon(x = c(rtNW[, 1], rev(rtNW[, 1])), 
           y = c(rtNW[, 5], rev(rtNW[, 6])), col = alpha("black", alpha = 0.2), border = NA)
   lines(x = rtW[, 1], y = rtW[, 4], type = "l", col = "red")
