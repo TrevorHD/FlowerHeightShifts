@@ -121,10 +121,13 @@ t.test(ht_CA_W$Height, ht_CA_NW$Height, alt = "two.sided", var.equal = FALSE)
 
 ##### [F2] Estimate height distribution PDF with 95% bootstrap interval -----------------------------------
 
+# Set seed for (pseudo) RNG
+set.seed(19854)
+
 # Kolmogorov-Smirnov test for NW/W CN and NW/W CA
 # The NW and W height distributions display significant difference for CN and CA
-ks.test(hBoot_HD1[, 2], hBoot_HD1[, 5], alt = "two.sided")
-ks.test(hBoot_HD2[, 2], hBoot_HD2[, 5], alt = "two.sided")
+ht.pdfBoot(ht_CN_NW$Height, ht_CN_W$Height, ks.only = TRUE)
+ht.pdfBoot(ht_CA_NW$Height, ht_CA_W$Height, ks.only = TRUE)
 
 
 
@@ -143,8 +146,8 @@ ds.mean(ht_CA_W$Height, "CA")
 
 # Kolmogorov-Smirnov test for NW/W CN and NW/W CA
 # The NW and W dispersal kernels display significant difference for CN and CA
-ks.test(hBoot_WNW1_pdf[, 2], hBoot_WNW1_pdf[, 5], alt = "two.sided")
-ks.test(hBoot_WNW2_pdf[, 2], hBoot_WNW2_pdf[, 5], alt = "two.sided")
+ds.pdfBoot(ht_CN_NW$Height, ht_CN_W$Height, "WNW", "CN", ks.only = TRUE)
+ds.pdfBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW", "CA", ks.only = TRUE)
 
 
 
@@ -201,10 +204,10 @@ ds.mean(ht_CA_W_max$max, "CA")
 
 # Kolmogorov-Smirnov test for NW/W CN and NW/W CA
 # The NW and W dispersal kernels display significant difference for CN and CA
-ks.test(hBoot_MHD1_pdf[, 2], hBoot_MHD1_pdf[, 5], alt = "two.sided")
-ks.test(hBoot_MHD2_pdf[, 2], hBoot_MHD2_pdf[, 5], alt = "two.sided")
-ks.test(hBoot_MHD3_pdf[, 2], hBoot_MHD3_pdf[, 5], alt = "two.sided")
-ks.test(hBoot_MHD4_pdf[, 2], hBoot_MHD4_pdf[, 5], alt = "two.sided")
+ds.pdfBoot(ht_CN_NW$Height, ht_CN_NW_max$max, "MHD", "CN", ks.only = TRUE)
+ds.pdfBoot(ht_CN_W$Height, ht_CN_W_max$max, "MHD", "CN", ks.only = TRUE)
+ds.pdfBoot(ht_CA_NW$Height, ht_CA_NW_max$max, "MHD", "CA", ks.only = TRUE)
+ds.pdfBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD", "CA", ks.only = TRUE)
 
 
 

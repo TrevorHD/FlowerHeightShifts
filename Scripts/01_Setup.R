@@ -129,7 +129,7 @@ WALD.b <- function(n, H, species){
 WALD.h <- function(n, h, species){
   
   # Let n be the number of release heights
-  # Let h be the distribution of heights
+  # Let h be the observed distribution of flower heights
   
   # Use 100 replicates for each height
   nr <- 100
@@ -137,10 +137,12 @@ WALD.h <- function(n, h, species){
   # Get PDF of heights
   h_PDF <- density(h)
   
-  # Generate normally-distributed release heights, and convert cm to m too
+  # Generate release heights from empirical distribution of terminal velocities
+  # Convert heights from cm to m since WALD model is coded in metres
   hRange <- rnorm(n, sample(h, size = n, replace = TRUE), h_PDF$bw)/100
   
-  # Truncate heights below 15 cm since these plants will likely not flower
+  # Truncate heights below 15 cm (canopy height) since these plants will likely not flower
+  # Also, WALD model does not cover below-canopy dispersal
   hRange <- hRange[hRange >= 0.15]
   
   # Simulate seed release events for each height
@@ -185,17 +187,22 @@ ht.pdf <- function(heights){
   return(hList.dens(seq(0, 200, by = 0.1)))}
 
 # Function to bootstrap height distributions and estimate 95% bootstrap interval
-# For each bootstrap sample 500 release heights; bootstrap 1000 times
-ht.pdfBoot <- function(h1, h2){
-  hBoot_1 <- data.frame(replicate(1000, ht.pdf(sample(h1, size = 500, replace = TRUE))))
-  hBoot_2 <- data.frame(replicate(1000, ht.pdf(sample(h2, size = 500, replace = TRUE))))
-  return(data.frame(seq(0, 200, by = 0.1),
-                    apply(X = hBoot_1, MARGIN = 1, FUN = mean),
-                    apply(X = hBoot_1, MARGIN = 1, FUN = quantile, probs = 0.025),
-                    apply(X = hBoot_1, MARGIN = 1, FUN = quantile, probs = 0.975),
-                    apply(X = hBoot_2, MARGIN = 1, FUN = mean),
-                    apply(X = hBoot_2, MARGIN = 1, FUN = quantile, probs = 0.025),
-                    apply(X = hBoot_2, MARGIN = 1, FUN = quantile, probs = 0.975)))}
+# For each bootstrap sample 500 release heights; bootstrap 1000 times (500000 replicates in total)
+# Otherwise, only conduct Kolmogorov-Smirnov test between the two distributions
+ht.pdfBoot <- function(h1, h2, ks.only = FALSE){
+  if(ks.only == FALSE){
+    hBoot_1 <- data.frame(replicate(1000, ht.pdf(sample(h1, size = 500, replace = TRUE))))
+    hBoot_2 <- data.frame(replicate(1000, ht.pdf(sample(h2, size = 500, replace = TRUE))))
+    return(data.frame(seq(0, 200, by = 0.1),
+                      apply(X = hBoot_1, MARGIN = 1, FUN = mean),
+                      apply(X = hBoot_1, MARGIN = 1, FUN = quantile, probs = 0.025),
+                      apply(X = hBoot_1, MARGIN = 1, FUN = quantile, probs = 0.975),
+                      apply(X = hBoot_2, MARGIN = 1, FUN = mean),
+                      apply(X = hBoot_2, MARGIN = 1, FUN = quantile, probs = 0.025),
+                      apply(X = hBoot_2, MARGIN = 1, FUN = quantile, probs = 0.975)))}
+  if(ks.only == TRUE){
+    ks.test(sample(h1, size = 500000, replace = TRUE), sample(h2, size = 500000, replace = TRUE),
+            alternative = "two.sided")}}
 
 # Function to plot bootstrapped height distributions, with mean line and 95% band
 ht.pdfBoot.plot <- function(bootData, bottom){
@@ -241,21 +248,24 @@ ds.mean <- function(h, species){
 
 # Function to bootstrap dispersal kernels and estimate 95% bootstrap interval
 # For each kernel sample 100 release heights with 100 seed releases each, and repeat 1000 times
-ds.pdfBoot <- function(h1, h2, type, species){
-  hBoot_1 <- data.frame(replicate(1000, ds.pdf(h1, species), simplify = "matrix"))
-  hBoot_2 <- data.frame(replicate(1000, ds.pdf(h2, species), simplify = "matrix"))
-  hBoot_dat <- data.frame(seq(0, 8, by = 0.01),
-                          apply(X = hBoot_1, MARGIN = 1, FUN = mean),
-                          apply(X = hBoot_1, MARGIN = 1, FUN = quantile, probs = 0.025),
-                          apply(X = hBoot_1, MARGIN = 1, FUN = quantile, probs = 0.975),
-                          apply(X = hBoot_2, MARGIN = 1, FUN = mean),
-                          apply(X = hBoot_2, MARGIN = 1, FUN = quantile, probs = 0.025),
-                          apply(X = hBoot_2, MARGIN = 1, FUN = quantile, probs = 0.975))
-  if(type == "WNW"){
-    names(hBoot_dat) <- c("Distance", "NW_Mean", "NW_Lower", "NW_Upper", "W_Mean", "W_Lower", "W_Upper")}
-  if(type == "MHD"){
-    names(hBoot_dat) <- c("Distance", "HD_Mean", "HD_Lower", "HD_Upper", "M_Mean", "M_Lower", "M_Upper")}
-  return(hBoot_dat)}
+ds.pdfBoot <- function(h1, h2, type, species, ks.only = FALSE){
+  if(ks.only == FALSE){
+    hBoot_1 <- data.frame(replicate(1000, ds.pdf(h1, species), simplify = "matrix"))
+    hBoot_2 <- data.frame(replicate(1000, ds.pdf(h2, species), simplify = "matrix"))
+    hBoot_dat <- data.frame(seq(0, 8, by = 0.01),
+                            apply(X = hBoot_1, MARGIN = 1, FUN = mean),
+                            apply(X = hBoot_1, MARGIN = 1, FUN = quantile, probs = 0.025),
+                            apply(X = hBoot_1, MARGIN = 1, FUN = quantile, probs = 0.975),
+                            apply(X = hBoot_2, MARGIN = 1, FUN = mean),
+                            apply(X = hBoot_2, MARGIN = 1, FUN = quantile, probs = 0.025),
+                            apply(X = hBoot_2, MARGIN = 1, FUN = quantile, probs = 0.975))
+    if(type == "WNW"){
+      names(hBoot_dat) <- c("Distance", "NW_Mean", "NW_Lower", "NW_Upper", "W_Mean", "W_Lower", "W_Upper")}
+    if(type == "MHD"){
+      names(hBoot_dat) <- c("Distance", "HD_Mean", "HD_Lower", "HD_Upper", "M_Mean", "M_Lower", "M_Upper")}
+    return(hBoot_dat)}
+  if(ks.only == TRUE){
+    ks.test(WALD.h(10000, h1, species), WALD.h(10000, h2, species), alt = "two.sided")}}
 
 # Function to plot bootstrapped dispersal kernels, with mean line and 95% band
 ds.pdfBoot.plot <- function(bootData, bottom){
