@@ -206,15 +206,22 @@ ht.pdfBoot <- function(h1, h2, ks.only = FALSE){
 
 # Function to plot bootstrapped height distributions, with mean line and 95% band
 ht.pdfBoot.plot <- function(bootData, bottom){
+  par(cex.axis = 0.45, tcl = -0.2)
   if(bottom == FALSE){
+    par(mar = c(1, 1.75, 0.75, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 200), ylim = c(0, 0.03),
-         xaxt = "n", yaxt = "n", ylab = "Probability Density")
+         xaxt = "n", yaxt = "n")
     axis(side = 1, at = c(0, 50, 100, 150, 200), labels = FALSE)
-    axis(side = 2, at = c(0, 0.01, 0.02, 0.03), labels = TRUE)}
+    axis(side = 2, at = c(0, 0.01, 0.02, 0.03), labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "Probability density", cex = 0.6)}
   if(bottom == TRUE){
+    par(mar = c(1.75, 1.75, 0, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 200), ylim = c(0, 0.03),
-         xlab = "Flower Height (cm)", yaxt = "n", ylab = "Probability Density")
-    axis(side = 2, at = c(0, 0.01, 0.02, 0.03), labels = TRUE)}
+         xaxt = "n", yaxt = "n")
+    axis(side = 1, at = c(0, 50, 100, 150, 200), labels = TRUE, mgp = c(0, 0, 0))
+    mtext(side = 1, line = 0.75, "Flower height (cm)", cex = 0.6)
+    axis(side = 2, at = c(0, 0.01, 0.02, 0.03), labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "Probability density", cex = 0.6)}
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 3], rev(bootData[, 4])), col = alpha("black", alpha = 0.2), border = NA)
   lines(x = bootData[, 1], y = bootData[, 5], type = "l", col = "red")

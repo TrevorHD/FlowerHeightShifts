@@ -35,7 +35,7 @@ dev.off()
 ##### [F2] Plot height distribution PDF with 95% bootstrap interval ---------------------------------------
 
 # Prepare graphics device
-jpeg(filename = "Figure 2.1.jpeg", width = 826, height = 568, units = "px")
+tiff(filename = "Figure 2.1.tif", width = 3304, height = 2272, units = "px", res = 800, compression = "lzw")
 
 # Create blank page
 grid.newpage()
@@ -70,14 +70,14 @@ popViewport()
 # Note: commented out code above adds a vertical line at the mean
 
 # Create legend
-grid.text(label = c("Warmed", "Not Warmed"), x = rep(0.84, 2), y = c(0.87, 0.90),
-          hjust = 0, gp = gpar(cex = 0.8))
-grid.segments(x0 = rep(0.813, 2), y0 = c(0.868, 0.898), x1 = rep(0.833, 2), y1 = c(0.868, 0.898),
-              gp = gpar(col = c("red", "black")))
+grid.text(label = c("Not Warmed", "Warmed"), x = rep(0.834, 2), y = c(0.918, 0.885),
+          hjust = 0, gp = gpar(cex = 0.5))
+grid.segments(x0 = rep(0.806, 2), y0 = c(0.918, 0.885), x1 = rep(0.826, 2), y1 = c(0.918, 0.885),
+              gp = gpar(col = c("black", "red")))
 
 # Create figure labels
-grid.text(label = c("(A) Carduus nutans", "(B) Carduus acanthoides"), x = rep(0.08, 2), y = c(0.93, 0.48),
-          hjust = 0, gp = gpar(cex = 1.1))
+grid.text(label = c(expression("(A)" ~ italic("C. nutans")), expression("(B)" ~ italic("C. acanthoides"))),
+          x = rep(0.096, 2), y = c(0.918, 0.471), hjust = 0, gp = gpar(cex = 0.5))
 popViewport()
 
 # Deactivate grid layout; finalise graphics save
