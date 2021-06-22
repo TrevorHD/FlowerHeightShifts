@@ -68,7 +68,7 @@ popViewport()
 # Note: commented out code above adds a vertical line at the mean
 
 # Create legend
-grid.text(label = c("Not Warmed", "Warmed"), x = rep(0.834, 2), y = c(0.918, 0.885),
+grid.text(label = c("Not warmed", "Warmed"), x = rep(0.834, 2), y = c(0.918, 0.885),
           hjust = 0, gp = gpar(cex = 0.5))
 grid.segments(x0 = rep(0.806, 2), y0 = c(0.918, 0.885), x1 = rep(0.826, 2), y1 = c(0.918, 0.885),
               gp = gpar(col = c("black", "red")))
@@ -114,7 +114,7 @@ ds.pdfBoot.plot(hBoot_WNW2_pdf, bottom = TRUE)
 popViewport()
 
 # Create legend
-grid.text(label = c("Not Warmed", "Warmed"), x = rep(0.834, 2), y = c(0.918, 0.885),
+grid.text(label = c("Not warmed", "Warmed"), x = rep(0.834, 2), y = c(0.918, 0.885),
           hjust = 0, gp = gpar(cex = 0.5))
 grid.segments(x0 = rep(0.806, 2), y0 = c(0.918, 0.885), x1 = rep(0.826, 2), y1 = c(0.918, 0.885),
               gp = gpar(col = c("black", "red")))
@@ -160,7 +160,7 @@ ds.ccdfBoot.plot(hBoot_WNW2_ccdf, bottom = TRUE)
 popViewport()
 
 # Create legend
-grid.text(label = c("Not Warmed", "Warmed"), x = rep(0.834, 2), y = c(0.918, 0.885),
+grid.text(label = c("Not warmed", "Warmed"), x = rep(0.834, 2), y = c(0.918, 0.885),
           hjust = 0, gp = gpar(cex = 0.5))
 grid.segments(x0 = rep(0.806, 2), y0 = c(0.918, 0.885), x1 = rep(0.826, 2), y1 = c(0.918, 0.885),
               gp = gpar(col = c("black", "red")))
@@ -244,7 +244,7 @@ ds.rtailBootWNW.plot(hboot_WNW2_rtail, bottom = TRUE)
 popViewport()
 
 # Create legend
-grid.text(label = c("Not Warmed", "Warmed"), x = rep(0.834, 2), y = c(0.635, 0.602),
+grid.text(label = c("Not warmed", "Warmed"), x = rep(0.834, 2), y = c(0.635, 0.602),
           hjust = 0, gp = gpar(cex = 0.5))
 grid.segments(x0 = rep(0.806, 2), y0 = c(0.635, 0.602), x1 = rep(0.826, 2), y1 = c(0.635, 0.602),
               gp = gpar(col = c("black", "red")))
@@ -264,7 +264,7 @@ dev.off()
 ##### [F4.1] Plot max height vs height distribution PDF (dispersal kernels) -------------------------------
 
 # Prepare graphics device
-jpeg(filename = "Figure 4.1.jpeg", width = 826, height = 825, units = "px")
+tiff(filename = "Figure 4.1.tif", width = 3304, height = 4544, units = "px", res = 800, compression = "lzw")
 
 # Create blank page
 grid.newpage()
@@ -278,46 +278,44 @@ pushViewport(viewport(layout = gly))
 pushViewport(vp = viewport(layout.pos.row = 1:600, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(1.1, 4, 2.9, 1))
-ds.pdfBoot.plot2(hBoot_MHD1_pdf, "black", "gray48", bNum = FALSE, bLab = FALSE)
+ds.pdfBoot.plot2(hBoot_MHD1_pdf, "black", "gray48", position = "top")
 popViewport()
 
 # CN warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 600:1200, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(3, 4, 1, 1))
-ds.pdfBoot.plot2(hBoot_MHD2_pdf, "red2", "indianred1", bNum = TRUE, bLab = FALSE)
+ds.pdfBoot.plot2(hBoot_MHD2_pdf, "red2", "indianred1", position = "centre")
 popViewport()
 
 # CA non-warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 1200:1800, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(2, 4, 2, 1))
-ds.pdfBoot.plot2(hBoot_MHD3_pdf, "black", "gray48", bNum = FALSE, bLab = FALSE)
+ds.pdfBoot.plot2(hBoot_MHD3_pdf, "black", "gray48", position = "centre")
 popViewport()
 
 # CA warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 1800:2400, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(4, 4, 0, 1))
-ds.pdfBoot.plot2(hBoot_MHD4_pdf, "red2", "indianred1", bNum = TRUE, bLab = TRUE)
+ds.pdfBoot.plot2(hBoot_MHD4_pdf, "red2", "indianred1", position = "bottom")
 popViewport()
 
 # Create legend
-grid.text(label = c("Dist. Height (W)", "Dist. Height (NW)", "Max Height (W)", "Max Height (NW)"), 
-          x = rep(0.83, 4), y = c(0.86, 0.88, 0.90 , 0.92), hjust = 0, gp = gpar(cex = 0.8))
-grid.segments(x0 = rep(0.803, 4), y0 = c(0.857, 0.877, 0.897 , 0.917), 
-              x1 = rep(0.823, 4), y1 = c(0.857, 0.877, 0.897 , 0.917),
+grid.text(label = c("Dist. height (W)", "Dist. height (NW)", "Max height (W)", "Max height (NW)"), 
+          x = rep(0.79, 4), y = c(0.897, 0.917, 0.937 , 0.957), hjust = 0, gp = gpar(cex = 0.5))
+grid.segments(x0 = rep(0.759, 4), y0 = c(0.897, 0.917, 0.937 , 0.957), 
+              x1 = rep(0.779, 4), y1 = c(0.897, 0.917, 0.937 , 0.957),
               gp = gpar(col = rep(c("red2", "black"), 2), lty = c(1, 1, 3, 3)))
 
 # Create figure labels
-grid.text(label = c("(A) Carduus nutans, unwarmed", "(B) Carduus nutans, warmed",
-                    "(C) Carduus acanthoides, unwarmed", "(D) Carduus acanthoides, warmed"), 
-          x = rep(0.08, 4), y = c(0.933, 0.715, 0.45, 0.235),
-          hjust = 0, gp = gpar(cex = 1.1))
+grid.text(label = c(expression("(A)" ~ italic("C. nutans,") ~ "unwarmed"),
+                    expression("(B)" ~ italic("C. nutans,") ~ "warmed"),
+                    expression("(C)" ~ italic("C. acanthoides,") ~ "unwarmed"),
+                    expression("(D)" ~ italic("C. acanthoides,") ~ "warmed")), 
+          x = rep(0.096, 4), y = c(0.957, 0.725, 0.475, 0.234),
+          hjust = 0, gp = gpar(cex = 0.5))
 popViewport()
 
 # Deactivate grid layout; finalise graphics save
@@ -331,7 +329,7 @@ dev.off()
 ##### [F4.2] Plot max height vs height distribution CCDF --------------------------------------------------
 
 # Prepare graphics device
-jpeg(filename = "Figure 4.2.jpeg", width = 826, height = 825, units = "px")
+tiff(filename = "Figure 4.2.tif", width = 3304, height = 4544, units = "px", res = 800, compression = "lzw")
 
 # Create blank page
 grid.newpage()
@@ -345,46 +343,44 @@ pushViewport(viewport(layout = gly))
 pushViewport(vp = viewport(layout.pos.row = 1:600, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(1.1, 4, 2.9, 1))
-ds.ccdfBoot.plot2(hBoot_MHD1_ccdf, "black", "gray48", bNum = FALSE, bLab = FALSE)
+ds.ccdfBoot.plot2(hBoot_MHD1_ccdf, "black", "gray48", position = "top")
 popViewport()
 
 # CN warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 600:1200, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(3, 4, 1, 1))
-ds.ccdfBoot.plot2(hBoot_MHD2_ccdf, "red2", "indianred1", bNum = TRUE, bLab = FALSE)
+ds.ccdfBoot.plot2(hBoot_MHD2_ccdf, "red2", "indianred1", position = "centre")
 popViewport()
 
 # CA non-warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 1200:1800, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(2, 4, 2, 1))
-ds.ccdfBoot.plot2(hBoot_MHD3_ccdf, "black", "gray48", bNum = FALSE, bLab = FALSE)
+ds.ccdfBoot.plot2(hBoot_MHD3_ccdf, "black", "gray48", position = "centre")
 popViewport()
 
 # CA warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 1800:2400, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(4, 4, 0, 1))
-ds.ccdfBoot.plot2(hBoot_MHD4_ccdf, "red2", "indianred1", bNum = TRUE, bLab = TRUE)
+ds.ccdfBoot.plot2(hBoot_MHD4_ccdf, "red2", "indianred1", position = "bottom")
 popViewport()
 
 # Create legend
-grid.text(label = c("Dist. Height (W)", "Dist. Height (NW)", "Max Height (W)", "Max Height (NW)"), 
-          x = rep(0.83, 4), y = c(0.86, 0.88, 0.90 , 0.92), hjust = 0, gp = gpar(cex = 0.8))
-grid.segments(x0 = rep(0.803, 4), y0 = c(0.857, 0.877, 0.897 , 0.917), 
-              x1 = rep(0.823, 4), y1 = c(0.857, 0.877, 0.897 , 0.917),
+grid.text(label = c("Dist. height (W)", "Dist. height (NW)", "Max height (W)", "Max height (NW)"), 
+          x = rep(0.79, 4), y = c(0.897, 0.917, 0.937 , 0.957), hjust = 0, gp = gpar(cex = 0.5))
+grid.segments(x0 = rep(0.759, 4), y0 = c(0.897, 0.917, 0.937 , 0.957), 
+              x1 = rep(0.779, 4), y1 = c(0.897, 0.917, 0.937 , 0.957),
               gp = gpar(col = rep(c("red2", "black"), 2), lty = c(1, 1, 3, 3)))
 
 # Create figure labels
-grid.text(label = c("(A) Carduus nutans, unwarmed", "(B) Carduus nutans, warmed",
-                    "(C) Carduus acanthoides, unwarmed", "(D) Carduus acanthoides, warmed"), 
-          x = rep(0.08, 4), y = c(0.933, 0.715, 0.45, 0.235),
-          hjust = 0, gp = gpar(cex = 1.1))
+grid.text(label = c(expression("(A)" ~ italic("C. nutans,") ~ "unwarmed"),
+                    expression("(B)" ~ italic("C. nutans,") ~ "warmed"),
+                    expression("(C)" ~ italic("C. acanthoides,") ~ "unwarmed"),
+                    expression("(D)" ~ italic("C. acanthoides,") ~ "warmed")), 
+          x = rep(0.096, 4), y = c(0.957, 0.725, 0.475, 0.234),
+          hjust = 0, gp = gpar(cex = 0.5))
 popViewport()
 
 # Deactivate grid layout; finalise graphics save
@@ -398,7 +394,7 @@ dev.off()
 ##### [F4.3] Plot max height vs height distribution CCDF ratio --------------------------------------------
 
 # Prepare graphics device
-jpeg(filename = "Figure 4.3.jpeg", width = 826, height = 825, units = "px")
+tiff(filename = "Figure 4.3.tif", width = 3304, height = 4544, units = "px", res = 800, compression = "lzw")
 
 # Create blank page
 grid.newpage()
@@ -412,37 +408,35 @@ pushViewport(viewport(layout = gly))
 pushViewport(vp = viewport(layout.pos.row = 1:600, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(1.1, 4, 2.9, 1))
-ds.ccdfRatioBoot.plot2(hBoot_MHD1_ccdfRatio, bNum = FALSE, bLab = FALSE)
+ds.ccdfRatioBoot.plot2(hBoot_MHD1_ccdfRatio, position = "top")
 popViewport()
 
 # CN warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 600:1200, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(3, 4, 1, 1))
-ds.ccdfRatioBoot.plot2(hBoot_MHD2_ccdfRatio, bNum = TRUE, bLab = FALSE)
+ds.ccdfRatioBoot.plot2(hBoot_MHD2_ccdfRatio, position = "centre")
 popViewport()
 
 # CA non-warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 1200:1800, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(2, 4, 2, 1))
-ds.ccdfRatioBoot.plot2(hBoot_MHD3_ccdfRatio, bNum = FALSE, bLab = FALSE)
+ds.ccdfRatioBoot.plot2(hBoot_MHD3_ccdfRatio, position = "centre")
 popViewport()
 
 # CA warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 1800:2400, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(4, 4, 0, 1))
-ds.ccdfRatioBoot.plot2(hBoot_MHD4_ccdfRatio, bNum = TRUE, bLab = TRUE)
+ds.ccdfRatioBoot.plot2(hBoot_MHD4_ccdfRatio, position = "bottom")
 popViewport()
 
 # Create figure labels
-grid.text(label = c("(A) Carduus nutans, unwarmed", "(B) Carduus nutans, warmed",
-                    "(C) Carduus acanthoides, unwarmed", "(D) Carduus acanthoides, warmed"), 
+grid.text(label = c(expression("(A)" ~ italic("C. nutans,") ~ "unwarmed"),
+                    expression("(B)" ~ italic("C. nutans,") ~ "warmed"),
+                    expression("(C)" ~ italic("C. acanthoides,") ~ "unwarmed"),
+                    expression("(D)" ~ italic("C. acanthoides,") ~ "warmed")), 
           x = rep(0.08, 4), y = c(0.933, 0.715, 0.45, 0.235),
           hjust = 0, gp = gpar(cex = 1.1))
 popViewport()
@@ -458,7 +452,7 @@ dev.off()
 ##### [F4.4] Estimate max height vs height distribution right tail dispersal percentile distances ---------
 
 # Prepare graphics device
-jpeg(filename = "Figure 4.4.jpeg", width = 826, height = 825, units = "px")
+tiff(filename = "Figure 4.4.tif", width = 3304, height = 4544, units = "px", res = 800, compression = "lzw")
 
 # Create blank page
 grid.newpage()
@@ -472,46 +466,44 @@ pushViewport(viewport(layout = gly))
 pushViewport(vp = viewport(layout.pos.row = 1:600, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(1.1, 4, 2.9, 1))
-ds.rtailBootMHD.plot(hBoot_MHD1_rtail, "black", "gray48", bNum = FALSE, bLab = FALSE)
+ds.rtailBootMHD.plot(hBoot_MHD1_rtail, "black", "gray48", position = "top")
 popViewport()
 
 # CN warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 600:1200, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(3, 4, 1, 1))
-ds.rtailBootMHD.plot(hBoot_MHD2_rtail, "red2", "indianred1", bNum = TRUE, bLab = FALSE)
+ds.rtailBootMHD.plot(hBoot_MHD2_rtail, "red2", "indianred1", position = "centre")
 popViewport()
 
 # CA non-warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 1200:1800, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(2, 4, 2, 1))
-ds.rtailBootMHD.plot(hBoot_MHD3_rtail, "black", "gray48", bNum = FALSE, bLab = FALSE)
+ds.rtailBootMHD.plot(hBoot_MHD3_rtail, "black", "gray48", position = "centre")
 popViewport()
 
 # CA warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 1800:2400, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-par(mar = c(4, 4, 0, 1))
-ds.rtailBootMHD.plot(hBoot_MHD4_rtail, "red2", "indianred1", bNum = TRUE, bLab = TRUE)
+ds.rtailBootMHD.plot(hBoot_MHD4_rtail, "red2", "indianred1", position = "bottom")
 popViewport()
 
 # Create legend
-grid.text(label = c("Dist. Height (W)", "Dist. Height (NW)", "Max Height (W)", "Max Height (NW)"), 
-          x = rep(0.83, 4), y = c(0.86, 0.88, 0.90 , 0.92), hjust = 0, gp = gpar(cex = 0.8))
-grid.segments(x0 = rep(0.803, 4), y0 = c(0.857, 0.877, 0.897 , 0.917), 
-              x1 = rep(0.823, 4), y1 = c(0.857, 0.877, 0.897 , 0.917),
+grid.text(label = c("Dist. height (W)", "Dist. height (NW)", "Max height (W)", "Max height (NW)"), 
+          x = rep(0.79, 4), y = c(0.897, 0.917, 0.937 , 0.957), hjust = 0, gp = gpar(cex = 0.5))
+grid.segments(x0 = rep(0.759, 4), y0 = c(0.897, 0.917, 0.937 , 0.957), 
+              x1 = rep(0.779, 4), y1 = c(0.897, 0.917, 0.937 , 0.957),
               gp = gpar(col = rep(c("red2", "black"), 2), lty = c(1, 1, 3, 3)))
 
 # Create figure labels
-grid.text(label = c("(A) Carduus nutans, unwarmed", "(B) Carduus nutans, warmed",
-                    "(C) Carduus acanthoides, unwarmed", "(D) Carduus acanthoides, warmed"), 
-          x = rep(0.08, 4), y = c(0.933, 0.715, 0.45, 0.235),
-          hjust = 0, gp = gpar(cex = 1.1))
+grid.text(label = c(expression("(A)" ~ italic("C. nutans,") ~ "unwarmed"),
+                    expression("(B)" ~ italic("C. nutans,") ~ "warmed"),
+                    expression("(C)" ~ italic("C. acanthoides,") ~ "unwarmed"),
+                    expression("(D)" ~ italic("C. acanthoides,") ~ "warmed")), 
+          x = rep(0.096, 4), y = c(0.957, 0.725, 0.475, 0.234),
+          hjust = 0, gp = gpar(cex = 0.5))
 popViewport()
 
 # Deactivate grid layout; finalise graphics save

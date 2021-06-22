@@ -504,14 +504,30 @@ hboot_WNW2_rtail <- ds.rtailBootWNW(ht_CA_NW$Height, ht_CA_W$Height, "CA")
 # Function to plot the dispersal kernels
 # Bands indicate the range in which 95% of the bootstrapped simulations are
 # Lines indicate mean values
-ds.pdfBoot.plot2 <- function(bootData, LColour, PColour, bNum, bLab){
-  if(bNum == FALSE){
+ds.pdfBoot.plot2 <- function(bootData, LColour, PColour, position){
+  par(cex.axis = 0.45, tcl = -0.2)
+  if(position == "top"){
+    par(mar = c(0.75, 1.75, 0.75, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", col = LColour, xlim = c(0, 7), ylim = c(0, 0.6),
-         xaxt = "n", ylab = "Probability Density")
-    axis(side = 1, at = 0:7, labels = FALSE)}
-  if(bNum == TRUE){
+         xaxt = "n", yaxt = "n")
+    axis(side = 1, at = 0:7, labels = FALSE)
+    axis(side = 2, at = c(0, 0.2, 0.4, 0.6), labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "Probability density", cex = 0.6)}
+  if(position == "centre"){
+    par(mar = c(1, 1.75, 0.25, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", col = LColour, xlim = c(0, 7), ylim = c(0, 0.6),
-         xlab = ifelse(bLab == TRUE, "Dispersal Distance (m)", NA), ylab = "Probability Density")}
+         xaxt = "n", yaxt = "n")
+    axis(side = 1, at = 0:7, labels = FALSE)
+    axis(side = 2, at = c(0, 0.2, 0.4, 0.6), labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "Probability density", cex = 0.6)}
+  if(position == "bottom"){
+    par(mar = c(1.75, 1.75, 0, 0.75))
+    plot(x = bootData[, 1], y = bootData[, 2], type = "l", col = LColour, xlim = c(0, 7), ylim = c(0, 0.6),
+         xaxt = "n", yaxt = "n")
+    axis(side = 1, at = 0:7, labels = TRUE, mgp = c(0, 0, 0))
+    mtext(side = 1, line = 0.75, "Dispersal distance (m)", cex = 0.6)
+    axis(side = 2, at = c(0, 0.2, 0.4, 0.6), labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "Probability density", cex = 0.6)}
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 3], rev(bootData[, 4])), col = alpha(LColour, alpha = 0.2), border = NA)
   lines(x = bootData[, 1], y = bootData[, 5], type = "l", lty = 3, col = PColour)
@@ -536,14 +552,30 @@ hBoot_MHD4_pdf <- ds.pdfBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD", "CA")
 # Plot the dispersal percentiles and the corresponding distances
 # Error bars indicate the range in which 95% of the bootstrapped simulations are
 # Lines indicate mean values
-ds.ccdfBoot.plot2 <- function(bootData, LColour, PColour, bNum, bLab){
-  if(bNum == FALSE){
+ds.ccdfBoot.plot2 <- function(bootData, LColour, PColour, bottom){
+  par(cex.axis = 0.45, tcl = -0.2)
+  if(position == "top"){
+    par(mar = c(0.75, 1.75, 0.75, 0.75))
     plot(x = bootData[, 1], y = bootData[, 4], type = "l", col = LColour, xlim = c(0, 60), ylim = c(0, 1),
-         xaxt = "n", ylab = "Dispersal Distance (m)")
-    axis(side = 1, at = seq(0, 60, by = 10), labels = FALSE)}
-  if(bNum == TRUE){
+         xaxt = "n", yaxt = "n")
+    axis(side = 1, at = seq(0, 30, by = 5), labels = FALSE)
+    axis(side = 2, at = c(0, 0.25, 0.5, 0.75, 1), labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "1 - Cumulative probability", cex = 0.6)}
+  if(position == "centre"){
+    par(mar = c(1, 1.75, 0.75, 0.75))
     plot(x = bootData[, 1], y = bootData[, 4], type = "l", col = LColour, xlim = c(0, 60), ylim = c(0, 1),
-         xlab = ifelse(bLab == TRUE, "Dispersal Quantile", NA), ylab = "Dispersal Distance (m)")}
+         xaxt = "n", yaxt = "n")
+    axis(side = 1, at = seq(0, 30, by = 5), labels = FALSE)
+    axis(side = 2, at = c(0, 0.25, 0.5, 0.75, 1), labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "1 - Cumulative probability", cex = 0.6)}
+  if(position == "bottom"){
+    par(mar = c(1.75, 1.75, 0, 0.75))
+    plot(x = bootData[, 1], y = bootData[, 4], type = "l", col = LColour, xlim = c(0, 60), ylim = c(0, 1),
+         xaxt = "n", yaxt = "n")
+    axis(side = 1, at = seq(0, 30, by = 5), labels = TRUE, mgp = c(0, 0, 0))
+    mtext(side = 1, line = 0.75, "Dispersal distance (m)", cex = 0.6)
+    axis(side = 2, at = c(0, 0.25, 0.5, 0.75, 1), labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "1 - Cumulative probability", cex = 0.6)}
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 5], rev(bootData[, 6])), col = alpha(LColour, alpha = 0.2), border = NA)
   lines(x = bootData[, 1], y = bootData[, 4], type = "l", lty = 3, col = PColour)
@@ -566,14 +598,30 @@ hBoot_MHD4_ccdf <- ds.ccdfBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD", "CA")
 ##### [F4.3] Plot max height vs height distribution CCDF ratio --------------------------------------------
 
 # Function to plot bootstrapped CCDF, with mean line and 95% band
-ds.ccdfRatioBoot.plot2 <- function(bootData, bNum, bLab){
-  if(bNum == FALSE){
+ds.ccdfRatioBoot.plot2 <- function(bootData, bottom){
+  par(cex.axis = 0.45, tcl = -0.2)
+  if(position == "top"){
+    par(mar = c(0.75, 1.75, 0.75, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 60), ylim = c(0, 4),
-         xaxt = "n", ylab = "M/HD CCDF Ratio")
-    axis(side = 1, at = seq(0, 60, by = 10), labels = FALSE)}
-  if(bNum == TRUE){
+         xaxt = "n", yaxt = "n")
+    axis(side = 1, at = seq(0, 60, by = 10), labels = FALSE)
+    axis(side = 2, at = 0:4, labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "W/NW CCDF Ratio", cex = 0.6)}
+  if(position == "centre"){
+    par(mar = c(1, 1.75, 0.75, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 60), ylim = c(0, 4),
-         xlab = ifelse(bLab == TRUE, "Dispersal Distance (m)", NA), ylab = "M/HD CCDF Ratio")}
+         xaxt = "n", yaxt = "n")
+    axis(side = 1, at = seq(0, 60, by = 10), labels = FALSE)
+    axis(side = 2, at = 0:4, labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "W/NW CCDF Ratio", cex = 0.6)}
+  if(position == "bottom"){
+    par(mar = c(1.75, 1.75, 0, 0.75))
+    plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 60), ylim = c(0, 4),
+         xaxt = "n", yaxt = "n")
+    axis(side = 1, at = seq(0, 60, by = 10), labels = TRUE, mgp = c(0, 0, 0))
+    mtext(side = 1, line = 0.75, "Dispersal distance (m)", cex = 0.6)
+    axis(side = 2, at = 0:4, labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "W/NW CCDF Ratio", cex = 0.6)}
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 3], rev(bootData[, 4])), col = alpha("black", alpha = 0.2), border = NA)
   abline(h = 1, lty = 3)}
@@ -616,17 +664,33 @@ ds.rtailBootMHD <- function(distHeight, maxHeight, Species){
 # Plot the dispersal percentiles and the corresponding distances
 # Error bars indicate the range in which 95% of the bootstrapped simulations are
 # Lines indicate mean values
-ds.rtailBootMHD.plot <- function(rtail_data, LColour, PColour, bNum, bLab){
+ds.rtailBootMHD.plot <- function(rtail_data, LColour, PColour, bottom){
   rtail_data[, 1] <- as.numeric(as.character(rtail_data[, 1]))
   rtDH <- subset(rtail_data, Heights == "Dist. Height")
   rtMH <- subset(rtail_data, Heights == "Max. Height")
-  if(bNum == FALSE){
+  par(cex.axis = 0.45, tcl = -0.2)
+  if(position == "top"){
+    par(mar = c(0.75, 1.75, 0.75, 0.75))
     plot(x = rtDH[, 1], y = rtDH[, 4], type = "l", col = LColour, xlim = c(0.95, 1), ylim = c(0, 80),
-         xaxt = "n", ylab = "Dispersal Distance (m)")
-    axis(side = 1, at = seq(0.95, 1, by = 0.01), labels = FALSE)}
-  if(bNum == TRUE){
+         xaxt = "n", yaxt = "n")
+    axis(side = 1, at = seq(0.95, 1, by = 0.01), labels = FALSE)
+    axis(side = 2, at = c(0, 20, 40, 60, 80), labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "Dispersal distance (m)", cex = 0.6)}
+  if(position == "centre"){
+    par(mar = c(1, 1.75, 0.75, 0.75))
     plot(x = rtDH[, 1], y = rtDH[, 4], type = "l", col = LColour, xlim = c(0.95, 1), ylim = c(0, 80),
-         xlab = ifelse(bLab == TRUE, "Dispersal Quantile", NA), ylab = "Dispersal Distance (m)")}
+         xaxt = "n", yaxt = "n")
+    axis(side = 1, at = seq(0.95, 1, by = 0.01), labels = FALSE)
+    axis(side = 2, at = c(0, 20, 40, 60, 80), labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "Dispersal distance (m)", cex = 0.6)}
+  if(position == "bottom"){
+    par(mar = c(1.75, 1.75, 0, 0.75))
+    plot(x = rtDH[, 1], y = rtDH[, 4], type = "l", col = LColour, xlim = c(0.95, 1), ylim = c(0, 80),
+         xaxt = "n", yaxt = "n")
+    axis(side = 1, at = seq(0.95, 1, by = 0.01), labels = TRUE, mgp = c(0, 0, 0))
+    mtext(side = 1, line = 0.75, "Dispersal percentile", cex = 0.6)
+    axis(side = 2, at = c(0, 20, 40, 60, 80), labels = TRUE, mgp = c(0, 0.21, 0))
+    mtext(side = 2, line = 0.95, "Dispersal distance (m)", cex = 0.6)}
   polygon(x = c(rtDH[, 1], rev(rtDH[, 1])), 
           y = c(rtDH[, 5], rev(rtDH[, 6])), col = alpha(LColour, alpha = 0.2), border = NA)
   lines(x = rtMH[, 1], y = rtMH[, 4], type = "l", lty = 3, col = PColour)
