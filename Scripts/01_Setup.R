@@ -211,17 +211,15 @@ ht.pdfBoot.plot <- function(bootData, bottom){
     par(mar = c(1, 1.75, 0.75, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 200), ylim = c(0, 0.03),
          xaxt = "n", yaxt = "n")
-    axis(side = 1, at = c(0, 50, 100, 150, 200), labels = FALSE)
-    axis(side = 2, at = c(0, 0.01, 0.02, 0.03), labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "Probability density", cex = 0.6)}
+    axis(side = 1, at = c(0, 50, 100, 150, 200), labels = FALSE)}
   if(bottom == TRUE){
     par(mar = c(1.75, 1.75, 0, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 200), ylim = c(0, 0.03),
          xaxt = "n", yaxt = "n")
     axis(side = 1, at = c(0, 50, 100, 150, 200), labels = TRUE, mgp = c(0, 0, 0))
-    mtext(side = 1, line = 0.75, "Flower height (cm)", cex = 0.6)
-    axis(side = 2, at = c(0, 0.01, 0.02, 0.03), labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "Probability density", cex = 0.6)}
+    mtext(side = 1, line = 0.75, "Flower height (cm)", cex = 0.6)}
+  axis(side = 2, at = c(0, 0.01, 0.02, 0.03), labels = TRUE, mgp = c(0, 0.21, 0))
+  mtext(side = 2, line = 0.95, "Probability density", cex = 0.6)
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 3], rev(bootData[, 4])), col = alpha("black", alpha = 0.2), border = NA)
   lines(x = bootData[, 1], y = bootData[, 5], type = "l", col = "red")
@@ -281,17 +279,15 @@ ds.pdfBoot.plot <- function(bootData, bottom){
     par(mar = c(1, 1.75, 0.75, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 7), ylim = c(0, 0.6),
          xaxt = "n", yaxt = "n")
-    axis(side = 1, at = 0:7, labels = FALSE)
-    axis(side = 2, at = c(0, 0.2, 0.4, 0.6), labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "Probability density", cex = 0.6)}
+    axis(side = 1, at = 0:7, labels = FALSE)}
   if(bottom == TRUE){
     par(mar = c(1.75, 1.75, 0, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 7), ylim = c(0, 0.6),
          xaxt = "n", yaxt = "n")
     axis(side = 1, at = 0:7, labels = TRUE, mgp = c(0, 0, 0))
-    mtext(side = 1, line = 0.75, "Dispersal distance (m)", cex = 0.6)
-    axis(side = 2, at = c(0, 0.2, 0.4, 0.6), labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "Probability density", cex = 0.6)}
+    mtext(side = 1, line = 0.75, "Dispersal distance (m)", cex = 0.6)}
+  axis(side = 2, at = c(0, 0.2, 0.4, 0.6), labels = TRUE, mgp = c(0, 0.21, 0))
+  mtext(side = 2, line = 0.95, "Probability density", cex = 0.6)
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 3], rev(bootData[, 4])), col = alpha("black", alpha = 0.2), border = NA)
   lines(x = bootData[, 1], y = bootData[, 5], type = "l", col = "red")
@@ -344,17 +340,15 @@ ds.ccdfBoot.plot <- function(bootData, bottom){
     par(mar = c(1, 1.75, 0.75, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 30), ylim = c(0, 1),
          xaxt = "n", yaxt = "n")
-    axis(side = 1, at = seq(0, 30, by = 5), labels = FALSE)
-    axis(side = 2, at = c(0, 0.25, 0.5, 0.75, 1), labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "1 - Cumulative probability", cex = 0.6)}
+    axis(side = 1, at = seq(0, 30, by = 5), labels = FALSE)}
   if(bottom == TRUE){
     par(mar = c(1.75, 1.75, 0, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 30), ylim = c(0, 1),
          xaxt = "n", yaxt = "n")
     axis(side = 1, at = seq(0, 30, by = 5), labels = TRUE, mgp = c(0, 0, 0))
-    mtext(side = 1, line = 0.75, "Dispersal distance (m)", cex = 0.6)
-    axis(side = 2, at = c(0, 0.25, 0.5, 0.75, 1), labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "1 - Cumulative probability", cex = 0.6)}
+    mtext(side = 1, line = 0.75, "Dispersal distance (m)", cex = 0.6)}
+  axis(side = 2, at = c(0, 0.25, 0.5, 0.75, 1), labels = TRUE, mgp = c(0, 0.21, 0))
+  mtext(side = 2, line = 0.95, "1 - Cumulative probability", cex = 0.6)
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 3], rev(bootData[, 4])), col = alpha("black", alpha = 0.2), border = NA)
   lines(x = bootData[, 1], y = bootData[, 5], type = "l", col = "red")
@@ -401,17 +395,15 @@ ds.ccdfRatioBoot.plot <- function(bootData, bottom){
     par(mar = c(1, 1.75, 0.75, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 60), ylim = c(0, 4),
          xaxt = "n", yaxt = "n")
-    axis(side = 1, at = seq(0, 60, by = 10), labels = FALSE)
-    axis(side = 2, at = 0:4, labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "W/NW CCDF Ratio", cex = 0.6)}
+    axis(side = 1, at = seq(0, 60, by = 10), labels = FALSE)}
   if(bottom == TRUE){
     par(mar = c(1.75, 1.75, 0, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 60), ylim = c(0, 4),
          xaxt = "n", yaxt = "n")
     axis(side = 1, at = seq(0, 60, by = 10), labels = TRUE, mgp = c(0, 0, 0))
-    mtext(side = 1, line = 0.75, "Dispersal distance (m)", cex = 0.6)
-    axis(side = 2, at = 0:4, labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "W/NW CCDF Ratio", cex = 0.6)}
+    mtext(side = 1, line = 0.75, "Dispersal distance (m)", cex = 0.6)}
+  axis(side = 2, at = 0:4, labels = TRUE, mgp = c(0, 0.21, 0))
+  mtext(side = 2, line = 0.95, "W/NW CCDF Ratio", cex = 0.6)
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 3], rev(bootData[, 4])), col = alpha("black", alpha = 0.2), border = NA)
   abline(h = 1, lty = 3)}
@@ -466,17 +458,15 @@ ds.rtailBootWNW.plot <- function(bootData, bottom){
     par(mar = c(1, 1.75, 0.75, 0.75))
     plot(x = rtNW[, 1], y = rtNW[, 4], type = "l", xlim = c(0.95, 1), ylim = c(0, 80),
          xaxt = "n", yaxt = "n")
-    axis(side = 1, at = seq(0.95, 1, by = 0.01), labels = FALSE)
-    axis(side = 2, at = c(0, 20, 40, 60, 80), labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "Dispersal distance (m)", cex = 0.6)}
+    axis(side = 1, at = seq(0.95, 1, by = 0.01), labels = FALSE)}
   if(bottom == TRUE){
     par(mar = c(1.75, 1.75, 0, 0.75))
     plot(x = rtNW[, 1], y = rtNW[, 4], type = "l", xlim = c(0.95, 1), ylim = c(0, 80),
          xaxt = "n", yaxt = "n")
     axis(side = 1, at = seq(0.95, 1, by = 0.01), labels = TRUE, mgp = c(0, 0, 0))
-    mtext(side = 1, line = 0.75, "Dispersal percentile", cex = 0.6)
-    axis(side = 2, at = c(0, 20, 40, 60, 80), labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "Dispersal distance (m)", cex = 0.6)}
+    mtext(side = 1, line = 0.75, "Dispersal percentile", cex = 0.6)}
+  axis(side = 2, at = c(0, 20, 40, 60, 80), labels = TRUE, mgp = c(0, 0.21, 0))
+  mtext(side = 2, line = 0.95, "Dispersal distance (m)", cex = 0.6)
   polygon(x = c(rtNW[, 1], rev(rtNW[, 1])), 
           y = c(rtNW[, 5], rev(rtNW[, 6])), col = alpha("black", alpha = 0.2), border = NA)
   lines(x = rtW[, 1], y = rtW[, 4], type = "l", col = "red")
@@ -510,24 +500,20 @@ ds.pdfBoot.plot2 <- function(bootData, LColour, PColour, position){
     par(mar = c(0.75, 1.75, 0.75, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", col = LColour, xlim = c(0, 7), ylim = c(0, 0.6),
          xaxt = "n", yaxt = "n")
-    axis(side = 1, at = 0:7, labels = FALSE)
-    axis(side = 2, at = c(0, 0.2, 0.4, 0.6), labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "Probability density", cex = 0.6)}
+    axis(side = 1, at = 0:7, labels = FALSE)}
   if(position == "centre"){
     par(mar = c(1, 1.75, 0.25, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", col = LColour, xlim = c(0, 7), ylim = c(0, 0.6),
          xaxt = "n", yaxt = "n")
-    axis(side = 1, at = 0:7, labels = FALSE)
-    axis(side = 2, at = c(0, 0.2, 0.4, 0.6), labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "Probability density", cex = 0.6)}
+    axis(side = 1, at = 0:7, labels = FALSE)}
   if(position == "bottom"){
     par(mar = c(1.75, 1.75, 0, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", col = LColour, xlim = c(0, 7), ylim = c(0, 0.6),
          xaxt = "n", yaxt = "n")
     axis(side = 1, at = 0:7, labels = TRUE, mgp = c(0, 0, 0))
-    mtext(side = 1, line = 0.75, "Dispersal distance (m)", cex = 0.6)
-    axis(side = 2, at = c(0, 0.2, 0.4, 0.6), labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "Probability density", cex = 0.6)}
+    mtext(side = 1, line = 0.75, "Dispersal distance (m)", cex = 0.6)}
+  axis(side = 2, at = c(0, 0.2, 0.4, 0.6), labels = TRUE, mgp = c(0, 0.21, 0))
+  mtext(side = 2, line = 0.95, "Probability density", cex = 0.6)
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 3], rev(bootData[, 4])), col = alpha(LColour, alpha = 0.2), border = NA)
   lines(x = bootData[, 1], y = bootData[, 5], type = "l", lty = 3, col = PColour)
@@ -558,24 +544,20 @@ ds.ccdfBoot.plot2 <- function(bootData, LColour, PColour, bottom){
     par(mar = c(0.75, 1.75, 0.75, 0.75))
     plot(x = bootData[, 1], y = bootData[, 4], type = "l", col = LColour, xlim = c(0, 60), ylim = c(0, 1),
          xaxt = "n", yaxt = "n")
-    axis(side = 1, at = seq(0, 30, by = 5), labels = FALSE)
-    axis(side = 2, at = c(0, 0.25, 0.5, 0.75, 1), labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "1 - Cumulative probability", cex = 0.6)}
+    axis(side = 1, at = seq(0, 30, by = 5), labels = FALSE)}
   if(position == "centre"){
     par(mar = c(1, 1.75, 0.75, 0.75))
     plot(x = bootData[, 1], y = bootData[, 4], type = "l", col = LColour, xlim = c(0, 60), ylim = c(0, 1),
          xaxt = "n", yaxt = "n")
-    axis(side = 1, at = seq(0, 30, by = 5), labels = FALSE)
-    axis(side = 2, at = c(0, 0.25, 0.5, 0.75, 1), labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "1 - Cumulative probability", cex = 0.6)}
+    axis(side = 1, at = seq(0, 30, by = 5), labels = FALSE)}
   if(position == "bottom"){
     par(mar = c(1.75, 1.75, 0, 0.75))
     plot(x = bootData[, 1], y = bootData[, 4], type = "l", col = LColour, xlim = c(0, 60), ylim = c(0, 1),
          xaxt = "n", yaxt = "n")
     axis(side = 1, at = seq(0, 30, by = 5), labels = TRUE, mgp = c(0, 0, 0))
-    mtext(side = 1, line = 0.75, "Dispersal distance (m)", cex = 0.6)
-    axis(side = 2, at = c(0, 0.25, 0.5, 0.75, 1), labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "1 - Cumulative probability", cex = 0.6)}
+    mtext(side = 1, line = 0.75, "Dispersal distance (m)", cex = 0.6)}
+  axis(side = 2, at = c(0, 0.25, 0.5, 0.75, 1), labels = TRUE, mgp = c(0, 0.21, 0))
+  mtext(side = 2, line = 0.95, "1 - Cumulative probability", cex = 0.6)
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 5], rev(bootData[, 6])), col = alpha(LColour, alpha = 0.2), border = NA)
   lines(x = bootData[, 1], y = bootData[, 4], type = "l", lty = 3, col = PColour)
@@ -604,24 +586,20 @@ ds.ccdfRatioBoot.plot2 <- function(bootData, bottom){
     par(mar = c(0.75, 1.75, 0.75, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 60), ylim = c(0, 4),
          xaxt = "n", yaxt = "n")
-    axis(side = 1, at = seq(0, 60, by = 10), labels = FALSE)
-    axis(side = 2, at = 0:4, labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "W/NW CCDF Ratio", cex = 0.6)}
+    axis(side = 1, at = seq(0, 60, by = 10), labels = FALSE)}
   if(position == "centre"){
     par(mar = c(1, 1.75, 0.75, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 60), ylim = c(0, 4),
          xaxt = "n", yaxt = "n")
-    axis(side = 1, at = seq(0, 60, by = 10), labels = FALSE)
-    axis(side = 2, at = 0:4, labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "W/NW CCDF Ratio", cex = 0.6)}
+    axis(side = 1, at = seq(0, 60, by = 10), labels = FALSE)}
   if(position == "bottom"){
     par(mar = c(1.75, 1.75, 0, 0.75))
     plot(x = bootData[, 1], y = bootData[, 2], type = "l", xlim = c(0, 60), ylim = c(0, 4),
          xaxt = "n", yaxt = "n")
     axis(side = 1, at = seq(0, 60, by = 10), labels = TRUE, mgp = c(0, 0, 0))
-    mtext(side = 1, line = 0.75, "Dispersal distance (m)", cex = 0.6)
-    axis(side = 2, at = 0:4, labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "W/NW CCDF Ratio", cex = 0.6)}
+    mtext(side = 1, line = 0.75, "Dispersal distance (m)", cex = 0.6)}
+  axis(side = 2, at = 0:4, labels = TRUE, mgp = c(0, 0.21, 0))
+  mtext(side = 2, line = 0.95, "W/NW CCDF Ratio", cex = 0.6)
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 3], rev(bootData[, 4])), col = alpha("black", alpha = 0.2), border = NA)
   abline(h = 1, lty = 3)}
@@ -673,24 +651,20 @@ ds.rtailBootMHD.plot <- function(rtail_data, LColour, PColour, bottom){
     par(mar = c(0.75, 1.75, 0.75, 0.75))
     plot(x = rtDH[, 1], y = rtDH[, 4], type = "l", col = LColour, xlim = c(0.95, 1), ylim = c(0, 80),
          xaxt = "n", yaxt = "n")
-    axis(side = 1, at = seq(0.95, 1, by = 0.01), labels = FALSE)
-    axis(side = 2, at = c(0, 20, 40, 60, 80), labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "Dispersal distance (m)", cex = 0.6)}
+    axis(side = 1, at = seq(0.95, 1, by = 0.01), labels = FALSE)}
   if(position == "centre"){
     par(mar = c(1, 1.75, 0.75, 0.75))
     plot(x = rtDH[, 1], y = rtDH[, 4], type = "l", col = LColour, xlim = c(0.95, 1), ylim = c(0, 80),
          xaxt = "n", yaxt = "n")
-    axis(side = 1, at = seq(0.95, 1, by = 0.01), labels = FALSE)
-    axis(side = 2, at = c(0, 20, 40, 60, 80), labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "Dispersal distance (m)", cex = 0.6)}
+    axis(side = 1, at = seq(0.95, 1, by = 0.01), labels = FALSE)}
   if(position == "bottom"){
     par(mar = c(1.75, 1.75, 0, 0.75))
     plot(x = rtDH[, 1], y = rtDH[, 4], type = "l", col = LColour, xlim = c(0.95, 1), ylim = c(0, 80),
          xaxt = "n", yaxt = "n")
     axis(side = 1, at = seq(0.95, 1, by = 0.01), labels = TRUE, mgp = c(0, 0, 0))
-    mtext(side = 1, line = 0.75, "Dispersal percentile", cex = 0.6)
-    axis(side = 2, at = c(0, 20, 40, 60, 80), labels = TRUE, mgp = c(0, 0.21, 0))
-    mtext(side = 2, line = 0.95, "Dispersal distance (m)", cex = 0.6)}
+    mtext(side = 1, line = 0.75, "Dispersal percentile", cex = 0.6)}
+  axis(side = 2, at = c(0, 20, 40, 60, 80), labels = TRUE, mgp = c(0, 0.21, 0))
+  mtext(side = 2, line = 0.95, "Dispersal distance (m)", cex = 0.6)
   polygon(x = c(rtDH[, 1], rev(rtDH[, 1])), 
           y = c(rtDH[, 5], rev(rtDH[, 6])), col = alpha(LColour, alpha = 0.2), border = NA)
   lines(x = rtMH[, 1], y = rtMH[, 4], type = "l", lty = 3, col = PColour)
