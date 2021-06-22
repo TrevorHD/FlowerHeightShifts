@@ -10,7 +10,9 @@ An analysis of experimental results examining how increases in ambient temperatu
 
 **ThistleData** *(.xlsx)* - Data including flower heights and stages from the experimental thistles.
 
-**SeedDropData** *(.csv)* - Data on seed terminal velocities, used to model seed dispersal.
+**SeedDropData** *(.csv)* - Data on seed terminal velocities, used to model seed dispersal (old).
+
+**SeedDropData2** *(.txt)* - Data on seed terminal velocities, used to model seed dispersal (current).
 
 **Weather1** *(.csv)* - Weather data from the study site, with wind speeds used to model seed dispersal.
 
@@ -23,6 +25,8 @@ An analysis of experimental results examining how increases in ambient temperatu
 **02_Stats** *(.R)* - Code used for various statistical analyses on the data.
 
 **03_Plots** *(.R)* - Code used for plotting figures.
+
+**S1_Extras** *(.R)* - Supplementary code not used in the main analyses.
 
 ## Media
 
