@@ -226,13 +226,6 @@ ht.pdfBoot.plot <- function(bootData, bottom){
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 6], rev(bootData[, 7])), col = alpha("red", alpha = 0.2), border = NA)}
 
-# Set seed for (pseudo) RNG
-set.seed(19854)
-
-# Bootstrap PDFs for NW/W CN and NW/W CA heights
-hBoot_HD1 <- ht.pdfBoot(ht_CN_NW$Height, ht_CN_W$Height)
-hBoot_HD2 <- ht.pdfBoot(ht_CA_NW$Height, ht_CA_W$Height)
-
 
 
 
@@ -294,13 +287,6 @@ ds.pdfBoot.plot <- function(bootData, bottom){
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 6], rev(bootData[, 7])), col = alpha("red", alpha = 0.2), border = NA)}
 
-# Set seed for (pseudo) RNG
-set.seed(18364)
-
-# Bootstrap PDFs for NW/W CN and NW/W CA dispersal kernels
-hBoot_WNW1_pdf <- ds.pdfBoot(ht_CN_NW$Height, ht_CN_W$Height, "WNW", "CN")
-hBoot_WNW2_pdf <- ds.pdfBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW", "CA")
-
 
 
 
@@ -355,13 +341,6 @@ ds.ccdfBoot.plot <- function(bootData, bottom){
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 6], rev(bootData[, 7])), col = alpha("red", alpha = 0.2), border = NA)}
 
-# Set seed for (pseudo) RNG
-set.seed(62947)
-
-# Bootstrap CCDFs for NW/W CN and NW/W CA heights
-hBoot_WNW1_ccdf <- ds.ccdfBoot(ht_CN_NW$Height, ht_CN_W$Height, "WNW", "CN")
-hBoot_WNW2_ccdf <- ds.ccdfBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW", "CA")
-
 
 
 
@@ -407,13 +386,6 @@ ds.ccdfRatioBoot.plot <- function(bootData, bottom){
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 3], rev(bootData[, 4])), col = alpha("black", alpha = 0.2), border = NA)
   abline(h = 1, lty = 3)}
-
-# Set seed for (pseudo) RNG
-set.seed(56284)
-
-# Bootstrap CCDF ratios for NW/W CN and NW/W CA heights
-hBoot_WNW1_CCDFRatio <- ds.ccdfRatioBoot(ht_CN_NW$Height, ht_CN_W$Height, "WNW", "CN")
-hBoot_WNW2_CCDFRatio <- ds.ccdfRatioBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW", "CA")
 
 
 
@@ -473,13 +445,6 @@ ds.rtailBootWNW.plot <- function(bootData, bottom){
   polygon(x = c(rtW[, 1], rev(rtW[, 1])), 
           y = c(rtW[, 5], rev(rtW[, 6])), col = alpha("red", alpha = 0.2), border = NA)}
 
-# Set seed for (pseudo) RNG
-set.seed(70472)
-
-# Bootstrap right tail dispersal percentile distances for NW/W CN and NW/W CA heights
-hboot_WNW1_rtail <- ds.rtailBootWNW(ht_CN_NW$Height, ht_CN_W$Height, "CN")
-hboot_WNW2_rtail <- ds.rtailBootWNW(ht_CA_NW$Height, ht_CA_W$Height, "CA")
-
 
 
 
@@ -520,15 +485,6 @@ ds.pdfBoot.plot2 <- function(bootData, LColour, PColour, position){
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 6], rev(bootData[, 7])), col = alpha(PColour, alpha = 0.2), border = NA)}
 
-# Set seed for (pseudo) RNG
-set.seed(28472)
-
-# Bootstrap PDFs for M/HD CN and M/HD CA dispersal kernels
-hBoot_MHD1_pdf <- ds.pdfBoot(ht_CN_NW$Height, ht_CN_NW_max$max, "MHD", "CN")
-hBoot_MHD2_pdf <- ds.pdfBoot(ht_CN_W$Height, ht_CN_W_max$max, "MHD", "CN")
-hBoot_MHD3_pdf <- ds.pdfBoot(ht_CA_NW$Height, ht_CA_NW_max$max, "MHD", "CA")
-hBoot_MHD4_pdf <- ds.pdfBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD", "CA")
-
 
 
 
@@ -564,15 +520,6 @@ ds.ccdfBoot.plot2 <- function(bootData, LColour, PColour, bottom){
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 5], rev(bootData[, 6])), col = alpha(PColour, alpha = 0.2), border = NA)}
 
-# Set seed for (pseudo) RNG
-set.seed(93748)
-
-# Bootstrap CCDFs for M/HD CN and M/HD CA
-hBoot_MHD1_ccdf <- ds.ccdfBoot(ht_CN_NW$Height, ht_CN_NW_max$max, "MHD", "CN")
-hBoot_MHD2_ccdf <- ds.ccdfBoot(ht_CN_W$Height, ht_CN_W_max$max, "MHD", "CN")
-hBoot_MHD3_ccdf <- ds.ccdfBoot(ht_CA_NW$Height, ht_CA_NW_max$max, "MHD", "CA")
-hBoot_MHD4_ccdf <- ds.ccdfBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD", "CA")
-
 
 
 
@@ -603,15 +550,6 @@ ds.ccdfRatioBoot.plot2 <- function(bootData, bottom){
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 3], rev(bootData[, 4])), col = alpha("black", alpha = 0.2), border = NA)
   abline(h = 1, lty = 3)}
-
-# Set seed for (pseudo) RNG
-set.seed(44492)
-
-# Bootstrap CCDF ratios for M/HD CN and M/HD CA dispersal kernels
-hBoot_MHD1_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_W$Height, ht_CN_W_max$max, "MHD", "CN")
-hBoot_MHD2_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_NW$Height, ht_CN_NW_max$max, "MHD", "CN")
-hBoot_MHD3_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD", "CA")
-hBoot_MHD4_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_NW$Height, ht_CA_NW_max$max, "MHD", "CA")
 
 
 
@@ -670,13 +608,4 @@ ds.rtailBootMHD.plot <- function(rtail_data, LColour, PColour, bottom){
   lines(x = rtMH[, 1], y = rtMH[, 4], type = "l", lty = 3, col = PColour)
   polygon(x = c(rtMH[, 1], rev(rtMH[, 1])), 
           y = c(rtMH[, 5], rev(rtMH[, 6])), col = alpha(PColour, alpha = 0.2), border = NA)}
-
-# Set seed for (pseudo) RNG
-set.seed(91748)
-
-# Bootstrap right tail dispersal percentile distances for max and dist NW/W CN and NW/W CA heights
-hBoot_MHD1_rtail <- ds.rtailBootMHD(ht_CN_NW$Height, ht_CN_NW_max$max, "CN")
-hBoot_MHD2_rtail <- ds.rtailBootMHD(ht_CN_W$Height, ht_CN_W_max$max, "CN")
-hBoot_MHD3_rtail <- ds.rtailBootMHD(ht_CA_NW$Height, ht_CA_NW_max$max, "CA")
-hBoot_MHD4_rtail <- ds.rtailBootMHD(ht_CA_W$Height, ht_CA_W_max$max, "CA")
 
