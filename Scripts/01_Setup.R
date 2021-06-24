@@ -54,7 +54,7 @@ ht_CA_W <- subset(data_ht, Species == "CA" & TRT == "W")
 # Find maximum flower heights for each plant
 data_ht %>% 
   subset(Type == "f" | Type == "s") %>% 
-  group_by(Row, Group, Plant, Species, TRT) %>% 
+  group_by(Row, Group, Plant, Species, TRT, DM_t) %>% 
   summarise(max = max(Height)) -> data_ht_max
 
 # Create vector of CN max flower heights for each treatment group
