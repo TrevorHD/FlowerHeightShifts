@@ -1,4 +1,4 @@
-##### Statistical tests on CN height data -----------------------------------------------------------------
+##### Statistical tests on CN height data: distribution ---------------------------------------------------
 
 # Model population-level distribution of flower head heights
 
@@ -58,7 +58,31 @@ qqline(ht_CN_W$Height)
 
 
 
-##### Statistical tests on CA height data -----------------------------------------------------------------
+##### Statistical tests on CN height data: maximum --------------------------------------------------------
+
+# Model population-level distribution of flower head heights
+
+# Examine effect of treatment using LME model
+# Fixed effect is treatment (TRT) with post-transplant diameter (DM_t) as covariate
+# Random effect is nested group position within block (row) 
+mod_CN <- lmer(max ~ TRT + DM_t + TRT*DM_t + (1|Row/Group),
+               data = subset(data_ht_max, Species == "CN"))
+summary(mod_CN)
+
+# Perform backward selection using AIC
+step(mod_CN)
+
+# Backward selection indicates that the interaction term should be removed
+# Random effect is also reduced to (1|Group:Row)
+mod_CN <- lmer(max ~ TRT + DM_t + (1 | Group:Row),
+               data = subset(data_ht_max, Species == "CN"))
+summary(mod_CN)
+
+
+
+
+
+##### Statistical tests on CA height data: distribution ---------------------------------------------------
 
 # Model population-level distribution of flower head heights
 
@@ -66,7 +90,7 @@ qqline(ht_CN_W$Height)
 # Fixed effect is treatment (TRT) with post-transplant diameter (DM_t) as covariate
 # Random effect is nested plant position within group position within block (row)
 mod_CA <- lmer(Height ~ TRT + DM_t + TRT*DM_t + (1|Row/Group/Plant),
-               data = subset(data_ht, Species == "CA"))
+               data = subset(na.omit(data_ht), Species == "CA"))
 summary(mod_CA)
 
 # Row random effect causes convergence issues and is almost zero; remove it
@@ -112,6 +136,30 @@ qqline(ht_CA_W$Height)
 
 # Shapiro-Wilk test is extremely sensitive to small departures from normality at large sample sizes
 # Heights are pretty much normally distributed... some deviation at the tails, but this is acceptable
+
+
+
+
+
+##### Statistical tests on CA height data: maximum --------------------------------------------------------
+
+# Model population-level distribution of flower head heights
+
+# Examine effect of treatment using LME model
+# Fixed effect is treatment (TRT) with post-transplant diameter (DM_t) as covariate
+# Random effect is nested group position within block (row) 
+mod_CA <- lmer(max ~ TRT + DM_t + TRT*DM_t + (1|Row/Group),
+               data = subset(na.omit(data_ht_max), Species == "CA"))
+summary(mod_CA)
+
+# Perform backward selection using AIC
+step(mod_CA)
+
+# Backward selection indicates that the interaction and DM_t terms should be removed
+# Random effect is also reduced to (1|Group:Row)
+mod_CA <- lmer(max ~ TRT + (1|Group:Row),
+               data = subset(na.omit(data_ht_max), Species == "CA"))
+summary(mod_CA)
 
 
 
