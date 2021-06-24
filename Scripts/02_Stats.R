@@ -1,12 +1,21 @@
 ##### Statistical tests on CN height data -----------------------------------------------------------------
 
-# Examine effect of treatment using LME model, with row and group as random effects
-# Using Gaussian link function (default)
-mod_CN <- lmer(Height ~ TRT + (1|Row) + (1|Group), data = subset(data_ht, Species == "CN"))
+# Model population-level distribution of flower head heights
 
-# Warming treatment fixed effect is significant
-# Note: ANOVA and t-test on TRT are equivalent for only 2 levels (NW and W)
-anova(mod_CN)
+# Examine effect of treatment using LME model
+# Fixed effect is treatment (TRT) with post-transplant diameter (DM_t) as covariate
+# Random effect is nested plant position within group position within block (row) 
+mod_CN <- lmer(Height ~ TRT + DM_t + TRT*DM_t + (1|Row/Group/Plant),
+               data = subset(data_ht, Species == "CN"))
+summary(mod_CN)
+
+# Perform backward selection using AIC
+step(mod_CN)
+
+# Backward selection indicates that the interaction term should be removed
+# Random effect is also reduced to (1|Plant:(Group:Row)) + (1|Group:Row)
+mod_CN <- lmer(Height ~ TRT + DM_t + (1|Plant:(Group:Row)) + (1|Group:Row),
+               data = subset(data_ht, Species == "CN"))
 summary(mod_CN)
 
 # Residuals seem to be normally distributed
@@ -45,33 +54,32 @@ qqline(ht_CN_W$Height)
 # Shapiro-Wilk test is extremely sensitive to small departures from normality at large sample sizes
 # Heights are pretty much normally distributed... some deviation at the tails, but this is acceptable
 
-# Use Levene's Test to assess if there are differences in variance between groups
-# Test indicates that there is not significant difference in variance
-leveneTest(Height ~ TRT, data = subset(data_ht, Species == "CN"))
-
-# We will perform Student's t-test (equal variance) on warmed vs non-warmed treatments
-# The test should be fine given only minor deviations from normality
-t.test(ht_CN_W$Height, ht_CN_NW$Height, alt = "two.sided", var.equal = TRUE)
-
-# There is a significant height difference between warmed and unwarmed groups
-
 
 
 
 
 ##### Statistical tests on CA height data -----------------------------------------------------------------
 
-# Examine effect of treatment using LME model, with row and group as random effects
-# Using Gaussian link function (default)
-mod_CA <- lmer(Height ~ TRT + (1|Row) + (1|Group), data = subset(data_ht, Species == "CA"))
+# Model population-level distribution of flower head heights
 
-# Singular fit; Row random effect makes no contribution, so remove it
+# Examine effect of treatment using LME model
+# Fixed effect is treatment (TRT) with post-transplant diameter (DM_t) as covariate
+# Random effect is nested plant position within group position within block (row)
+mod_CA <- lmer(Height ~ TRT + DM_t + TRT*DM_t + (1|Row/Group/Plant),
+               data = subset(data_ht, Species == "CA"))
 summary(mod_CA)
-mod_CA <- lmer(Height ~ TRT + (1|Group), data = subset(data_ht, Species == "CA"))
 
-# Warming treatment fixed effect is significant
-# Note: ANOVA and t-test on TRT are equivalent for only 2 levels (NW and W)
-anova(mod_CA)
+# Row random effect causes convergence issues and is almost zero; remove it
+mod_CA <- lmer(Height ~ TRT + DM_t + TRT*DM_t + (1|Plant:(Group:Row)) + (1|Group:Row),
+               data = subset(na.omit(data_ht), Species == "CA"))
+summary(mod_CA)
+
+# Perform backward selection using AIC
+step(mod_CA)
+
+# Backward selection indicates that the interaction and DM_t terms should be removed
+mod_CA <- lmer(Height ~ TRT + (1|Plant:(Group:Row)) + (1|Group:Row),
+               data = subset(na.omit(data_ht), Species == "CA"))
 summary(mod_CA)
 
 # Residuals seem to be normally distributed
@@ -105,31 +113,20 @@ qqline(ht_CA_W$Height)
 # Shapiro-Wilk test is extremely sensitive to small departures from normality at large sample sizes
 # Heights are pretty much normally distributed... some deviation at the tails, but this is acceptable
 
-# Use Levene's Test to assess if there are differences in variance between groups
-# Test indicates that there is significant difference in variance
-leveneTest(Height ~ TRT, data = subset(data_ht, Species == "CA"))
-
-# We will perform Welch's t-test (unequal variance) on warmed vs non-warmed treatments
-# The test should be fine given only minor deviations from normality
-t.test(ht_CA_W$Height, ht_CA_NW$Height, alt = "two.sided", var.equal = FALSE)
-
-# There is a significant height difference between warmed and unwarmed groups
-
 
 
 
 
 ##### [F2] Estimate height distribution PDF with 95% bootstrap interval -----------------------------------
 
-# Set seed for (pseudo) RNG
+# Set seed for RNG, then bootstrap PDFs for NW/W CN and NW/W CA heights
 set.seed(19854)
-
-# Bootstrap PDFs for NW/W CN and NW/W CA heights
 hBoot_HD1 <- ht.pdfBoot(ht_CN_NW$Height, ht_CN_W$Height)
 hBoot_HD2 <- ht.pdfBoot(ht_CA_NW$Height, ht_CA_W$Height)
 
-# Kolmogorov-Smirnov test for NW/W CN and NW/W CA
+# Set seed for RNG, then conduct Kolmogorov-Smirnov test for NW/W CN and NW/W CA
 # The NW and W height distributions display significant difference for CN and CA
+set.seed(19854)
 ht.pdfBoot(ht_CN_NW$Height, ht_CN_W$Height, ks.only = TRUE)
 ht.pdfBoot(ht_CA_NW$Height, ht_CA_W$Height, ks.only = TRUE)
 
@@ -139,21 +136,21 @@ ht.pdfBoot(ht_CA_NW$Height, ht_CA_W$Height, ks.only = TRUE)
 
 ##### [F3.1] Estimate warmed vs not warmed PDF (dispersal kernels) ----------------------------------------
 
-# Set seed for (pseudo) RNG
+# Set seed for RNG, then bootstrap PDFs for NW/W CN and NW/W CA dispersal kernels
 set.seed(18364)
-
-# Bootstrap PDFs for NW/W CN and NW/W CA dispersal kernels
 hBoot_WNW1_pdf <- ds.pdfBoot(ht_CN_NW$Height, ht_CN_W$Height, "WNW", "CN")
 hBoot_WNW2_pdf <- ds.pdfBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW", "CA")
 
-# Mean dispersal distance for kernel, along with 95% bootstrap interval on mean
+# Set seed for RNG, then find Mean dispersal distance and 95% bootstrap interval on mean
+set.seed(18364)
 ds.mean(ht_CN_NW$Height, "CN")
 ds.mean(ht_CN_W$Height, "CN")
 ds.mean(ht_CA_NW$Height, "CA")
 ds.mean(ht_CA_W$Height, "CA")
 
-# Kolmogorov-Smirnov test for NW/W CN and NW/W CA
+# Set seed for RNG, then conduct Kolmogorov-Smirnov test for NW/W CN and NW/W CA
 # The NW and W dispersal kernels display significant difference for CN and CA
+set.seed(18364)
 ds.pdfBoot(ht_CN_NW$Height, ht_CN_W$Height, "WNW", "CN", ks.only = TRUE)
 ds.pdfBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW", "CA", ks.only = TRUE)
 
@@ -163,10 +160,8 @@ ds.pdfBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW", "CA", ks.only = TRUE)
 
 ##### [F3.2] Estimate warmed vs not warmed CCDF -----------------------------------------------------------
 
-# Set seed for (pseudo) RNG
+# Set seed for RNG, then bootstrap CCDFs for NW/W CN and NW/W CA heights
 set.seed(62947)
-
-# Bootstrap CCDFs for NW/W CN and NW/W CA heights
 hBoot_WNW1_ccdf <- ds.ccdfBoot(ht_CN_NW$Height, ht_CN_W$Height, "WNW", "CN")
 hBoot_WNW2_ccdf <- ds.ccdfBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW", "CA")
 
@@ -176,10 +171,8 @@ hBoot_WNW2_ccdf <- ds.ccdfBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW", "CA")
 
 ##### [F3.3] Estimate warmed vs not warmed CCDF ratios ----------------------------------------------------
 
-# Set seed for (pseudo) RNG
+# Set seed for RNG, then bootstrap CCDF ratios for NW/W CN and NW/W CA heights
 set.seed(56284)
-
-# Bootstrap CCDF ratios for NW/W CN and NW/W CA heights
 hBoot_WNW1_CCDFRatio <- ds.ccdfRatioBoot(ht_CN_NW$Height, ht_CN_W$Height, "WNW", "CN")
 hBoot_WNW2_CCDFRatio <- ds.ccdfRatioBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW", "CA")
 
@@ -193,10 +186,9 @@ hBoot_WNW2_CCDFRatio[hBoot_WNW1_CCDFRatio[, 1] == 50, ]
 
 ##### [F3.4] Estimate warmed vs not right tail dispersal percentile distances -----------------------------
 
-# Set seed for (pseudo) RNG
+# First, set seed for RNG
+# Then bootstrap right tail dispersal percentile distances for NW/W CN and NW/W CA heights
 set.seed(70472)
-
-# Bootstrap right tail dispersal percentile distances for NW/W CN and NW/W CA heights
 hboot_WNW1_rtail <- ds.rtailBootWNW(ht_CN_NW$Height, ht_CN_W$Height, "CN")
 hboot_WNW2_rtail <- ds.rtailBootWNW(ht_CA_NW$Height, ht_CA_W$Height, "CA")
 
@@ -218,16 +210,15 @@ subset(hboot_WNW2_rtail, DistancePercentile == 0.99 & Treatment == "Warmed")
 
 ##### [F4.1] Estimate max height vs height distribution PDF (dispersal kernels) ---------------------------
 
-# Set seed for (pseudo) RNG
+# Set seed for RNG, then bootstrap PDFs for M/HD CN and M/HD CA dispersal kernels
 set.seed(28472)
-
-# Bootstrap PDFs for M/HD CN and M/HD CA dispersal kernels
 hBoot_MHD1_pdf <- ds.pdfBoot(ht_CN_NW$Height, ht_CN_NW_max$max, "MHD", "CN")
 hBoot_MHD2_pdf <- ds.pdfBoot(ht_CN_W$Height, ht_CN_W_max$max, "MHD", "CN")
 hBoot_MHD3_pdf <- ds.pdfBoot(ht_CA_NW$Height, ht_CA_NW_max$max, "MHD", "CA")
 hBoot_MHD4_pdf <- ds.pdfBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD", "CA")
 
-# Mean dispersal distance for kernel, along with 95% bootstrap interval on mean
+# Set seed for RNG, then find Mean dispersal distance and 95% bootstrap interval on mean
+set.seed(28472)
 ds.mean(ht_CN_NW$Height, "CN")
 ds.mean(ht_CN_W$Height, "CN")
 ds.mean(ht_CA_NW$Height, "CA")
@@ -237,8 +228,9 @@ ds.mean(ht_CN_W_max$max, "CN")
 ds.mean(ht_CA_NW_max$max, "CA")
 ds.mean(ht_CA_W_max$max, "CA")
 
-# Kolmogorov-Smirnov test for NW/W CN and NW/W CA
+# Set seed for RNG, then conduct Kolmogorov-Smirnov test for NW/W CN and NW/W CA
 # The NW and W dispersal kernels display significant difference for CN and CA
+set.seed(28472)
 ds.pdfBoot(ht_CN_NW$Height, ht_CN_NW_max$max, "MHD", "CN", ks.only = TRUE)
 ds.pdfBoot(ht_CN_W$Height, ht_CN_W_max$max, "MHD", "CN", ks.only = TRUE)
 ds.pdfBoot(ht_CA_NW$Height, ht_CA_NW_max$max, "MHD", "CA", ks.only = TRUE)
@@ -250,10 +242,8 @@ ds.pdfBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD", "CA", ks.only = TRUE)
 
 ##### [F4.2] Estimate max height vs height distribution CCDF ----------------------------------------------
 
-# Set seed for (pseudo) RNG
+# Set seed for RNG, then bootstrap CCDFs for M/HD CN and M/HD CA
 set.seed(93748)
-
-# Bootstrap CCDFs for M/HD CN and M/HD CA
 hBoot_MHD1_ccdf <- ds.ccdfBoot(ht_CN_NW$Height, ht_CN_NW_max$max, "MHD", "CN")
 hBoot_MHD2_ccdf <- ds.ccdfBoot(ht_CN_W$Height, ht_CN_W_max$max, "MHD", "CN")
 hBoot_MHD3_ccdf <- ds.ccdfBoot(ht_CA_NW$Height, ht_CA_NW_max$max, "MHD", "CA")
@@ -265,10 +255,8 @@ hBoot_MHD4_ccdf <- ds.ccdfBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD", "CA")
 
 ##### [F4.3] Plot max height vs height distribution CCDF ratio --------------------------------------------
 
-# Set seed for (pseudo) RNG
+# Set seed for RNG, then bootstrap CCDF ratios for M/HD CN and M/HD CA dispersal kernels
 set.seed(44492)
-
-# Bootstrap CCDF ratios for M/HD CN and M/HD CA dispersal kernels
 hBoot_MHD1_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_W$Height, ht_CN_W_max$max, "MHD", "CN")
 hBoot_MHD2_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_NW$Height, ht_CN_NW_max$max, "MHD", "CN")
 hBoot_MHD3_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD", "CA")
@@ -286,10 +274,9 @@ hBoot_MHD4_ccdfRatio[hBoot_MHD4_ccdfRatio[, 1] == 50, ]
 
 ##### [F4.4] Estimate max height vs height distribution right tail dispersal percentile distances ---------
 
-# Set seed for (pseudo) RNG
+# First, set seed for RNG
+# Then bootstrap right tail dispersal percentile distances for M/HD CN and M/HD CA heights
 set.seed(91748)
-
-# Bootstrap right tail dispersal percentile distances for max and dist NW/W CN and NW/W CA heights
 hBoot_MHD1_rtail <- ds.rtailBootMHD(ht_CN_NW$Height, ht_CN_NW_max$max, "CN")
 hBoot_MHD2_rtail <- ds.rtailBootMHD(ht_CN_W$Height, ht_CN_W_max$max, "CN")
 hBoot_MHD3_rtail <- ds.rtailBootMHD(ht_CA_NW$Height, ht_CA_NW_max$max, "CA")
