@@ -605,7 +605,7 @@ ds.rtailBootMHD.plot <- function(rtail_data, LColour, PColour, position){
          xaxt = "n", yaxt = "n")
     axis(side = 1, at = seq(0.95, 1, by = 0.01), labels = FALSE)}
   if(position == "centre"){
-    par(mar = c(1, 1.75, 0.75, 0.75))
+    par(mar = c(1, 1.75, 0.25, 0.75))
     plot(x = rtDH[, 1], y = rtDH[, 4], type = "l", col = LColour, xlim = c(0.95, 1), ylim = c(0, 80),
          xaxt = "n", yaxt = "n")
     axis(side = 1, at = seq(0.95, 1, by = 0.01), labels = FALSE)}
