@@ -224,6 +224,10 @@ set.seed(56284)
 hBoot_WNW1_CCDFRatio <- ds.ccdfRatioBoot(ht_CN_NW$Height, ht_CN_W$Height, "WNW", "CN")
 hBoot_WNW2_CCDFRatio <- ds.ccdfRatioBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW", "CA")
 
+# Ratios at 10 m for CN and CA
+hBoot_WNW1_CCDFRatio[hBoot_WNW1_CCDFRatio[, 1] == 10, ]
+hBoot_WNW2_CCDFRatio[hBoot_WNW1_CCDFRatio[, 1] == 10, ]
+
 # Ratios at 50 m for CN and CA
 hBoot_WNW1_CCDFRatio[hBoot_WNW1_CCDFRatio[, 1] == 50, ]
 hBoot_WNW2_CCDFRatio[hBoot_WNW1_CCDFRatio[, 1] == 50, ]
@@ -309,6 +313,12 @@ hBoot_MHD1_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_W$Height, ht_CN_W_max$max, "MHD",
 hBoot_MHD2_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_NW$Height, ht_CN_NW_max$max, "MHD", "CN")
 hBoot_MHD3_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD", "CA")
 hBoot_MHD4_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_NW$Height, ht_CA_NW_max$max, "MHD", "CA")
+
+# Ratios at 10 m for CN and CA
+hBoot_MHD1_ccdfRatio[hBoot_MHD1_ccdfRatio[, 1] == 10, ]
+hBoot_MHD2_ccdfRatio[hBoot_MHD2_ccdfRatio[, 1] == 10, ]
+hBoot_MHD3_ccdfRatio[hBoot_MHD3_ccdfRatio[, 1] == 10, ]
+hBoot_MHD4_ccdfRatio[hBoot_MHD4_ccdfRatio[, 1] == 10, ]
 
 # Ratios at 50 m for CN and CA
 hBoot_MHD1_ccdfRatio[hBoot_MHD1_ccdfRatio[, 1] == 50, ]
