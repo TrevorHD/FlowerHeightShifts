@@ -5,8 +5,8 @@
 # Examine effect of treatment using LME model
 # Fixed effect is treatment (TRT) with post-transplant diameter (DM_t) as covariate
 # Random effect is nested plant position within group position within block (row) 
-mod_CN_HD <- lmer(Height ~ TRT + DM_t + TRT*DM_t + (1|Row/Group/Plant),
-               data = subset(data_ht, Species == "CN"))
+mod_CN_HD <- lmer(Height ~ TRT + scale(DM_t) + TRT*scale(DM_t) + (1|Row/Group/Plant),
+                  data = subset(data_ht, Species == "CN"))
 summary(mod_CN_HD)
 
 # Perform backward selection using AIC
@@ -14,8 +14,8 @@ step(mod_CN_HD)
 
 # Backward selection indicates that the interaction term should be removed
 # Random effect is also reduced to (1|Plant:(Group:Row)) + (1|Group:Row)
-mod_CN_HD <- lmer(Height ~ TRT + DM_t + (1|Plant:(Group:Row)) + (1|Group:Row),
-               data = subset(data_ht, Species == "CN"))
+mod_CN_HD <- lmer(Height ~ TRT + scale(DM_t) + (1|Plant:(Group:Row)) + (1|Group:Row),
+                  data = subset(data_ht, Species == "CN"))
 summary(mod_CN_HD)
 
 # Variance appears to be homogeneous
@@ -64,8 +64,8 @@ shapiro.test(ht_CN_W$Height)
 # Examine effect of treatment using LME model
 # Fixed effect is treatment (TRT) with post-transplant diameter (DM_t) as covariate
 # Random effect is nested group position within block (row) 
-mod_CN_M <- lmer(max ~ TRT + DM_t + TRT*DM_t + (1|Row/Group),
-               data = subset(data_ht_max, Species == "CN"))
+mod_CN_M <- lmer(max ~ TRT + scale(DM_t) + TRT*scale(DM_t) + (1|Row/Group),
+                 data = subset(data_ht_max, Species == "CN"))
 summary(mod_CN_M)
 
 # Perform backward selection using AIC
@@ -73,8 +73,8 @@ step(mod_CN_M)
 
 # Backward selection indicates that the interaction term should be removed
 # Random effect is also reduced to (1|Group:Row)
-mod_CN_M <- lmer(max ~ TRT + DM_t + (1 | Group:Row),
-               data = subset(data_ht_max, Species == "CN"))
+mod_CN_M <- lmer(max ~ TRT + scale(DM_t) + (1|Group:Row),
+                 data = subset(data_ht_max, Species == "CN"))
 summary(mod_CN_M)
 
 # Variance appears to be homogeneous
@@ -112,13 +112,13 @@ shapiro.test(ht_CN_W_max$max)
 # Examine effect of treatment using LME model
 # Fixed effect is treatment (TRT) with post-transplant diameter (DM_t) as covariate
 # Random effect is nested plant position within group position within block (row)
-mod_CA_HD <- lmer(Height ~ TRT + DM_t + TRT*DM_t + (1|Row/Group/Plant),
+mod_CA_HD <- lmer(Height ~ TRT + scale(DM_t) + TRT*scale(DM_t) + (1|Row/Group/Plant),
                data = subset(na.omit(data_ht), Species == "CA"))
 summary(mod_CA_HD)
 
-# Row random effect causes convergence issues and is almost zero; remove it
-mod_CA_HD <- lmer(Height ~ TRT + DM_t + TRT*DM_t + (1|Plant:(Group:Row)) + (1|Group:Row),
-               data = subset(na.omit(data_ht), Species == "CA"))
+# Row random effect causes convergence issues and has almost zero variance; remove it
+mod_CA_HD <- lmer(Height ~ TRT + scale(DM_t) + TRT*scale(DM_t) + (1|Plant:(Group:Row)) + (1|Group:Row),
+                  data = subset(na.omit(data_ht), Species == "CA"))
 summary(mod_CA_HD)
 
 # Perform backward selection using AIC
@@ -126,7 +126,7 @@ step(mod_CA_HD)
 
 # Backward selection indicates that the interaction and DM_t terms should be removed
 mod_CA_HD <- lmer(Height ~ TRT + (1|Plant:(Group:Row)) + (1|Group:Row),
-               data = subset(na.omit(data_ht), Species == "CA"))
+                  data = subset(na.omit(data_ht), Species == "CA"))
 summary(mod_CA_HD)
 
 # Variance appears to be homogeneous
@@ -175,8 +175,8 @@ shapiro.test(ht_CA_W$Height)
 # Examine effect of treatment using LME model
 # Fixed effect is treatment (TRT) with post-transplant diameter (DM_t) as covariate
 # Random effect is nested group position within block (row) 
-mod_CA_M <- lmer(max ~ TRT + DM_t + TRT*DM_t + (1|Row/Group),
-               data = subset(na.omit(data_ht_max), Species == "CA"))
+mod_CA_M <- lmer(max ~ TRT + scale(DM_t) + TRT*scale(DM_t) + (1|Row/Group),
+                 data = subset(na.omit(data_ht_max), Species == "CA"))
 summary(mod_CA_M)
 
 # Perform backward selection using AIC
@@ -185,7 +185,7 @@ step(mod_CA_M)
 # Backward selection indicates that the interaction and DM_t terms should be removed
 # Random effect is also reduced to (1|Group:Row)
 mod_CA_M <- lmer(max ~ TRT + (1|Group:Row),
-               data = subset(na.omit(data_ht_max), Species == "CA"))
+                 data = subset(na.omit(data_ht_max), Species == "CA"))
 summary(mod_CA_M)
 
 # Variance appears to be homogeneous
