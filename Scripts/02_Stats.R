@@ -5,54 +5,53 @@
 # Examine effect of treatment using LME model
 # Fixed effect is treatment (TRT) with post-transplant diameter (DM_t) as covariate
 # Random effect is nested plant position within group position within block (row) 
-mod_CN <- lmer(Height ~ TRT + DM_t + TRT*DM_t + (1|Row/Group/Plant),
+mod_CN_HD <- lmer(Height ~ TRT + DM_t + TRT*DM_t + (1|Row/Group/Plant),
                data = subset(data_ht, Species == "CN"))
-summary(mod_CN)
+summary(mod_CN_HD)
 
 # Perform backward selection using AIC
-step(mod_CN)
+step(mod_CN_HD)
 
 # Backward selection indicates that the interaction term should be removed
 # Random effect is also reduced to (1|Plant:(Group:Row)) + (1|Group:Row)
-mod_CN <- lmer(Height ~ TRT + DM_t + (1|Plant:(Group:Row)) + (1|Group:Row),
+mod_CN_HD <- lmer(Height ~ TRT + DM_t + (1|Plant:(Group:Row)) + (1|Group:Row),
                data = subset(data_ht, Species == "CN"))
-summary(mod_CN)
+summary(mod_CN_HD)
 
-# Residuals seem to be normally distributed
-# Shapiro-Wilk test disagrees, but it is sensitive to slight departures from normal in large samples
-plot(mod_CN)
-qqnorm(resid(mod_CN))
-qqline(resid(mod_CN))
-shapiro.test(resid(mod_CN))
+# Variance appears to be homogeneous
+# Plotting/visual inspection is often useful to show this (see Zuur et al. 2010)
+plot(mod_CN_HD)
 
-# Random effect for Group is normally distributed
-qqnorm(ranef(mod_CN)$Group$`(Intercept)`)
-qqline(ranef(mod_CN)$Group$`(Intercept)`)
-shapiro.test(ranef(mod_CN)$Group$`(Intercept)`)
+# Residuals seem to be close to normally distributed, though tails are skewed
+# Will not affect parameter estimates, but may inflate standard errors and p-values
+# P-values are already extremely low, though, so this is likely not a problem
+qqnorm(resid(mod_CN_HD))
+qqline(resid(mod_CN_HD))
 
-# Random effect for Row is normally distributed
-qqnorm(ranef(mod_CN)$Row$`(Intercept)`)
-qqline(ranef(mod_CN)$Row$`(Intercept)`)
-shapiro.test(ranef(mod_CN)$Row$`(Intercept)`)
+# Shapiro-Wilk test rejects normality of residuals
+# However, it is sensitive to slight departures from normal in large samples
+# Also note that normality is a one of the weaker assumptions of linear model
+# Linear models are pretty robust to violation of normality (see Fitzmaurice 2004, Schielzeth 2020)
+shapiro.test(resid(mod_CN_HD))
 
-# Residual variances are homogeneous at alpha of 0.05
-leveneTest(residuals(mod_CN) ~ subset(data_ht, Species == "CN" )$TRT)
+# Random effects are normally distributed
+qqnorm(ranef(mod_CN_HD)$`Plant:(Group:Row)`$`(Intercept)`)
+qqline(ranef(mod_CN_HD)$`Plant:(Group:Row)`$`(Intercept)`)
+shapiro.test(ranef(mod_CN_HD)$`Plant:(Group:Row)`$`(Intercept)`)
+qqnorm(ranef(mod_CN_HD)$`Group:Row`$`(Intercept)`)
+qqline(ranef(mod_CN_HD)$`Group:Row`$`(Intercept)`)
+shapiro.test(ranef(mod_CN_HD)$`Group:Row`$`(Intercept)`)
 
-# Assumptions for the LME model are satisfied
-# Now look at normality of each treatment group
-
-# Normality: Not warmed treatment
-shapiro.test(ht_CN_NW$Height)
+# Data within each treatment group are approximately normal
+# Again, Shapiro-Wilk test is sensitive to slight departures from normal in large samples
 qqnorm(ht_CN_NW$Height)
 qqline(ht_CN_NW$Height)
-
-# Normality: Warmed treatment
-shapiro.test(ht_CN_W$Height)
+shapiro.test(ht_CN_NW$Height)
 qqnorm(ht_CN_W$Height)
 qqline(ht_CN_W$Height)
+shapiro.test(ht_CN_W$Height)
 
-# Shapiro-Wilk test is extremely sensitive to small departures from normality at large sample sizes
-# Heights are pretty much normally distributed... some deviation at the tails, but this is acceptable
+# There are no egregious violations of the LME model assumptions
 
 
 
@@ -60,23 +59,47 @@ qqline(ht_CN_W$Height)
 
 ##### Statistical tests on CN height data: maximum --------------------------------------------------------
 
-# Model population-level distribution of flower head heights
+# Model maximum flower head heights
 
 # Examine effect of treatment using LME model
 # Fixed effect is treatment (TRT) with post-transplant diameter (DM_t) as covariate
 # Random effect is nested group position within block (row) 
-mod_CN <- lmer(max ~ TRT + DM_t + TRT*DM_t + (1|Row/Group),
+mod_CN_M <- lmer(max ~ TRT + DM_t + TRT*DM_t + (1|Row/Group),
                data = subset(data_ht_max, Species == "CN"))
-summary(mod_CN)
+summary(mod_CN_M)
 
 # Perform backward selection using AIC
-step(mod_CN)
+step(mod_CN_M)
 
 # Backward selection indicates that the interaction term should be removed
 # Random effect is also reduced to (1|Group:Row)
-mod_CN <- lmer(max ~ TRT + DM_t + (1 | Group:Row),
+mod_CN_M <- lmer(max ~ TRT + DM_t + (1 | Group:Row),
                data = subset(data_ht_max, Species == "CN"))
-summary(mod_CN)
+summary(mod_CN_M)
+
+# Variance appears to be homogeneous
+# Plotting/visual inspection is often useful to show this (see Zuur et al. 2010)
+plot(mod_CN_M)
+
+# Residuals are approximately normally distributed; Shapiro-Wilk test agrees
+qqnorm(resid(mod_CN_M))
+qqline(resid(mod_CN_M))
+shapiro.test(resid(mod_CN_M))
+
+# Random effects are normally distributed; Shapiro-Wilk test agrees
+qqnorm(ranef(mod_CN_M)$`Group:Row`$`(Intercept)`)
+qqline(ranef(mod_CN_M)$`Group:Row`$`(Intercept)`)
+shapiro.test(ranef(mod_CN_M)$`Group:Row`$`(Intercept)`)
+
+# Data within each treatment group are approximately normal
+qqnorm(ht_CN_NW_max$max)
+qqline(ht_CN_NW_max$max)
+shapiro.test(ht_CN_NW_max$max)
+qqnorm(ht_CN_W_max$max)
+qqline(ht_CN_W_max$max)
+shapiro.test(ht_CN_W_max$max)
+
+# There are no egregious violations of the LME model assumptions
 
 
 
@@ -89,53 +112,57 @@ summary(mod_CN)
 # Examine effect of treatment using LME model
 # Fixed effect is treatment (TRT) with post-transplant diameter (DM_t) as covariate
 # Random effect is nested plant position within group position within block (row)
-mod_CA <- lmer(Height ~ TRT + DM_t + TRT*DM_t + (1|Row/Group/Plant),
+mod_CA_HD <- lmer(Height ~ TRT + DM_t + TRT*DM_t + (1|Row/Group/Plant),
                data = subset(na.omit(data_ht), Species == "CA"))
-summary(mod_CA)
+summary(mod_CA_HD)
 
 # Row random effect causes convergence issues and is almost zero; remove it
-mod_CA <- lmer(Height ~ TRT + DM_t + TRT*DM_t + (1|Plant:(Group:Row)) + (1|Group:Row),
+mod_CA_HD <- lmer(Height ~ TRT + DM_t + TRT*DM_t + (1|Plant:(Group:Row)) + (1|Group:Row),
                data = subset(na.omit(data_ht), Species == "CA"))
-summary(mod_CA)
+summary(mod_CA_HD)
 
 # Perform backward selection using AIC
-step(mod_CA)
+step(mod_CA_HD)
 
 # Backward selection indicates that the interaction and DM_t terms should be removed
-mod_CA <- lmer(Height ~ TRT + (1|Plant:(Group:Row)) + (1|Group:Row),
+mod_CA_HD <- lmer(Height ~ TRT + (1|Plant:(Group:Row)) + (1|Group:Row),
                data = subset(na.omit(data_ht), Species == "CA"))
-summary(mod_CA)
+summary(mod_CA_HD)
 
-# Residuals seem to be normally distributed
-# Shapiro-Wilk test disagrees, but it is sensitive to slight departures from normal in large samples
-plot(mod_CA)
-qqnorm(resid(mod_CA))
-qqline(resid(mod_CA))
-shapiro.test(resid(mod_CA))
+# Variance appears to be homogeneous
+# Plotting/visual inspection is often useful to show this (see Zuur et al. 2010)
+plot(mod_CA_HD)
 
-# Random effect for Group is normally distributed
-qqnorm(ranef(mod_CA)$Group$`(Intercept)`)
-qqline(ranef(mod_CA)$Group$`(Intercept)`)
-shapiro.test(ranef(mod_CA)$Group$`(Intercept)`)
+# Residuals seem to be close to normally distributed, though tails are skewed
+# Will not affect parameter estimates, but may inflate standard errors and p-values
+# P-values are already extremely low, though, so this is likely not a problem
+qqnorm(resid(mod_CA_HD))
+qqline(resid(mod_CA_HD))
 
-# Residual variances are not quite homogeneous at alpha of 0.05
-# Slightly problematic for the LME model
-leveneTest(residuals(mod_CA) ~ subset(data_ht, Species == "CA")$TRT)
+# Shapiro-Wilk test rejects normality of residuals
+# However, it is sensitive to slight departures from normal in large samples
+# Also note that normality is a one of the weaker assumptions of linear model
+# Linear models are pretty robust to violation of normality (see Fitzmaurice 2004, Schielzeth 2020)
+shapiro.test(resid(mod_CA_HD))
 
-# Now look at normality of each treatment group
+# Random effects are approximately normally distributed
+qqnorm(ranef(mod_CA_HD)$`Plant:(Group:Row)`$`(Intercept)`)
+qqline(ranef(mod_CA_HD)$`Plant:(Group:Row)`$`(Intercept)`)
+shapiro.test(ranef(mod_CA_HD)$`Plant:(Group:Row)`$`(Intercept)`)
+qqnorm(ranef(mod_CA_HD)$`Group:Row`$`(Intercept)`)
+qqline(ranef(mod_CA_HD)$`Group:Row`$`(Intercept)`)
+shapiro.test(ranef(mod_CA_HD)$`Group:Row`$`(Intercept)`)
 
-# Normality: Not warmed treatment
-shapiro.test(ht_CA_NW$Height)
+# Data within each treatment group are approximately normal
+# Again, Shapiro-Wilk test is sensitive to slight departures from normal in large samples
 qqnorm(ht_CA_NW$Height)
 qqline(ht_CA_NW$Height)
-
-# Normality: Warmed treatment
-shapiro.test(ht_CA_W$Height)
+shapiro.test(ht_CA_NW$Height)
 qqnorm(ht_CA_W$Height)
 qqline(ht_CA_W$Height)
+shapiro.test(ht_CA_W$Height)
 
-# Shapiro-Wilk test is extremely sensitive to small departures from normality at large sample sizes
-# Heights are pretty much normally distributed... some deviation at the tails, but this is acceptable
+# There are no egregious violations of the LME model assumptions
 
 
 
@@ -148,18 +175,42 @@ qqline(ht_CA_W$Height)
 # Examine effect of treatment using LME model
 # Fixed effect is treatment (TRT) with post-transplant diameter (DM_t) as covariate
 # Random effect is nested group position within block (row) 
-mod_CA <- lmer(max ~ TRT + DM_t + TRT*DM_t + (1|Row/Group),
+mod_CA_M <- lmer(max ~ TRT + DM_t + TRT*DM_t + (1|Row/Group),
                data = subset(na.omit(data_ht_max), Species == "CA"))
-summary(mod_CA)
+summary(mod_CA_M)
 
 # Perform backward selection using AIC
-step(mod_CA)
+step(mod_CA_M)
 
 # Backward selection indicates that the interaction and DM_t terms should be removed
 # Random effect is also reduced to (1|Group:Row)
-mod_CA <- lmer(max ~ TRT + (1|Group:Row),
+mod_CA_M <- lmer(max ~ TRT + (1|Group:Row),
                data = subset(na.omit(data_ht_max), Species == "CA"))
-summary(mod_CA)
+summary(mod_CA_M)
+
+# Variance appears to be homogeneous
+# Plotting/visual inspection is often useful to show this (see Zuur et al. 2010)
+plot(mod_CA_M)
+
+# Residuals are approximately normally distributed; Shapiro-Wilk test agrees
+qqnorm(resid(mod_CA_M))
+qqline(resid(mod_CA_M))
+shapiro.test(resid(mod_CA_M))
+
+# Random effects are normally distributed; Shapiro-Wilk test agrees
+qqnorm(ranef(mod_CA_M)$`Group:Row`$`(Intercept)`)
+qqline(ranef(mod_CA_M)$`Group:Row`$`(Intercept)`)
+shapiro.test(ranef(mod_CA_M)$`Group:Row`$`(Intercept)`)
+
+# Data within each treatment group are approximately normal
+qqnorm(ht_CA_NW_max$max)
+qqline(ht_CA_NW_max$max)
+shapiro.test(ht_CA_NW_max$max)
+qqnorm(ht_CA_W_max$max)
+qqline(ht_CA_W_max$max)
+shapiro.test(ht_CA_W_max$max)
+
+# There are no egregious violations of the LME model assumptions
 
 
 
