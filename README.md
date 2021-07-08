@@ -32,6 +32,8 @@ An analysis of experimental results examining how increases in ambient temperatu
 
 **Presentation** *(.pptx)* - A PowerPoint presentation (for ESA 2021) regarding this research.
 
+**Presentation** *(.pdf)* - A PDF version of the above PowerPoint slides.
+
 **Transcript** *(.docx)* - A transcript of the recorded presentation in docx format.
 
 **Transcript** *(.pdf)* - A transcript of the recorded presentation in PDF format.
