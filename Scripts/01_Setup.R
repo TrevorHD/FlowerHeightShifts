@@ -34,7 +34,8 @@ data_rs <- read.xlsx("Data/ThistleData.xlsx", sheetName = "General")
 # Then merge initial rosette diameter with flower height data and keep only necessary columns
 data_rs <- subset(data_rs, !is.na(LLL_t1) & !is.na(DM_t1) & F == 1)
 data_ht <- merge(data_ht, data_rs, by = c("Row", "Group", "Plant", "Species"))
-data_ht <- data_ht[, 1:9]
+data_ht <- data_ht[, c(1:7, 9:10)]
+names(data_ht)[7] <- "TRT"
 
 # Note: we are only including flowers (f) and seed heads (s), not buds (b)
 # We are also interested in only warmed (W) and not warmed (NW)
@@ -55,7 +56,7 @@ ht_CA_W <- subset(data_ht, Species == "CA" & TRT == "W")
 data_ht %>% 
   subset(Type == "f" | Type == "s") %>% 
   group_by(Row, Group, Plant, Species, TRT, DM_t) %>% 
-  summarise(max = max(Height)) -> data_ht_max
+  summarise(Max = max(Height)) -> data_ht_max
 
 # Create vector of CN max flower heights for each treatment group
 ht_CN_NW_max <- subset(data_ht_max, Species == "CN" & TRT == "NW")

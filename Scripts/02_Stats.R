@@ -64,7 +64,7 @@ shapiro.test(ht_CN_W$Height)
 # Examine effect of treatment using LME model
 # Fixed effect is treatment (TRT) with post-transplant diameter (DM_t) as covariate
 # Random effect is nested group position within block (row) 
-mod_CN_M <- lmer(max ~ TRT + scale(DM_t) + TRT*scale(DM_t) + (1|Row/Group),
+mod_CN_M <- lmer(Max ~ TRT + scale(DM_t) + TRT*scale(DM_t) + (1|Row/Group),
                  data = subset(data_ht_max, Species == "CN"))
 summary(mod_CN_M)
 
@@ -73,7 +73,7 @@ step(mod_CN_M)
 
 # Backward selection indicates that the interaction term should be removed
 # Random effect is also reduced to (1|Group:Row)
-mod_CN_M <- lmer(max ~ TRT + scale(DM_t) + (1|Group:Row),
+mod_CN_M <- lmer(Max ~ TRT + scale(DM_t) + (1|Group:Row),
                  data = subset(data_ht_max, Species == "CN"))
 summary(mod_CN_M)
 
@@ -92,12 +92,12 @@ qqline(ranef(mod_CN_M)$`Group:Row`$`(Intercept)`)
 shapiro.test(ranef(mod_CN_M)$`Group:Row`$`(Intercept)`)
 
 # Data within each treatment group are approximately normal
-qqnorm(ht_CN_NW_max$max)
-qqline(ht_CN_NW_max$max)
-shapiro.test(ht_CN_NW_max$max)
-qqnorm(ht_CN_W_max$max)
-qqline(ht_CN_W_max$max)
-shapiro.test(ht_CN_W_max$max)
+qqnorm(ht_CN_NW_max$Max)
+qqline(ht_CN_NW_max$Max)
+shapiro.test(ht_CN_NW_max$Max)
+qqnorm(ht_CN_W_max$Max)
+qqline(ht_CN_W_max$Max)
+shapiro.test(ht_CN_W_max$Max)
 
 # There are no egregious violations of the LME model assumptions
 
@@ -175,7 +175,7 @@ shapiro.test(ht_CA_W$Height)
 # Examine effect of treatment using LME model
 # Fixed effect is treatment (TRT) with post-transplant diameter (DM_t) as covariate
 # Random effect is nested group position within block (row) 
-mod_CA_M <- lmer(max ~ TRT + scale(DM_t) + TRT*scale(DM_t) + (1|Row/Group),
+mod_CA_M <- lmer(Max ~ TRT + scale(DM_t) + TRT*scale(DM_t) + (1|Row/Group),
                  data = subset(na.omit(data_ht_max), Species == "CA"))
 summary(mod_CA_M)
 
@@ -184,7 +184,7 @@ step(mod_CA_M)
 
 # Backward selection indicates that the interaction and DM_t terms should be removed
 # Random effect is also reduced to (1|Group:Row)
-mod_CA_M <- lmer(max ~ TRT + (1|Group:Row),
+mod_CA_M <- lmer(Max ~ TRT + (1|Group:Row),
                  data = subset(na.omit(data_ht_max), Species == "CA"))
 summary(mod_CA_M)
 
@@ -203,12 +203,12 @@ qqline(ranef(mod_CA_M)$`Group:Row`$`(Intercept)`)
 shapiro.test(ranef(mod_CA_M)$`Group:Row`$`(Intercept)`)
 
 # Data within each treatment group are approximately normal
-qqnorm(ht_CA_NW_max$max)
-qqline(ht_CA_NW_max$max)
-shapiro.test(ht_CA_NW_max$max)
-qqnorm(ht_CA_W_max$max)
-qqline(ht_CA_W_max$max)
-shapiro.test(ht_CA_W_max$max)
+qqnorm(ht_CA_NW_max$Max)
+qqline(ht_CA_NW_max$Max)
+shapiro.test(ht_CA_NW_max$Max)
+qqnorm(ht_CA_W_max$Max)
+qqline(ht_CA_W_max$Max)
+shapiro.test(ht_CA_W_max$Max)
 
 # There are no egregious violations of the LME model assumptions
 
@@ -315,10 +315,10 @@ subset(hboot_WNW2_rtail, DistancePercentile == 0.99 & Treatment == "Warmed")
 
 # Set seed for RNG, then bootstrap PDFs for M/HD CN and M/HD CA dispersal kernels
 set.seed(28472)
-hBoot_MHD1_pdf <- ds.pdfBoot(ht_CN_NW$Height, ht_CN_NW_max$max, "MHD", "CN")
-hBoot_MHD2_pdf <- ds.pdfBoot(ht_CN_W$Height, ht_CN_W_max$max, "MHD", "CN")
-hBoot_MHD3_pdf <- ds.pdfBoot(ht_CA_NW$Height, ht_CA_NW_max$max, "MHD", "CA")
-hBoot_MHD4_pdf <- ds.pdfBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD", "CA")
+hBoot_MHD1_pdf <- ds.pdfBoot(ht_CN_NW$Height, ht_CN_NW_max$Max, "MHD", "CN")
+hBoot_MHD2_pdf <- ds.pdfBoot(ht_CN_W$Height, ht_CN_W_max$Max, "MHD", "CN")
+hBoot_MHD3_pdf <- ds.pdfBoot(ht_CA_NW$Height, ht_CA_NW_max$Max, "MHD", "CA")
+hBoot_MHD4_pdf <- ds.pdfBoot(ht_CA_W$Height, ht_CA_W_max$Max, "MHD", "CA")
 
 # Set seed for RNG, then find Mean dispersal distance and 95% bootstrap interval on mean
 set.seed(28472)
@@ -326,18 +326,18 @@ ds.mean(ht_CN_NW$Height, "CN")
 ds.mean(ht_CN_W$Height, "CN")
 ds.mean(ht_CA_NW$Height, "CA")
 ds.mean(ht_CA_W$Height, "CA")
-ds.mean(ht_CN_NW_max$max, "CN")
-ds.mean(ht_CN_W_max$max, "CN")
-ds.mean(ht_CA_NW_max$max, "CA")
-ds.mean(ht_CA_W_max$max, "CA")
+ds.mean(ht_CN_NW_max$Max, "CN")
+ds.mean(ht_CN_W_max$Max, "CN")
+ds.mean(ht_CA_NW_max$Max, "CA")
+ds.mean(ht_CA_W_max$Max, "CA")
 
 # Set seed for RNG, then conduct Kolmogorov-Smirnov test for NW/W CN and NW/W CA
 # The NW and W dispersal kernels display significant difference for CN and CA
 set.seed(28472)
-ds.pdfBoot(ht_CN_NW$Height, ht_CN_NW_max$max, "MHD", "CN", ks.only = TRUE)
-ds.pdfBoot(ht_CN_W$Height, ht_CN_W_max$max, "MHD", "CN", ks.only = TRUE)
-ds.pdfBoot(ht_CA_NW$Height, ht_CA_NW_max$max, "MHD", "CA", ks.only = TRUE)
-ds.pdfBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD", "CA", ks.only = TRUE)
+ds.pdfBoot(ht_CN_NW$Height, ht_CN_NW_max$Max, "MHD", "CN", ks.only = TRUE)
+ds.pdfBoot(ht_CN_W$Height, ht_CN_W_max$Max, "MHD", "CN", ks.only = TRUE)
+ds.pdfBoot(ht_CA_NW$Height, ht_CA_NW_max$Max, "MHD", "CA", ks.only = TRUE)
+ds.pdfBoot(ht_CA_W$Height, ht_CA_W_max$Max, "MHD", "CA", ks.only = TRUE)
 
 
 
@@ -347,10 +347,10 @@ ds.pdfBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD", "CA", ks.only = TRUE)
 
 # Set seed for RNG, then bootstrap CCDFs for M/HD CN and M/HD CA
 set.seed(93748)
-hBoot_MHD1_ccdf <- ds.ccdfBoot(ht_CN_NW$Height, ht_CN_NW_max$max, "MHD", "CN")
-hBoot_MHD2_ccdf <- ds.ccdfBoot(ht_CN_W$Height, ht_CN_W_max$max, "MHD", "CN")
-hBoot_MHD3_ccdf <- ds.ccdfBoot(ht_CA_NW$Height, ht_CA_NW_max$max, "MHD", "CA")
-hBoot_MHD4_ccdf <- ds.ccdfBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD", "CA")
+hBoot_MHD1_ccdf <- ds.ccdfBoot(ht_CN_NW$Height, ht_CN_NW_max$Max, "MHD", "CN")
+hBoot_MHD2_ccdf <- ds.ccdfBoot(ht_CN_W$Height, ht_CN_W_max$Max, "MHD", "CN")
+hBoot_MHD3_ccdf <- ds.ccdfBoot(ht_CA_NW$Height, ht_CA_NW_max$Max, "MHD", "CA")
+hBoot_MHD4_ccdf <- ds.ccdfBoot(ht_CA_W$Height, ht_CA_W_max$Max, "MHD", "CA")
 
 
 
@@ -360,10 +360,10 @@ hBoot_MHD4_ccdf <- ds.ccdfBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD", "CA")
 
 # Set seed for RNG, then bootstrap CCDF ratios for M/HD CN and M/HD CA dispersal kernels
 set.seed(44492)
-hBoot_MHD1_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_W$Height, ht_CN_W_max$max, "MHD", "CN")
-hBoot_MHD2_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_NW$Height, ht_CN_NW_max$max, "MHD", "CN")
-hBoot_MHD3_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_W$Height, ht_CA_W_max$max, "MHD", "CA")
-hBoot_MHD4_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_NW$Height, ht_CA_NW_max$max, "MHD", "CA")
+hBoot_MHD1_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_W$Height, ht_CN_W_max$Max, "MHD", "CN")
+hBoot_MHD2_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_NW$Height, ht_CN_NW_max$Max, "MHD", "CN")
+hBoot_MHD3_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_W$Height, ht_CA_W_max$Max, "MHD", "CA")
+hBoot_MHD4_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_NW$Height, ht_CA_NW_max$Max, "MHD", "CA")
 
 # Ratios at 10 m for CN and CA
 hBoot_MHD1_ccdfRatio[hBoot_MHD1_ccdfRatio[, 1] == 10, ]
@@ -386,10 +386,10 @@ hBoot_MHD4_ccdfRatio[hBoot_MHD4_ccdfRatio[, 1] == 50, ]
 # First, set seed for RNG
 # Then bootstrap right tail dispersal percentile distances for M/HD CN and M/HD CA heights
 set.seed(91748)
-hBoot_MHD1_rtail <- ds.rtailBootMHD(ht_CN_NW$Height, ht_CN_NW_max$max, "CN")
-hBoot_MHD2_rtail <- ds.rtailBootMHD(ht_CN_W$Height, ht_CN_W_max$max, "CN")
-hBoot_MHD3_rtail <- ds.rtailBootMHD(ht_CA_NW$Height, ht_CA_NW_max$max, "CA")
-hBoot_MHD4_rtail <- ds.rtailBootMHD(ht_CA_W$Height, ht_CA_W_max$max, "CA")
+hBoot_MHD1_rtail <- ds.rtailBootMHD(ht_CN_NW$Height, ht_CN_NW_max$Max, "CN")
+hBoot_MHD2_rtail <- ds.rtailBootMHD(ht_CN_W$Height, ht_CN_W_max$Max, "CN")
+hBoot_MHD3_rtail <- ds.rtailBootMHD(ht_CA_NW$Height, ht_CA_NW_max$Max, "CA")
+hBoot_MHD4_rtail <- ds.rtailBootMHD(ht_CA_W$Height, ht_CA_W_max$Max, "CA")
 
 # Mean 95th and 99th percentiles for CN unwarmed
 subset(hBoot_MHD1_rtail, DistancePercentile == 0.95 & Heights == "Dist. Height")
