@@ -66,6 +66,21 @@ ht_CN_W_max <- subset(data_ht_max, Species == "CN" & TRT == "W")
 ht_CA_NW_max <- subset(data_ht_max, Species == "CA" & TRT == "NW")
 ht_CA_W_max <- subset(data_ht_max, Species == "CA" & TRT == "W")
 
+# Calculate plot averages for maximum flower height
+data_ht_max %>% 
+  na.omit() %>% 
+  group_by(Row, Group, Species, TRT) %>% 
+  summarise(Max_PA = mean(Max),
+            DM_t_PA = mean(DM_t)) -> data_ht_max_PA
+
+# Calculate plot averages for mean flower height
+data_ht %>% 
+  na.omit() %>% 
+  group_by(Row, Group, Species, TRT) %>% 
+  summarise(Height_PA = mean(Height)) -> data_ht_PA
+data_ht_PA <- cbind(data.frame(data_ht_PA), data_ht_max_PA$DM_t_PA)
+names(data_ht_PA)[6] <- "DM_t_PA"
+
 
 
 
