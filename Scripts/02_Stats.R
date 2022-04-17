@@ -4,8 +4,8 @@
 
 # Examine effect of treatment using LME model
 # Fixed effect is treatment (TRT) with post-transplant diameter (DM_t) as covariate
-# Random effect is block (row)
-mod_CN_HD <- lmer(Height_PA ~ TRT + scale(DM_t_PA) + TRT*scale(DM_t_PA) + (1|Row),
+# Random effect is block (Group)
+mod_CN_HD <- lmer(Height_PA ~ TRT + scale(DM_t_PA) + TRT*scale(DM_t_PA) + (1|Group),
                   data = subset(data_ht_PA, Species == "CN"))
 summary(mod_CN_HD)
 
@@ -13,7 +13,7 @@ summary(mod_CN_HD)
 step(mod_CN_HD)
 
 # Backward selection indicates that the interaction term and covariate should be removed
-mod_CN_HD <- lmer(Height_PA ~ TRT + (1|Row),
+mod_CN_HD <- lmer(Height_PA ~ TRT + (1|Group),
                   data = subset(data_ht_PA, Species == "CN"))
 summary(mod_CN_HD)
 
@@ -47,8 +47,8 @@ shapiro.test(subset(data_ht_PA, Species == "CN" & TRT == "W")$Height)
 
 # Examine effect of treatment using LME model
 # Fixed effect is treatment (TRT) with post-transplant diameter (DM_t) as covariate
-# Random effect is block (row)
-mod_CN_M <- lmer(Max_PA ~ TRT + scale(DM_t_PA) + TRT*scale(DM_t_PA) + (1|Row),
+# Random effect is block (Group)
+mod_CN_M <- lmer(Max_PA ~ TRT + scale(DM_t_PA) + TRT*scale(DM_t_PA) + (1|Group),
                  data = subset(data_ht_max_PA, Species == "CN"))
 summary(mod_CN_M)
 
@@ -56,7 +56,7 @@ summary(mod_CN_M)
 step(mod_CN_M)
 
 # Backward selection indicates that the interaction term should be removed
-mod_CN_M <- lmer(Max_PA ~ TRT + scale(DM_t_PA) + (1|Row),
+mod_CN_M <- lmer(Max_PA ~ TRT + scale(DM_t_PA) + (1|Group),
                  data = subset(data_ht_max_PA, Species == "CN"))
 summary(mod_CN_M)
 
@@ -90,8 +90,8 @@ shapiro.test(subset(data_ht_max_PA, Species == "CN" & TRT == "W")$Max_PA)
 
 # Examine effect of treatment using LME model
 # Fixed effect is treatment (TRT) with post-transplant diameter (DM_t) as covariate
-# Random effect is block (row)
-mod_CA_HD <- lmer(Height_PA ~ TRT + scale(DM_t_PA) + TRT*scale(DM_t_PA) + (1|Row),
+# Random effect is block (Group)
+mod_CA_HD <- lmer(Height_PA ~ TRT + scale(DM_t_PA) + TRT*scale(DM_t_PA) + (1|Group),
                   data = subset(data_ht_PA, Species == "CA"))
 summary(mod_CA_HD)
 
@@ -99,7 +99,7 @@ summary(mod_CA_HD)
 step(mod_CA_HD)
 
 # Backward selection indicates that the interaction term and covariate should be removed
-mod_CA_HD <- lmer(Height_PA ~ TRT + (1|Row),
+mod_CA_HD <- lmer(Height_PA ~ TRT + (1|Group),
                   data = subset(data_ht_PA, Species == "CA"))
 summary(mod_CA_HD)
 
@@ -133,8 +133,8 @@ shapiro.test(subset(data_ht_PA, Species == "CA" & TRT == "W")$Height)
 
 # Examine effect of treatment using LME model
 # Fixed effect is treatment (TRT) with post-transplant diameter (DM_t) as covariate
-# Random effect is block (row)
-mod_CA_M <- lmer(Max_PA ~ TRT + scale(DM_t_PA) + TRT*scale(DM_t_PA) + (1|Row),
+# Random effect is block (Group)
+mod_CA_M <- lmer(Max_PA ~ TRT + scale(DM_t_PA) + TRT*scale(DM_t_PA) + (1|Group),
                  data = subset(data_ht_max_PA, Species == "CA"))
 summary(mod_CA_M)
 
@@ -142,7 +142,7 @@ summary(mod_CA_M)
 step(mod_CA_M)
 
 # Backward selection indicates that the interaction term and covariate should be removed
-mod_CA_M <- lmer(Max_PA ~ TRT + (1|Row),
+mod_CA_M <- lmer(Max_PA ~ TRT + (1|Group),
                  data = subset(data_ht_max_PA, Species == "CA"))
 summary(mod_CA_M)
 
