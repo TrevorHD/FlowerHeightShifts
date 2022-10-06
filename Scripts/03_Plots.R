@@ -35,7 +35,8 @@ dev.off()
 ##### [F2] Plot height distribution PDF with 95% bootstrap interval ---------------------------------------
 
 # Prepare graphics device
-tiff(filename = "Figure 2.tif", width = 3304, height = 2272, units = "px", res = 800, compression = "lzw")
+tiff(filename = "Figure 2.tif", width = 3304, height = 2272, units = "px",
+     res = 800, compression = "lzw")
 
 # Create blank page
 grid.newpage()
@@ -89,7 +90,8 @@ dev.off()
 ##### [F3.1] Estimate warmed vs not warmed PDF (dispersal kernels) ----------------------------------------
 
 # Prepare graphics device
-tiff(filename = "Figure 3.1.tif", width = 3304, height = 2272, units = "px", res = 800, compression = "lzw")
+tiff(filename = "Figure 3.1.tif", width = 3304, height = 2272, units = "px",
+     res = 800, compression = "lzw")
 
 # Create blank page
 grid.newpage()
@@ -135,7 +137,8 @@ dev.off()
 ##### [F3.2] Plot warmed vs not warmed CCDF ---------------------------------------------------------------
 
 # Prepare graphics device
-tiff(filename = "Figure 3.2.tif", width = 3304, height = 2272, units = "px", res = 800, compression = "lzw")
+tiff(filename = "Figure 3.2.tif", width = 3304, height = 2272, units = "px",
+     res = 800, compression = "lzw")
 
 # Create blank page
 grid.newpage()
@@ -180,7 +183,8 @@ dev.off()
 ##### [F3.3] Plot warmed vs not warmed CCDF ratios --------------------------------------------------------
 
 # Prepare graphics device
-tiff(filename = "Figure 3.3.tif", width = 3304, height = 2272, units = "px", res = 800, compression = "lzw")
+tiff(filename = "Figure 3.3.tif", width = 3304, height = 2272, units = "px",
+     res = 800, compression = "lzw")
 
 # Create blank page
 grid.newpage()
@@ -219,7 +223,8 @@ dev.off()
 ##### [F3.4] Plot warmed vs not right tail dispersal percentile distances ---------------------------------
 
 # Prepare graphics device
-tiff(filename = "Figure 3.4.tif", width = 3304, height = 2272, units = "px", res = 800, compression = "lzw")
+tiff(filename = "Figure 3.4.tif", width = 3304, height = 2272, units = "px",
+     res = 800, compression = "lzw")
 
 # Create blank page
 grid.newpage()
@@ -264,7 +269,8 @@ dev.off()
 ##### [F4.1] Plot max height vs height distribution PDF (dispersal kernels) -------------------------------
 
 # Prepare graphics device
-tiff(filename = "Figure 4.1.tif", width = 3304, height = 4544, units = "px", res = 800, compression = "lzw")
+tiff(filename = "Figure 4.1.tif", width = 3304, height = 4544, units = "px",
+     res = 800, compression = "lzw")
 
 # Create blank page
 grid.newpage()
@@ -329,7 +335,8 @@ dev.off()
 ##### [F4.2] Plot max height vs height distribution CCDF --------------------------------------------------
 
 # Prepare graphics device
-tiff(filename = "Figure 4.2.tif", width = 3304, height = 4544, units = "px", res = 800, compression = "lzw")
+tiff(filename = "Figure 4.2.tif", width = 3304, height = 4544, units = "px",
+     res = 800, compression = "lzw")
 
 # Create blank page
 grid.newpage()
@@ -394,7 +401,8 @@ dev.off()
 ##### [F4.3] Plot max height vs height distribution CCDF ratio --------------------------------------------
 
 # Prepare graphics device
-tiff(filename = "Figure 4.3.tif", width = 3304, height = 4544, units = "px", res = 800, compression = "lzw")
+tiff(filename = "Figure 4.3.tif", width = 3304, height = 4544, units = "px",
+     res = 800, compression = "lzw")
 
 # Create blank page
 grid.newpage()
@@ -451,7 +459,8 @@ dev.off()
 ##### [F4.4] Estimate max height vs height distribution right tail dispersal percentile distances ---------
 
 # Prepare graphics device
-tiff(filename = "Figure 4.4.tif", width = 3304, height = 4544, units = "px", res = 800, compression = "lzw")
+tiff(filename = "Figure 4.4.tif", width = 3304, height = 4544, units = "px",
+     res = 800, compression = "lzw")
 
 # Create blank page
 grid.newpage()
