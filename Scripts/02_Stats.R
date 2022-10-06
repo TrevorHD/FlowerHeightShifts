@@ -183,6 +183,10 @@ set.seed(19854)
 ht.pdfBoot(ht_CN_NW$Height, ht_CN_W$Height, ks.only = TRUE)
 ht.pdfBoot(ht_CA_NW$Height, ht_CA_W$Height, ks.only = TRUE)
 
+# Note: not bootstrapping the distributions gives nearly identical test results
+ks.test(ht_CN_NW$Height, ht_CN_W$Height)
+ks.test(ht_CA_NW$Height, ht_CA_W$Height)
+
 
 
 
