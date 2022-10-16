@@ -185,31 +185,7 @@ WALD.h <- function(n, h, species){
 
 
 
-##### [F1] Calculate mean heights for each treatment/species combination ----------------------------------
-
-# Put data into list to easily use vectorised functions
-HeightList <- list(ht_CN_NW$Height, ht_CN_W$Height, ht_CA_NW$Height, ht_CA_W$Height)
-
-# Create data frame of height statistics and populate it
-ht_stats <- data.frame(matrix(rep(NA, 28), nrow = 4))
-ht_stats[, 1] <- c("CN-NW", "CN-W", "CA-NW", "CA-W")
-ht_stats[, 2] <- c(rep("CN", 2), rep("CA", 2))
-ht_stats[, 3] <- rep(c("Not Warmed", "Warmed"), 2)
-ht_stats[, 4] <- sapply(HeightList, length)
-ht_stats[, 5] <- sapply(HeightList, mean)
-ht_stats[, 6] <- sapply(HeightList, sd)
-ht_stats[, 7] <- sapply(HeightList, function(x) {sd(x)/sqrt(length(x))})
-names(ht_stats) <- c("ID", "Species", "Treatment", "n", "MeanHeight", "SDHeight", "SEHeight")
-ht_stats$Species <- factor(ht_stats$Species, levels = c("CN", "CA"))
-
-# Remove HeightList since it has served its purpose
-remove(HeightList)
-
-
-
-
-
-##### [F2] Estimate height distribution PDF with 95% bootstrap interval -----------------------------------
+##### Functions for height distribution PDF with 95% bootstrap interval -----------------------------------
 
 # Set up function to estimate PDF for a bootstrapped sample
 ht.pdf <- function(heights){
@@ -260,7 +236,7 @@ ht.pdfBoot.plot <- function(bootData, bottom){
 
 
 
-##### [F3.1] Estimate warmed vs not warmed PDF (dispersal kernels) ----------------------------------------
+##### Functions for warmed vs not warmed PDF (dispersal kernels) ------------------------------------------
 
 # Set up function to create a single sample and estimate PDF
 ds.pdf <- function(heights, species){
@@ -276,6 +252,7 @@ ds.mean <- function(h, species){
 
 # Function to bootstrap dispersal kernels and estimate 95% bootstrap interval
 # For each kernel sample 100 release heights with 100 seed releases each, and repeat 1000 times
+# K-S test compares two kernels constructed from 1 million seed releases each
 ds.pdfBoot <- function(h1, h2, type, species, ks.only = FALSE){
   if(ks.only == FALSE){
     hBoot_1 <- data.frame(replicate(1000, ds.pdf(h1, species), simplify = "matrix"))
@@ -321,7 +298,7 @@ ds.pdfBoot.plot <- function(bootData, bottom){
 
 
 
-##### [F3.2] Estimate warmed vs not warmed CCDF -----------------------------------------------------------
+##### Functions for warmed vs not warmed CCDF -------------------------------------------------------------
 
 # Set up function to create a single sample and estimate CCDF
 ds.ccdf <- function(heights, species){
@@ -375,7 +352,7 @@ ds.ccdfBoot.plot <- function(bootData, bottom){
 
 
 
-##### [F3.3] Estimate warmed vs not warmed CCDF ratios ----------------------------------------------------
+##### Functions for warmed vs not warmed CCDF ratios ------------------------------------------------------
 
 # Function to bootstrap CCDF ratio and estimate 95% bootstrap interval
 # For each CCDF sample 100 release heights with 100 seed releases each, and repeat 1000 times
@@ -421,7 +398,7 @@ ds.ccdfRatioBoot.plot <- function(bootData, bottom){
 
 
 
-##### [F3.4] Estimate warmed vs not right tail dispersal percentile distances -----------------------------
+##### Functions for warmed vs not right tail dispersal percentile distances -------------------------------
 
 # Set up function to create bootstrapped sample and canculate nth percentiles
 ds.rtail <- function(heights, species){
@@ -430,7 +407,7 @@ ds.rtail <- function(heights, species){
 
 # Function to calculate nth percentile dispersal distances, particularly on right tail
 # For distribution, sample 100 release heights with 100 seed releases each, and repeat 1000 times
-# For mean, simulate 10000 seed release events, and repeat 1000 times
+# For maximum, same as above, but sampling from maximum release heights rather than full distribution
 # Either way, each bootstrap has 10000 seed release events and is repeated 1000 times
 ds.rtailBootWNW <- function(h1, h2, species){
   hBoot_1 <- data.frame(replicate(1000, ds.rtail(h1, species), simplify = "matrix"))
@@ -479,12 +456,7 @@ ds.rtailBootWNW.plot <- function(bootData, bottom){
 
 
 
-##### [F4.1] Estimate max height vs height distribution PDF (dispersal kernels) ---------------------------
-
-# Function to calculate dispersal kernels with mean height or distribution of heights
-# For distribution, sample 100 release heights with 100 seed releases each, and repeat 1000 times
-# For mean, simulate 10000 seed release events, and repeat 1000 times
-# Either way, each bootstrap has 50000 seed release events and is repeated 1000 times
+##### Functions for max height vs height distribution PDF (dispersal kernels) -----------------------------
 
 # Function to plot the dispersal kernels
 # Bands indicate the range in which 95% of the bootstrapped simulations are
@@ -519,7 +491,7 @@ ds.pdfBoot.plot2 <- function(bootData, LColour, PColour, position){
 
 
 
-##### [F4.2] Estimate max height vs height distribution CCDF ----------------------------------------------
+##### Functions for max height vs height distribution CCDF ------------------------------------------------
 
 # Plot the dispersal percentiles and the corresponding distances
 # Error bars indicate the range in which 95% of the bootstrapped simulations are
@@ -554,7 +526,7 @@ ds.ccdfBoot.plot2 <- function(bootData, LColour, PColour, position){
 
 
 
-##### [F4.3] Plot max height vs height distribution CCDF ratio --------------------------------------------
+##### Functions for max height vs height distribution CCDF ratio ------------------------------------------
 
 # Function to plot bootstrapped CCDF, with mean line and 95% band
 ds.ccdfRatioBoot.plot2 <- function(bootData, position){
@@ -585,11 +557,11 @@ ds.ccdfRatioBoot.plot2 <- function(bootData, position){
 
 
 
-##### [F4.4] Estimate max height vs height distribution right tail dispersal percentile distances ---------
+##### Functions for max height vs height distribution right tail dispersal percentile distances -----------
 
 # Function to calculate nth percentile dispersal distances, particularly on right tail
 # For distribution, sample 100 release heights with 100 seed releases each, and repeat 1000 times
-# For mean, simulate 10000 seed release events, and repeat 1000 times
+# For maximum, same as above, but sampling from maximum release heights rather than full distribution
 # Either way, each bootstrap has 10000 seed release events and is repeated 1000 times
 ds.rtailBootMHD <- function(distHeight, maxHeight, species){
   hBoot_1 <- data.frame(replicate(1000, ds.rtail(distHeight, species), simplify = "matrix"))
