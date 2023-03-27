@@ -51,7 +51,7 @@ wv.StructuredRate <- function(B0, Ms, disdist, seqmax){
 
 # Get wavespeeds; use 10000 seeds per simulation
 wv.cStar <- function(mat, msMat, heights, species){
-  dd <- 1000 #default: 100000
+  dd <- 100000
   cstar <- numeric(dd)
   for(i in 1:dd){
     r <- WALD.h(100, heights, species)
