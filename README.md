@@ -26,6 +26,8 @@ An analysis of experimental results examining how increases in ambient temperatu
 
 **03_Plots** *(.R)* - Code used for plotting figures.
 
+**04_Wavespeeds** *(.R)* - Code used for simulating wavespeeds; adapted from Zhang *et al*. (2011) and Teller *et al*. (2016).
+
 **S1_Extras** *(.R)* - Supplementary code not used in the main analyses.
 
 ## Media
@@ -40,4 +42,4 @@ An analysis of experimental results examining how increases in ambient temperatu
 
 ## Writing
 
-**WarmingHeightMS_v2** *(.docx)* - Manuscript for this research.
+**WarmingHeightMS_vX** *(.docx)* - Manuscript for this research; several versions currently exist in the repo.
