@@ -207,6 +207,6 @@ cstarcmax <- wv.cStar(wv.dMatrix(vc), msMat, ht_CN_NW_max$Max, "CN")    # Unwarm
 cstarwmax <- wv.cStar(wv.dMatrix(vw), msMat, ht_CN_W_max$Max, "CN")     # Warmed, max height
 
 # Simulate wavespeeds for warmed plants, but exclude non-height demographic changes
-cstarwD <- wv.cStar(wv.dMatrix(vw), msMat, ht_CN_W$Height, "CN")
-cstarwmaxD <- wv.cStar(wv.dMatrix(vw), msMat, ht_CN_W_max$Max, "CN")
+cstarwD <- wv.cStar(wv.dMatrix(vc), msMat, ht_CN_W$Height, "CN")
+cstarwmaxD <- wv.cStar(wv.dMatrix(vc), msMat, ht_CN_W_max$Max, "CN")
 
