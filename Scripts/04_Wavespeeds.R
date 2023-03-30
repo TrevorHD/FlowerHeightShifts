@@ -201,8 +201,12 @@ max(Re(eigen(wv.dMatrix(vw))$value)) # Warmed, lambda = 680
 
 # Simulate wavespeeds
 set.seed(34952)
-cstarc <- wv.cStar(wv.dMatrix(vc), msMat, ht_CN_NW$Height, "CN")
-cstarw <- wv.cStar(wv.dMatrix(vw), msMat, ht_CN_W$Height, "CN")
-cstarcmax <- wv.cStar(wv.dMatrix(vc), msMat, ht_CN_NW_max$Max, "CN")
-cstarwmax <- wv.cStar(wv.dMatrix(vw), msMat, ht_CN_W_max$Max, "CN")
+cstarc <- wv.cStar(wv.dMatrix(vc), msMat, ht_CN_NW$Height, "CN")        # Unwarmed, height dist
+cstarw <- wv.cStar(wv.dMatrix(vw), msMat, ht_CN_W$Height, "CN")         # Warmed, height dist
+cstarcmax <- wv.cStar(wv.dMatrix(vc), msMat, ht_CN_NW_max$Max, "CN")    # Unwarmed, max height
+cstarwmax <- wv.cStar(wv.dMatrix(vw), msMat, ht_CN_W_max$Max, "CN")     # Warmed, max height
+
+# Simulate wavespeeds for warmed plants, but exclude non-height demographic changes
+cstarwD <- wv.cStar(wv.dMatrix(vw), msMat, ht_CN_W$Height, "CN")
+cstarwmaxD <- wv.cStar(wv.dMatrix(vw), msMat, ht_CN_W_max$Max, "CN")
 
