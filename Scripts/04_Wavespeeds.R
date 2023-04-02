@@ -181,7 +181,8 @@ p <- list(sigma1 = 0.2597,    # Survival of seed in Sb
           p3 = 26.05,         # Number of capitula per M
           p4 = 52.73,         # Number of capitula per L
           i = 236,            # Number of seeds per capitulum
-          j = 1,              # Proportion of seeds released
+          sc = 0.056,         # Proportion of seeds released (unwarmed)
+          sw = 0.129,         # Proportion of seeds released (warmed)
           phi = 0.85,         # Potential seed escaping from floral herbivory
           nu = 0.2333,        # New seed entering SB
           epsilon = 0.2333,   # New seed establishing seedling
@@ -190,10 +191,10 @@ p <- list(sigma1 = 0.2597,    # Survival of seed in Sb
 # Construct demographic/dispersal matrices for each scenario
 vc <- c(p$sigma1, p$sigma2, p$sigma3, p$sigma4, p$gamma3, p$gamma4, p$gamma32, p$gamma42, p$rho23,
         p$gamma43, p$rho24, p$rho34, p$beta2, p$beta3, p$beta4, p$p2, p$p3, p$p4, p$phi, p$nu,
-        p$epsilon, p$epsilon1, p$i, p$j)
+        p$epsilon, p$epsilon1, p$i, p$sc)
 vw <- c(p$sigma1, p$sigma2*1.0935, p$sigma3*1.0935, p$sigma4*1.0935, p$gamma3, p$gamma4, p$gamma32,
         p$gamma42, p$rho23, p$gamma43, p$rho24, p$rho34, p$beta2, p$beta3, p$beta4, p$p2*1.3244,
-        p$p3*1.3244, p$p4*1.3244, p$phi, p$nu, p$epsilon*1.2953, p$epsilon1*1.2953, p$i, p$j)
+        p$p3*1.3244, p$p4*1.3244, p$phi, p$nu, p$epsilon*1.2953, p$epsilon1*1.2953, p$i, p$sw)
 
 # Get population growth rates
 max(Re(eigen(wv.dMatrix(vc))$value)) # Unwarmed, lambda = 363
