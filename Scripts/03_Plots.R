@@ -344,3 +344,128 @@ popViewport()
 # Deactivate grid layout; finalise graphics save
 popViewport()
 dev.off()
+
+
+
+
+
+##### [FS2] Plot max height point source vs height distribution PDF (dispersal kernels) -------------------
+
+# Prepare graphics device
+tiff(filename = "Figure 4.tif", width = 3304, height = 4544, units = "px",
+     res = 800, compression = "lzw")
+
+# Create blank page
+grid.newpage()
+plot.new()
+
+# Set grid layout and activate it
+gly <- grid.layout(2400, 800)
+pushViewport(viewport(layout = gly))
+
+# CN non-warmed: mean vs distribution
+pushViewport(vp = viewport(layout.pos.row = 1:600, layout.pos.col = 1:800))
+par(fig = gridFIG())
+par(new = TRUE)
+ds.pdfBoot.plot2(hBoot_MPHD1_pdf, "black", "gray48", position = "top")
+popViewport()
+
+# CN warmed: mean vs distribution
+pushViewport(vp = viewport(layout.pos.row = 600:1200, layout.pos.col = 1:800))
+par(fig = gridFIG())
+par(new = TRUE)
+ds.pdfBoot.plot2(hBoot_MPHD2_pdf, "red2", "indianred1", position = "centre")
+popViewport()
+
+# CA non-warmed: mean vs distribution
+pushViewport(vp = viewport(layout.pos.row = 1200:1800, layout.pos.col = 1:800))
+par(fig = gridFIG())
+par(new = TRUE)
+ds.pdfBoot.plot2(hBoot_MPHD3_pdf, "black", "gray48", position = "centre")
+popViewport()
+
+# CA warmed: mean vs distribution
+pushViewport(vp = viewport(layout.pos.row = 1800:2400, layout.pos.col = 1:800))
+par(fig = gridFIG())
+par(new = TRUE)
+ds.pdfBoot.plot2(hBoot_MPHD4_pdf, "red2", "indianred1", position = "bottom")
+popViewport()
+
+# Create legend
+grid.text(label = c("Dist. height (W)", "Dist. height (NW)", "Max height (W)", "Max height (NW)"), 
+          x = rep(0.79, 4), y = c(0.897, 0.917, 0.937 , 0.957), hjust = 0, gp = gpar(cex = 0.5))
+grid.segments(x0 = rep(0.759, 4), y0 = c(0.897, 0.917, 0.937 , 0.957), 
+              x1 = rep(0.779, 4), y1 = c(0.897, 0.917, 0.937 , 0.957),
+              gp = gpar(col = rep(c("red2", "black"), 2), lty = c(1, 1, 3, 3)))
+
+# Create figure labels
+grid.text(label = c(expression(italic("C. nutans,") ~ "unwarmed"),
+                    expression(italic("C. nutans,") ~ "warmed"),
+                    expression(italic("C. acanthoides,") ~ "unwarmed"),
+                    expression(italic("C. acanthoides,") ~ "warmed")), 
+          x = rep(0.096, 4), y = c(0.957, 0.725, 0.475, 0.234),
+          hjust = 0, gp = gpar(cex = 0.5))
+popViewport()
+
+# Deactivate grid layout; finalise graphics save
+popViewport()
+dev.off()
+
+
+
+
+
+##### [FS3] Plot max height point source vs height distribution CCDF ratio --------------------------------
+
+# Prepare graphics device
+tiff(filename = "Figure 5.tif", width = 3304, height = 4544, units = "px",
+     res = 800, compression = "lzw")
+
+# Create blank page
+grid.newpage()
+plot.new()
+
+# Set grid layout and activate it
+gly <- grid.layout(2400, 800)
+pushViewport(viewport(layout = gly))
+
+# CN non-warmed: mean vs distribution
+pushViewport(vp = viewport(layout.pos.row = 1:600, layout.pos.col = 1:800))
+par(fig = gridFIG())
+par(new = TRUE)
+ds.ccdfRatioBoot.plot2(hBoot_MPHD1_ccdfRatio, position = "top")
+popViewport()
+
+# CN warmed: mean vs distribution
+pushViewport(vp = viewport(layout.pos.row = 600:1200, layout.pos.col = 1:800))
+par(fig = gridFIG())
+par(new = TRUE)
+ds.ccdfRatioBoot.plot2(hBoot_MPHD2_ccdfRatio, position = "centre")
+popViewport()
+
+# CA non-warmed: mean vs distribution
+pushViewport(vp = viewport(layout.pos.row = 1200:1800, layout.pos.col = 1:800))
+par(fig = gridFIG())
+par(new = TRUE)
+ds.ccdfRatioBoot.plot2(hBoot_MPHD3_ccdfRatio, position = "centre")
+popViewport()
+
+# CA warmed: mean vs distribution
+pushViewport(vp = viewport(layout.pos.row = 1800:2400, layout.pos.col = 1:800))
+par(fig = gridFIG())
+par(new = TRUE)
+ds.ccdfRatioBoot.plot2(hBoot_MPHD4_ccdfRatio, position = "bottom")
+popViewport()
+
+# Create figure labels
+grid.text(label = c(expression(italic("C. nutans,") ~ "unwarmed"),
+                    expression(italic("C. nutans,") ~ "warmed"),
+                    expression(italic("C. acanthoides,") ~ "unwarmed"),
+                    expression(italic("C. acanthoides,") ~ "warmed")), 
+          x = rep(0.096, 4), y = c(0.957, 0.725, 0.475, 0.234),
+          hjust = 0, gp = gpar(cex = 0.5))
+
+# Deactivate grid layout; finalise graphics save
+popViewport()
+dev.off()
+
