@@ -232,6 +232,32 @@ ht.pdfBoot.plot <- function(bootData, bottom){
   polygon(x = c(bootData[, 1], rev(bootData[, 1])), 
           y = c(bootData[, 6], rev(bootData[, 7])), col = alpha("red", alpha = 0.2), border = NA)}
 
+# Same as above, but with histogram of observations and no 95% BI
+ht.pdfBoot.plot2 <- function(bootData, h1, h2, bottom){
+  par(cex.axis = 0.45, tcl = -0.2)
+  if(bottom == FALSE){
+    par(mar = c(1, 1.75, 0.75, 0.75))
+    plot(h1, col = alpha("black", alpha = 0.2), freq = FALSE, xlim = c(0, 200), ylim = c(0, 0.03),
+         main = "", xaxt = "n", yaxt = "n")
+    plot(h2, col = alpha("red", alpha = 0.2), freq = FALSE, xlim = c(0, 200), ylim = c(0, 0.03),
+         add = TRUE)
+    lines(x = bootData[, 1], y = bootData[, 2])
+    axis(side = 1, at = c(0, 50, 100, 150, 200), labels = FALSE)
+    box()}
+  if(bottom == TRUE){
+    par(mar = c(1.75, 1.75, 0, 0.75))
+    plot(h1, col = alpha("black", alpha = 0.2), freq = FALSE, xlim = c(0, 200), ylim = c(0, 0.03),
+         main = "", xaxt = "n", yaxt = "n")
+    plot(h2, col = alpha("red", alpha = 0.2), freq = FALSE, xlim = c(0, 200), ylim = c(0, 0.03),
+         add = TRUE)
+    lines(x = bootData[, 1], y = bootData[, 2])
+    axis(side = 1, at = c(0, 50, 100, 150, 200), labels = TRUE, mgp = c(0, 0, 0))
+    mtext(side = 1, line = 0.75, "Flower head height (cm)", cex = 0.6)
+    box()}
+  axis(side = 2, at = c(0, 0.01, 0.02, 0.03), labels = TRUE, mgp = c(0, 0.21, 0))
+  mtext(side = 2, line = 0.95, "Probability density", cex = 0.6)
+  lines(x = bootData[, 1], y = bootData[, 5], type = "l", col = "red")}
+
 
 
 

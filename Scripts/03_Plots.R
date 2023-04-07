@@ -270,32 +270,6 @@ ht_CA_NW_hist <- hist(ht_CA_NW$Height, breaks = seq(0, 200, length.out = 40), fr
 ht_CA_W_hist <- hist(ht_CA_W$Height, breaks = seq(0, 200, length.out = 40), freq = FALSE,
                      ylim = c(0, 0.03), xaxt = "n", yaxt = "n")
 
-# Function to plot data and bootstrapped height distributions, with mean line and 95% band
-ht.pdfBoot.plot2 <- function(bootData, h1, h2, bottom){
-  par(cex.axis = 0.45, tcl = -0.2)
-  if(bottom == FALSE){
-    par(mar = c(1, 1.75, 0.75, 0.75))
-    plot(h1, col = alpha("black", alpha = 0.2), freq = FALSE, xlim = c(0, 200), ylim = c(0, 0.03),
-         main = "", xaxt = "n", yaxt = "n")
-    plot(h2, col = alpha("red", alpha = 0.2), freq = FALSE, xlim = c(0, 200), ylim = c(0, 0.03),
-         add = TRUE)
-    lines(x = bootData[, 1], y = bootData[, 2])
-    axis(side = 1, at = c(0, 50, 100, 150, 200), labels = FALSE)
-    box()}
-  if(bottom == TRUE){
-    par(mar = c(1.75, 1.75, 0, 0.75))
-    plot(h1, col = alpha("black", alpha = 0.2), freq = FALSE, xlim = c(0, 200), ylim = c(0, 0.03),
-         main = "", xaxt = "n", yaxt = "n")
-    plot(h2, col = alpha("red", alpha = 0.2), freq = FALSE, xlim = c(0, 200), ylim = c(0, 0.03),
-         add = TRUE)
-    lines(x = bootData[, 1], y = bootData[, 2])
-    axis(side = 1, at = c(0, 50, 100, 150, 200), labels = TRUE, mgp = c(0, 0, 0))
-    mtext(side = 1, line = 0.75, "Flower head height (cm)", cex = 0.6)
-    box()}
-  axis(side = 2, at = c(0, 0.01, 0.02, 0.03), labels = TRUE, mgp = c(0, 0.21, 0))
-  mtext(side = 2, line = 0.95, "Probability density", cex = 0.6)
-  lines(x = bootData[, 1], y = bootData[, 5], type = "l", col = "red")}
-
 # Prepare graphics device
 tiff(filename = "Figure S1.tif", width = 3304, height = 2272, units = "px",
      res = 800, compression = "lzw")
