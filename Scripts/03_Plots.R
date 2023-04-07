@@ -17,9 +17,6 @@ pushViewport(vp = viewport(layout.pos.row = 1:600, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
 ht.pdfBoot.plot(hBoot_HD1, bottom = FALSE)
-#abline(v = c(subset(ht_stats, Species == "CN" & Treatment == "Not Warmed")$MeanHeight,
-#             subset(ht_stats, Species == "CN" & Treatment == "Warmed")$MeanHeight),
-#       col = c("black", "red"), lty = c(2, 2))
 popViewport()
 
 # CA non-warmed vs warmed
@@ -27,12 +24,7 @@ pushViewport(vp = viewport(layout.pos.row = 600:1200, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
 ht.pdfBoot.plot(hBoot_HD2, bottom = TRUE)
-#abline(v = c(subset(ht_stats, Species == "CA" & Treatment == "Not Warmed")$MeanHeight,
-#             subset(ht_stats, Species == "CA" & Treatment == "Warmed")$MeanHeight),
-#       col = c("black", "red"), lty = c(2, 2))
 popViewport()
-
-# Note: commented out code above adds a vertical line at the mean
 
 # Create legend
 grid.text(label = c("Not warmed", "Warmed"), x = rep(0.834, 2), y = c(0.918, 0.885),
