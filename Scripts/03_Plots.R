@@ -38,7 +38,6 @@ grid.text(label = c(expression(italic("C. nutans")), expression(italic("C. acant
 popViewport()
 
 # Deactivate grid layout; finalise graphics save
-popViewport()
 dev.off()
 
 
@@ -85,7 +84,6 @@ grid.text(label = c(expression(italic("C. nutans")), expression(italic("C. acant
 popViewport()
 
 # Deactivate grid layout; finalise graphics save
-popViewport()
 dev.off()
 
 
@@ -125,7 +123,6 @@ grid.text(label = c(expression(italic("C. nutans")), expression(italic("C. acant
           x = rep(0.096, 2), y = c(0.918, 0.471), hjust = 0, gp = gpar(cex = 0.5))
 
 # Deactivate grid layout; finalise graphics save
-popViewport()
 dev.off()
 
 
@@ -191,7 +188,6 @@ grid.text(label = c(expression(italic("C. nutans,") ~ "unwarmed"),
 popViewport()
 
 # Deactivate grid layout; finalise graphics save
-popViewport()
 dev.off()
 
 
@@ -249,7 +245,6 @@ grid.text(label = c(expression(italic("C. nutans,") ~ "unwarmed"),
           hjust = 0, gp = gpar(cex = 0.5))
 
 # Deactivate grid layout; finalise graphics save
-popViewport()
 dev.off()
 
 
@@ -308,7 +303,6 @@ grid.text(label = c(expression(italic("C. nutans")), expression(italic("C. acant
 popViewport()
 
 # Deactivate grid layout; finalise graphics save
-popViewport()
 dev.off()
 
 
@@ -374,7 +368,6 @@ grid.text(label = c(expression(italic("C. nutans,") ~ "unwarmed"),
 popViewport()
 
 # Deactivate grid layout; finalise graphics save
-popViewport()
 dev.off()
 
 
@@ -432,6 +425,5 @@ grid.text(label = c(expression(italic("C. nutans,") ~ "unwarmed"),
           hjust = 0, gp = gpar(cex = 0.5))
 
 # Deactivate grid layout; finalise graphics save
-popViewport()
 dev.off()
 
