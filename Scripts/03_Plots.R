@@ -129,7 +129,7 @@ dev.off()
 
 
 
-##### [F4] Plot max height vs height distribution PDF (dispersal kernels) ---------------------------------
+##### [F4] Plot max height point source vs overall height distribution PDF (dispersal kernels) ------------
 
 # Prepare graphics device
 tiff(filename = "Figure 4.tif", width = 3304, height = 4544, units = "px",
@@ -147,28 +147,28 @@ pushViewport(viewport(layout = gly))
 pushViewport(vp = viewport(layout.pos.row = 1:600, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-ds.pdfBoot.plot2(hBoot_MHD1_pdf, "black", "gray48", position = "top")
+ds.pdfBoot.plot2(hBoot_MPHD1_pdf, "black", "gray48", position = "top")
 popViewport()
 
 # CN warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 600:1200, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-ds.pdfBoot.plot2(hBoot_MHD2_pdf, "red2", "indianred1", position = "centre")
+ds.pdfBoot.plot2(hBoot_MPHD2_pdf, "red2", "indianred1", position = "centre")
 popViewport()
 
 # CA non-warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 1200:1800, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-ds.pdfBoot.plot2(hBoot_MHD3_pdf, "black", "gray48", position = "centre")
+ds.pdfBoot.plot2(hBoot_MPHD3_pdf, "black", "gray48", position = "centre")
 popViewport()
 
 # CA warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 1800:2400, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-ds.pdfBoot.plot2(hBoot_MHD4_pdf, "red2", "indianred1", position = "bottom")
+ds.pdfBoot.plot2(hBoot_MPHD4_pdf, "red2", "indianred1", position = "bottom")
 popViewport()
 
 # Create legend
@@ -194,7 +194,7 @@ dev.off()
 
 
 
-##### [F5] Plot max height vs height distribution CCDF ratio ----------------------------------------------
+##### [F5] Plot max height point source vs overall height distribution CCDF ratio -------------------------
 
 # Prepare graphics device
 tiff(filename = "Figure 5.tif", width = 3304, height = 4544, units = "px",
@@ -212,28 +212,28 @@ pushViewport(viewport(layout = gly))
 pushViewport(vp = viewport(layout.pos.row = 1:600, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-ds.ccdfRatioBoot.plot2(hBoot_MHD1_ccdfRatio, position = "top")
+ds.ccdfRatioBoot.plot2(hBoot_MPHD1_ccdfRatio, position = "top")
 popViewport()
 
 # CN warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 600:1200, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-ds.ccdfRatioBoot.plot2(hBoot_MHD2_ccdfRatio, position = "centre")
+ds.ccdfRatioBoot.plot2(hBoot_MPHD2_ccdfRatio, position = "centre")
 popViewport()
 
 # CA non-warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 1200:1800, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-ds.ccdfRatioBoot.plot2(hBoot_MHD3_ccdfRatio, position = "centre")
+ds.ccdfRatioBoot.plot2(hBoot_MPHD3_ccdfRatio, position = "centre")
 popViewport()
 
 # CA warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 1800:2400, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-ds.ccdfRatioBoot.plot2(hBoot_MHD4_ccdfRatio, position = "bottom")
+ds.ccdfRatioBoot.plot2(hBoot_MPHD4_ccdfRatio, position = "bottom")
 popViewport()
 
 # Create figure labels
@@ -309,7 +309,7 @@ dev.off()
 
 
 
-##### [FS2] Plot max height point source vs height distribution PDF (dispersal kernels) -------------------
+##### [FS2] Plot max height distribution vs height distribution PDF (dispersal kernels) -------------------
 
 # Prepare graphics device
 tiff(filename = "Figure 4.tif", width = 3304, height = 4544, units = "px",
@@ -327,28 +327,28 @@ pushViewport(viewport(layout = gly))
 pushViewport(vp = viewport(layout.pos.row = 1:600, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-ds.pdfBoot.plot2(hBoot_MPHD1_pdf, "black", "gray48", position = "top")
+ds.pdfBoot.plot2(hBoot_MHD1_pdf, "black", "gray48", position = "top")
 popViewport()
 
 # CN warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 600:1200, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-ds.pdfBoot.plot2(hBoot_MPHD2_pdf, "red2", "indianred1", position = "centre")
+ds.pdfBoot.plot2(hBoot_MHD2_pdf, "red2", "indianred1", position = "centre")
 popViewport()
 
 # CA non-warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 1200:1800, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-ds.pdfBoot.plot2(hBoot_MPHD3_pdf, "black", "gray48", position = "centre")
+ds.pdfBoot.plot2(hBoot_MHD3_pdf, "black", "gray48", position = "centre")
 popViewport()
 
 # CA warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 1800:2400, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-ds.pdfBoot.plot2(hBoot_MPHD4_pdf, "red2", "indianred1", position = "bottom")
+ds.pdfBoot.plot2(hBoot_MHD4_pdf, "red2", "indianred1", position = "bottom")
 popViewport()
 
 # Create legend
@@ -374,7 +374,7 @@ dev.off()
 
 
 
-##### [FS3] Plot max height point source vs height distribution CCDF ratio --------------------------------
+##### [FS3] Plot max height distribution vs height distribution CCDF ratio --------------------------------
 
 # Prepare graphics device
 tiff(filename = "Figure 5.tif", width = 3304, height = 4544, units = "px",
@@ -392,28 +392,28 @@ pushViewport(viewport(layout = gly))
 pushViewport(vp = viewport(layout.pos.row = 1:600, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-ds.ccdfRatioBoot.plot2(hBoot_MPHD1_ccdfRatio, position = "top")
+ds.ccdfRatioBoot.plot2(hBoot_MHD1_ccdfRatio, position = "top")
 popViewport()
 
 # CN warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 600:1200, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-ds.ccdfRatioBoot.plot2(hBoot_MPHD2_ccdfRatio, position = "centre")
+ds.ccdfRatioBoot.plot2(hBoot_MHD2_ccdfRatio, position = "centre")
 popViewport()
 
 # CA non-warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 1200:1800, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-ds.ccdfRatioBoot.plot2(hBoot_MPHD3_ccdfRatio, position = "centre")
+ds.ccdfRatioBoot.plot2(hBoot_MHD3_ccdfRatio, position = "centre")
 popViewport()
 
 # CA warmed: mean vs distribution
 pushViewport(vp = viewport(layout.pos.row = 1800:2400, layout.pos.col = 1:800))
 par(fig = gridFIG())
 par(new = TRUE)
-ds.ccdfRatioBoot.plot2(hBoot_MPHD4_ccdfRatio, position = "bottom")
+ds.ccdfRatioBoot.plot2(hBoot_MHD4_ccdfRatio, position = "bottom")
 popViewport()
 
 # Create figure labels

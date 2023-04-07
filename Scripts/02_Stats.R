@@ -170,7 +170,7 @@ shapiro.test(subset(data_ht_max_PA, Species == "CA" & TRT == "W")$Max_PA)
 
 
 
-##### [F1] Estimate height distribution PDF with 95% bootstrap interval -----------------------------------
+##### [F1] Estimate overall height distribution PDF with 95% bootstrap interval ---------------------------
 
 # Set seed for RNG, then bootstrap PDFs for NW/W CN and NW/W CA heights
 set.seed(19854)
@@ -219,41 +219,7 @@ hBoot_WNW2_CCDFRatio <- ds.ccdfRatioBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW",
 
 
 
-##### [F4] Estimate max height vs height distribution PDF (dispersal kernels) -----------------------------
-
-# Set seed for RNG, then bootstrap PDFs for M/HD CN and M/HD CA dispersal kernels
-set.seed(19854)
-hBoot_MHD1_pdf <- ds.pdfBoot(ht_CN_NW$Height, ht_CN_NW_max$Max, "MHD", "CN")
-hBoot_MHD2_pdf <- ds.pdfBoot(ht_CN_W$Height, ht_CN_W_max$Max, "MHD", "CN")
-hBoot_MHD3_pdf <- ds.pdfBoot(ht_CA_NW$Height, ht_CA_NW_max$Max, "MHD", "CA")
-hBoot_MHD4_pdf <- ds.pdfBoot(ht_CA_W$Height, ht_CA_W_max$Max, "MHD", "CA")
-
-# Set seed for RNG, then conduct Kolmogorov-Smirnov test for NW/W CN and NW/W CA
-# The NW and W dispersal kernels display significant difference for CN and CA
-set.seed(19854)
-ds.pdfBoot(ht_CN_NW$Height, ht_CN_NW_max$Max, "MHD", "CN", ks.only = TRUE)
-ds.pdfBoot(ht_CN_W$Height, ht_CN_W_max$Max, "MHD", "CN", ks.only = TRUE)
-ds.pdfBoot(ht_CA_NW$Height, ht_CA_NW_max$Max, "MHD", "CA", ks.only = TRUE)
-ds.pdfBoot(ht_CA_W$Height, ht_CA_W_max$Max, "MHD", "CA", ks.only = TRUE)
-
-
-
-
-
-##### [F5] Estimate max height vs height distribution CCDF ratio ------------------------------------------
-
-# Set seed for RNG, then bootstrap CCDF ratios for M/HD CN and M/HD CA dispersal kernels
-set.seed(19854)
-hBoot_MHD1_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_W$Height, ht_CN_W_max$Max, "MHD", "CN")
-hBoot_MHD2_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_NW$Height, ht_CN_NW_max$Max, "MHD", "CN")
-hBoot_MHD3_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_W$Height, ht_CA_W_max$Max, "MHD", "CA")
-hBoot_MHD4_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_NW$Height, ht_CA_NW_max$Max, "MHD", "CA")
-
-
-
-
-
-##### [FS2] Estimate max height point source vs height distribution PDF (dispersal kernels) ---------------
+##### [F4] Estimate max height point source vs overall height distribution PDF (dispersal kernels) --------
 
 # Set seed for RNG, then bootstrap PDFs for M/HD CN and M/HD CA dispersal kernels
 set.seed(19854)
@@ -274,7 +240,7 @@ ds.pdfBoot(ht_CA_W$Height, rep(mean(ht_CA_W_max$Max), 100), "MHD", "CA", ks.only
 
 
 
-##### [FS3] Estimate max height point source vs height distribution CCDF ratio ----------------------------
+##### [F5] Estimate max height point source vs overall height distribution CCDF ratio ---------------------
 
 # Set seed for RNG, then bootstrap CCDF ratios for M/HD CN and M/HD CA dispersal kernels
 set.seed(19854)
@@ -282,6 +248,40 @@ hBoot_MPHD1_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_W$Height, rep(mean(ht_CN_W_max$M
 hBoot_MPHD2_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_NW$Height, rep(mean(ht_CN_NW_max$Max), 100), "MHD", "CN")
 hBoot_MPHD3_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_W$Height, rep(mean(ht_CA_W_max$Max), 100), "MHD", "CA")
 hBoot_MPHD4_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_NW$Height, rep(mean(ht_CA_NW_max$Max), 100), "MHD", "CA")
+
+
+
+
+
+##### [FS2] Estimate max height distribution vs overall height distribution PDF (dispersal kernels) -------
+
+# Set seed for RNG, then bootstrap PDFs for M/HD CN and M/HD CA dispersal kernels
+set.seed(19854)
+hBoot_MHD1_pdf <- ds.pdfBoot(ht_CN_NW$Height, ht_CN_NW_max$Max, "MHD", "CN")
+hBoot_MHD2_pdf <- ds.pdfBoot(ht_CN_W$Height, ht_CN_W_max$Max, "MHD", "CN")
+hBoot_MHD3_pdf <- ds.pdfBoot(ht_CA_NW$Height, ht_CA_NW_max$Max, "MHD", "CA")
+hBoot_MHD4_pdf <- ds.pdfBoot(ht_CA_W$Height, ht_CA_W_max$Max, "MHD", "CA")
+
+# Set seed for RNG, then conduct Kolmogorov-Smirnov test for NW/W CN and NW/W CA
+# The NW and W dispersal kernels display significant difference for CN and CA
+set.seed(19854)
+ds.pdfBoot(ht_CN_NW$Height, ht_CN_NW_max$Max, "MHD", "CN", ks.only = TRUE)
+ds.pdfBoot(ht_CN_W$Height, ht_CN_W_max$Max, "MHD", "CN", ks.only = TRUE)
+ds.pdfBoot(ht_CA_NW$Height, ht_CA_NW_max$Max, "MHD", "CA", ks.only = TRUE)
+ds.pdfBoot(ht_CA_W$Height, ht_CA_W_max$Max, "MHD", "CA", ks.only = TRUE)
+
+
+
+
+
+##### [FS3] Estimate max height distribution vs overall height distribution CCDF ratio --------------------
+
+# Set seed for RNG, then bootstrap CCDF ratios for M/HD CN and M/HD CA dispersal kernels
+set.seed(19854)
+hBoot_MHD1_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_W$Height, ht_CN_W_max$Max, "MHD", "CN")
+hBoot_MHD2_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_NW$Height, ht_CN_NW_max$Max, "MHD", "CN")
+hBoot_MHD3_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_W$Height, ht_CA_W_max$Max, "MHD", "CA")
+hBoot_MHD4_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_NW$Height, ht_CA_NW_max$Max, "MHD", "CA")
 
 
 
@@ -325,63 +325,7 @@ hBoot_WNW2_CCDFRatio[hBoot_WNW1_CCDFRatio[, 1] == 50, ]
 
 
 
-##### [TS2] Select quantities for max height vs height distribution ----------------------------------------
-
-# Mean dispersal distances with 95% BI
-set.seed(19854)
-ds.mean(ht_CN_NW$Height, "CN")
-ds.mean(ht_CN_W$Height, "CN")
-ds.mean(ht_CN_NW_max$Max, "CN")
-ds.mean(ht_CN_W_max$Max, "CN")
-ds.mean(ht_CA_NW$Height, "CA")
-ds.mean(ht_CA_W$Height, "CA")
-ds.mean(ht_CA_NW_max$Max, "CA")
-ds.mean(ht_CA_W_max$Max, "CA")
-
-# Bootstrap right tail dispersal percentile distances for M/HD CN and M/HD CA heights
-set.seed(19854)
-hBoot_MHD1_rtail <- ds.rtailBootMHD(ht_CN_NW$Height, ht_CN_NW_max$Max, "CN")
-hBoot_MHD2_rtail <- ds.rtailBootMHD(ht_CN_W$Height, ht_CN_W_max$Max, "CN")
-hBoot_MHD3_rtail <- ds.rtailBootMHD(ht_CA_NW$Height, ht_CA_NW_max$Max, "CA")
-hBoot_MHD4_rtail <- ds.rtailBootMHD(ht_CA_W$Height, ht_CA_W_max$Max, "CA")
-
-# 95th percentile dispersal distances with 95% BI
-subset(hBoot_MHD1_rtail, DistancePercentile == 0.95 & Heights == "Dist. Height")
-subset(hBoot_MHD2_rtail, DistancePercentile == 0.95 & Heights == "Dist. Height")
-subset(hBoot_MHD1_rtail, DistancePercentile == 0.95 & Heights == "Max. Height")
-subset(hBoot_MHD2_rtail, DistancePercentile == 0.95 & Heights == "Max. Height")
-subset(hBoot_MHD3_rtail, DistancePercentile == 0.95 & Heights == "Dist. Height")
-subset(hBoot_MHD4_rtail, DistancePercentile == 0.95 & Heights == "Dist. Height")
-subset(hBoot_MHD3_rtail, DistancePercentile == 0.95 & Heights == "Max. Height")
-subset(hBoot_MHD4_rtail, DistancePercentile == 0.95 & Heights == "Max. Height")
-
-# 99th percentile dispersal distances with 95% BI
-subset(hBoot_MHD1_rtail, DistancePercentile == 0.99 & Heights == "Dist. Height")
-subset(hBoot_MHD2_rtail, DistancePercentile == 0.99 & Heights == "Dist. Height")
-subset(hBoot_MHD1_rtail, DistancePercentile == 0.99 & Heights == "Max. Height")
-subset(hBoot_MHD2_rtail, DistancePercentile == 0.99 & Heights == "Max. Height")
-subset(hBoot_MHD3_rtail, DistancePercentile == 0.99 & Heights == "Dist. Height")
-subset(hBoot_MHD4_rtail, DistancePercentile == 0.99 & Heights == "Dist. Height")
-subset(hBoot_MHD3_rtail, DistancePercentile == 0.99 & Heights == "Max. Height")
-subset(hBoot_MHD4_rtail, DistancePercentile == 0.99 & Heights == "Max. Height")
-
-# 10m maximum/distribution risk ratio with 95% BI
-hBoot_MHD1_ccdfRatio[hBoot_MHD1_ccdfRatio[, 1] == 10, ]
-hBoot_MHD2_ccdfRatio[hBoot_MHD2_ccdfRatio[, 1] == 10, ]
-hBoot_MHD3_ccdfRatio[hBoot_MHD3_ccdfRatio[, 1] == 10, ]
-hBoot_MHD4_ccdfRatio[hBoot_MHD4_ccdfRatio[, 1] == 10, ]
-
-# 50m maximum/distribution risk ratio with 95% BI
-hBoot_MHD1_ccdfRatio[hBoot_MHD1_ccdfRatio[, 1] == 50, ]
-hBoot_MHD2_ccdfRatio[hBoot_MHD2_ccdfRatio[, 1] == 50, ]
-hBoot_MHD3_ccdfRatio[hBoot_MHD3_ccdfRatio[, 1] == 50, ]
-hBoot_MHD4_ccdfRatio[hBoot_MHD4_ccdfRatio[, 1] == 50, ]
-
-
-
-
-
-##### [TS3] Select quantities for max height point source vs height distribution --------------------------
+##### [TS2] Select quantities for max height point source vs overall height distribution ------------------
 
 # Mean dispersal distances with 95% BI
 set.seed(19854)
@@ -432,4 +376,60 @@ hBoot_MPHD1_ccdfRatio[hBoot_MHD1_ccdfRatio[, 1] == 50, ]
 hBoot_MPHD2_ccdfRatio[hBoot_MHD2_ccdfRatio[, 1] == 50, ]
 hBoot_MPHD3_ccdfRatio[hBoot_MHD3_ccdfRatio[, 1] == 50, ]
 hBoot_MPHD4_ccdfRatio[hBoot_MHD4_ccdfRatio[, 1] == 50, ]
+
+
+
+
+
+##### [TS3] Select quantities for max height distribution vs overall height distribution ------------------
+
+# Mean dispersal distances with 95% BI
+set.seed(19854)
+ds.mean(ht_CN_NW$Height, "CN")
+ds.mean(ht_CN_W$Height, "CN")
+ds.mean(ht_CN_NW_max$Max, "CN")
+ds.mean(ht_CN_W_max$Max, "CN")
+ds.mean(ht_CA_NW$Height, "CA")
+ds.mean(ht_CA_W$Height, "CA")
+ds.mean(ht_CA_NW_max$Max, "CA")
+ds.mean(ht_CA_W_max$Max, "CA")
+
+# Bootstrap right tail dispersal percentile distances for M/HD CN and M/HD CA heights
+set.seed(19854)
+hBoot_MHD1_rtail <- ds.rtailBootMHD(ht_CN_NW$Height, ht_CN_NW_max$Max, "CN")
+hBoot_MHD2_rtail <- ds.rtailBootMHD(ht_CN_W$Height, ht_CN_W_max$Max, "CN")
+hBoot_MHD3_rtail <- ds.rtailBootMHD(ht_CA_NW$Height, ht_CA_NW_max$Max, "CA")
+hBoot_MHD4_rtail <- ds.rtailBootMHD(ht_CA_W$Height, ht_CA_W_max$Max, "CA")
+
+# 95th percentile dispersal distances with 95% BI
+subset(hBoot_MHD1_rtail, DistancePercentile == 0.95 & Heights == "Dist. Height")
+subset(hBoot_MHD2_rtail, DistancePercentile == 0.95 & Heights == "Dist. Height")
+subset(hBoot_MHD1_rtail, DistancePercentile == 0.95 & Heights == "Max. Height")
+subset(hBoot_MHD2_rtail, DistancePercentile == 0.95 & Heights == "Max. Height")
+subset(hBoot_MHD3_rtail, DistancePercentile == 0.95 & Heights == "Dist. Height")
+subset(hBoot_MHD4_rtail, DistancePercentile == 0.95 & Heights == "Dist. Height")
+subset(hBoot_MHD3_rtail, DistancePercentile == 0.95 & Heights == "Max. Height")
+subset(hBoot_MHD4_rtail, DistancePercentile == 0.95 & Heights == "Max. Height")
+
+# 99th percentile dispersal distances with 95% BI
+subset(hBoot_MHD1_rtail, DistancePercentile == 0.99 & Heights == "Dist. Height")
+subset(hBoot_MHD2_rtail, DistancePercentile == 0.99 & Heights == "Dist. Height")
+subset(hBoot_MHD1_rtail, DistancePercentile == 0.99 & Heights == "Max. Height")
+subset(hBoot_MHD2_rtail, DistancePercentile == 0.99 & Heights == "Max. Height")
+subset(hBoot_MHD3_rtail, DistancePercentile == 0.99 & Heights == "Dist. Height")
+subset(hBoot_MHD4_rtail, DistancePercentile == 0.99 & Heights == "Dist. Height")
+subset(hBoot_MHD3_rtail, DistancePercentile == 0.99 & Heights == "Max. Height")
+subset(hBoot_MHD4_rtail, DistancePercentile == 0.99 & Heights == "Max. Height")
+
+# 10m maximum/distribution risk ratio with 95% BI
+hBoot_MHD1_ccdfRatio[hBoot_MHD1_ccdfRatio[, 1] == 10, ]
+hBoot_MHD2_ccdfRatio[hBoot_MHD2_ccdfRatio[, 1] == 10, ]
+hBoot_MHD3_ccdfRatio[hBoot_MHD3_ccdfRatio[, 1] == 10, ]
+hBoot_MHD4_ccdfRatio[hBoot_MHD4_ccdfRatio[, 1] == 10, ]
+
+# 50m maximum/distribution risk ratio with 95% BI
+hBoot_MHD1_ccdfRatio[hBoot_MHD1_ccdfRatio[, 1] == 50, ]
+hBoot_MHD2_ccdfRatio[hBoot_MHD2_ccdfRatio[, 1] == 50, ]
+hBoot_MHD3_ccdfRatio[hBoot_MHD3_ccdfRatio[, 1] == 50, ]
+hBoot_MHD4_ccdfRatio[hBoot_MHD4_ccdfRatio[, 1] == 50, ]
 
