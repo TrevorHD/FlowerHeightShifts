@@ -194,13 +194,13 @@ ks.test(ht_CA_NW$Height, ht_CA_W$Height)
 ##### [F2] Estimate warmed vs not warmed PDF (dispersal kernels) ------------------------------------------
 
 # Set seed for RNG, then bootstrap PDFs for NW/W CN and NW/W CA dispersal kernels
-set.seed(18364)
+set.seed(19854)
 hBoot_WNW1_pdf <- ds.pdfBoot(ht_CN_NW$Height, ht_CN_W$Height, "WNW", "CN")
 hBoot_WNW2_pdf <- ds.pdfBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW", "CA")
 
 # Set seed for RNG, then conduct Kolmogorov-Smirnov test for NW/W CN and NW/W CA
 # The NW and W dispersal kernels display significant difference for CN and CA
-set.seed(18364)
+set.seed(19854)
 ds.pdfBoot(ht_CN_NW$Height, ht_CN_W$Height, "WNW", "CN", ks.only = TRUE)
 ds.pdfBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW", "CA", ks.only = TRUE)
 
@@ -211,7 +211,7 @@ ds.pdfBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW", "CA", ks.only = TRUE)
 ##### [F3] Estimate warmed vs not warmed CCDF ratios ------------------------------------------------------
 
 # Set seed for RNG, then bootstrap CCDF ratios for NW/W CN and NW/W CA heights
-set.seed(56284)
+set.seed(19854)
 hBoot_WNW1_CCDFRatio <- ds.ccdfRatioBoot(ht_CN_NW$Height, ht_CN_W$Height, "WNW", "CN")
 hBoot_WNW2_CCDFRatio <- ds.ccdfRatioBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW", "CA")
 
@@ -222,7 +222,7 @@ hBoot_WNW2_CCDFRatio <- ds.ccdfRatioBoot(ht_CA_NW$Height, ht_CA_W$Height, "WNW",
 ##### [F4] Estimate max height vs height distribution PDF (dispersal kernels) -----------------------------
 
 # Set seed for RNG, then bootstrap PDFs for M/HD CN and M/HD CA dispersal kernels
-set.seed(28472)
+set.seed(19854)
 hBoot_MHD1_pdf <- ds.pdfBoot(ht_CN_NW$Height, ht_CN_NW_max$Max, "MHD", "CN")
 hBoot_MHD2_pdf <- ds.pdfBoot(ht_CN_W$Height, ht_CN_W_max$Max, "MHD", "CN")
 hBoot_MHD3_pdf <- ds.pdfBoot(ht_CA_NW$Height, ht_CA_NW_max$Max, "MHD", "CA")
@@ -230,7 +230,7 @@ hBoot_MHD4_pdf <- ds.pdfBoot(ht_CA_W$Height, ht_CA_W_max$Max, "MHD", "CA")
 
 # Set seed for RNG, then conduct Kolmogorov-Smirnov test for NW/W CN and NW/W CA
 # The NW and W dispersal kernels display significant difference for CN and CA
-set.seed(28472)
+set.seed(19854)
 ds.pdfBoot(ht_CN_NW$Height, ht_CN_NW_max$Max, "MHD", "CN", ks.only = TRUE)
 ds.pdfBoot(ht_CN_W$Height, ht_CN_W_max$Max, "MHD", "CN", ks.only = TRUE)
 ds.pdfBoot(ht_CA_NW$Height, ht_CA_NW_max$Max, "MHD", "CA", ks.only = TRUE)
@@ -243,7 +243,7 @@ ds.pdfBoot(ht_CA_W$Height, ht_CA_W_max$Max, "MHD", "CA", ks.only = TRUE)
 ##### [F5] Estimate max height vs height distribution CCDF ratio ------------------------------------------
 
 # Set seed for RNG, then bootstrap CCDF ratios for M/HD CN and M/HD CA dispersal kernels
-set.seed(44492)
+set.seed(19854)
 hBoot_MHD1_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_W$Height, ht_CN_W_max$Max, "MHD", "CN")
 hBoot_MHD2_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_NW$Height, ht_CN_NW_max$Max, "MHD", "CN")
 hBoot_MHD3_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_W$Height, ht_CA_W_max$Max, "MHD", "CA")
@@ -256,7 +256,7 @@ hBoot_MHD4_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_NW$Height, ht_CA_NW_max$Max, "MHD
 ##### [FS2] Estimate max height point source vs height distribution PDF (dispersal kernels) ---------------
 
 # Set seed for RNG, then bootstrap PDFs for M/HD CN and M/HD CA dispersal kernels
-set.seed(28472)
+set.seed(19854)
 hBoot_MPHD1_pdf <- ds.pdfBoot(ht_CN_NW$Height, rep(mean(ht_CN_W_max$Max), 100), "MHD", "CN")
 hBoot_MPHD2_pdf <- ds.pdfBoot(ht_CN_W$Height, rep(mean(ht_CN_W_max$Max), 100), "MHD", "CN")
 hBoot_MPHD3_pdf <- ds.pdfBoot(ht_CA_NW$Height, rep(mean(ht_CA_NW_max$Max), 100), "MHD", "CA")
@@ -264,7 +264,7 @@ hBoot_MPHD4_pdf <- ds.pdfBoot(ht_CA_W$Height, rep(mean(ht_CA_W_max$Max), 100), "
 
 # Set seed for RNG, then conduct Kolmogorov-Smirnov test for NW/W CN and NW/W CA
 # The NW and W dispersal kernels display significant difference for CN and CA
-set.seed(28472)
+set.seed(19854)
 ds.pdfBoot(ht_CN_NW$Height, rep(mean(ht_CN_W_max$Max), 100), "MHD", "CN", ks.only = TRUE)
 ds.pdfBoot(ht_CN_W$Height, rep(mean(ht_CN_W_max$Max), 100), "MHD", "CN", ks.only = TRUE)
 ds.pdfBoot(ht_CA_NW$Height, rep(mean(ht_CA_NW_max$Max), 100), "MHD", "CA", ks.only = TRUE)
@@ -277,7 +277,7 @@ ds.pdfBoot(ht_CA_W$Height, rep(mean(ht_CA_W_max$Max), 100), "MHD", "CA", ks.only
 ##### [FS3] Estimate max height point source vs height distribution CCDF ratio ----------------------------
 
 # Set seed for RNG, then bootstrap CCDF ratios for M/HD CN and M/HD CA dispersal kernels
-set.seed(44492)
+set.seed(19854)
 hBoot_MPHD1_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_W$Height, rep(mean(ht_CN_W_max$Max), 100), "MHD", "CN")
 hBoot_MPHD2_ccdfRatio <- ds.ccdfRatioBoot(ht_CN_NW$Height, rep(mean(ht_CN_NW_max$Max), 100), "MHD", "CN")
 hBoot_MPHD3_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_W$Height, rep(mean(ht_CA_W_max$Max), 100), "MHD", "CA")
@@ -290,14 +290,14 @@ hBoot_MPHD4_ccdfRatio <- ds.ccdfRatioBoot(ht_CA_NW$Height, rep(mean(ht_CA_NW_max
 ##### [TS1] Select quantities for warmed vs unwarmed treatments --------------------------------------------
 
 # Mean dispersal distances with 95% BI
-set.seed(18364)
+set.seed(19854)
 ds.mean(ht_CN_NW$Height, "CN")
 ds.mean(ht_CN_W$Height, "CN")
 ds.mean(ht_CA_NW$Height, "CA")
 ds.mean(ht_CA_W$Height, "CA")
 
 # Bootstrap right tail dispersal percentile distances for NW/W CN and NW/W CA heights
-set.seed(70472)
+set.seed(19854)
 hboot_WNW1_rtail <- ds.rtailBootWNW(ht_CN_NW$Height, ht_CN_W$Height, "CN")
 hboot_WNW2_rtail <- ds.rtailBootWNW(ht_CA_NW$Height, ht_CA_W$Height, "CA")
 
@@ -328,7 +328,7 @@ hBoot_WNW2_CCDFRatio[hBoot_WNW1_CCDFRatio[, 1] == 50, ]
 ##### [TS2] Select quantities for max height vs height distribution ----------------------------------------
 
 # Mean dispersal distances with 95% BI
-set.seed(28472)
+set.seed(19854)
 ds.mean(ht_CN_NW$Height, "CN")
 ds.mean(ht_CN_W$Height, "CN")
 ds.mean(ht_CN_NW_max$Max, "CN")
@@ -339,7 +339,7 @@ ds.mean(ht_CA_NW_max$Max, "CA")
 ds.mean(ht_CA_W_max$Max, "CA")
 
 # Bootstrap right tail dispersal percentile distances for M/HD CN and M/HD CA heights
-set.seed(91748)
+set.seed(19854)
 hBoot_MHD1_rtail <- ds.rtailBootMHD(ht_CN_NW$Height, ht_CN_NW_max$Max, "CN")
 hBoot_MHD2_rtail <- ds.rtailBootMHD(ht_CN_W$Height, ht_CN_W_max$Max, "CN")
 hBoot_MHD3_rtail <- ds.rtailBootMHD(ht_CA_NW$Height, ht_CA_NW_max$Max, "CA")
@@ -384,7 +384,7 @@ hBoot_MHD4_ccdfRatio[hBoot_MHD4_ccdfRatio[, 1] == 50, ]
 ##### [TS3] Select quantities for max height point source vs height distribution --------------------------
 
 # Mean dispersal distances with 95% BI
-set.seed(28472)
+set.seed(19854)
 ds.mean(ht_CN_NW$Height, "CN")
 ds.mean(ht_CN_W$Height, "CN")
 ds.mean(rep(mean(ht_CN_NW_max$Max), 100), "CN")
@@ -395,7 +395,7 @@ ds.mean(rep(mean(ht_CA_NW_max$Max), 100), "CA")
 ds.mean(rep(mean(ht_CA_W_max$Max), 100), "CA")
 
 # Bootstrap right tail dispersal percentile distances for M/HD CN and M/HD CA heights
-set.seed(91748)
+set.seed(19854)
 hBoot_MPHD1_rtail <- ds.rtailBootMHD(ht_CN_NW$Height, rep(mean(ht_CN_NW_max$Max), 100), "CN")
 hBoot_MPHD2_rtail <- ds.rtailBootMHD(ht_CN_W$Height, rep(mean(ht_CN_W_max$Max), 100), "CN")
 hBoot_MPHD3_rtail <- ds.rtailBootMHD(ht_CA_NW$Height, rep(mean(ht_CA_NW_max$Max), 100), "CA")
