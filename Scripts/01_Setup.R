@@ -278,7 +278,7 @@ ds.mean <- function(h, species){
 
 # Function to bootstrap dispersal kernels and estimate 95% bootstrap interval
 # For each kernel sample 100 release heights with 100 seed releases each, and repeat 1000 times
-# K-S test compares two kernels constructed from 1 million seed releases each
+# K-S test compares two kernels constructed from 10 million seed releases each
 ds.pdfBoot <- function(h1, h2, type, species, ks.only = FALSE){
   if(ks.only == FALSE){
     hBoot_1 <- data.frame(replicate(1000, ds.pdf(h1, species), simplify = "matrix"))
