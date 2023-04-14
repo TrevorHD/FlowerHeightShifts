@@ -211,19 +211,25 @@ cstarwmax <- wv.cStar(wv.dMatrix(vw), msMat, rep(mean(ht_CN_W_max$Max), 100), "C
 cstarwD <- wv.cStar(wv.dMatrix(vc), msMat, ht_CN_W$Height, "CN")
 cstarwmaxD <- wv.cStar(wv.dMatrix(vc), msMat, rep(mean(ht_CN_W_max$Max), 100), "CN")
 
+
+
+
+
+##### [TS2] Select quantities for max height distribution vs overall height distribution ------------------
+
 # Get mean and median wavespeeds
 median(cstarc); mean(cstarc)
-median(cstarw); mean(cstarw)
 median(cstarcmax); mean(cstarcmax)
-median(cstarwmax); mean(cstarwmax)
 median(cstarwD); mean(cstarwD)
 median(cstarwmaxD); mean(cstarwmaxD)
+median(cstarw); mean(cstarw)
+median(cstarwmax); mean(cstarwmax)
 
 # Get upper/lower 95% bootstrap interval
 quantile(cstarc, c(0.025, 0.975))
-quantile(cstarw, c(0.025, 0.975))
 quantile(cstarcmax, c(0.025, 0.975))
-quantile(cstarwmax, c(0.025, 0.975))
 quantile(cstarwD, c(0.025, 0.975))
 quantile(cstarwmaxD, c(0.025, 0.975))
+quantile(cstarw, c(0.025, 0.975))
+quantile(cstarwmax, c(0.025, 0.975))
 
