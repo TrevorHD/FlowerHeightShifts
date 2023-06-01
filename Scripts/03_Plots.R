@@ -35,9 +35,9 @@ grid.segments(x0 = rep(0.806, 2), y0 = c(0.918, 0.885), x1 = rep(0.826, 2), y1 =
 # Create figure labels
 grid.text(label = c(expression(italic("C. nutans")), expression(italic("C. acanthoides"))),
           x = rep(0.096, 2), y = c(0.918, 0.471), hjust = 0, gp = gpar(cex = 0.5))
-popViewport()
 
 # Deactivate grid layout; finalise graphics save
+popViewport()
 dev.off()
 
 
@@ -81,9 +81,9 @@ grid.segments(x0 = rep(0.806, 2), y0 = c(0.918, 0.885), x1 = rep(0.826, 2), y1 =
 # Create figure labels
 grid.text(label = c(expression(italic("C. nutans")), expression(italic("C. acanthoides"))),
           x = rep(0.096, 2), y = c(0.918, 0.471), hjust = 0, gp = gpar(cex = 0.5))
-popViewport()
 
 # Deactivate grid layout; finalise graphics save
+popViewport()
 dev.off()
 
 
@@ -185,9 +185,9 @@ grid.text(label = c(expression(italic("C. nutans,") ~ "unwarmed"),
                     expression(italic("C. acanthoides,") ~ "warmed")), 
           x = rep(0.096, 4), y = c(0.957, 0.725, 0.475, 0.234),
           hjust = 0, gp = gpar(cex = 0.5))
-popViewport()
 
 # Deactivate grid layout; finalise graphics save
+popViewport()
 dev.off()
 
 
