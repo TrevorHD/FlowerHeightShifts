@@ -20,6 +20,31 @@ Climate change may significantly alter how organisms disperse, with implications
 
 **Weather2** *(.csv)* -  Weather data from the study site, with wind speeds used to model seed dispersal.
 
+## Figures
+
+**Figure 1** *(.tif)* - Distribution of observed flower head heights for warmed/unwarmed *C. nutans* and *C. acanthoides*, with histograms.
+
+**Figure 2** *(.tif)* - Dispersal kernels for warmed/unwarmed *C. nutans* and *C. acanthoides*, with bootstrap intervals.
+
+**Figure 3** *(.tif)* - Relative risk of a seed exceeding a given distance for warmed maternal plants relative to unwarmed maternal plants.
+
+**Figure 4** *(.tif)* - Relative risk of a seed exceeding a given distance for max height dispersal simulations relative to distributed height dispersal simulations.
+
+**Figure S1** *(.tif)* - Distribution of observed flower head heights for warmed/unwarmed *C. nutans* and *C. acanthoides*, with bootstrap intervals.
+
+**Figure S2** *(.tif)* - Dispersal kernels for warmed/unwarmed x distributed/max height for *C. nutans* and *C. acanthoides*, with bootstrap intervals.
+
+
+## Media
+
+**Presentation** *(.pptx)* - A PowerPoint presentation (for ESA 2021) regarding this research.
+
+**Presentation** *(.pdf)* - A PDF version of the above PowerPoint slides.
+
+**Transcript** *(.docx)* - A transcript of the recorded presentation in docx format.
+
+**Transcript** *(.pdf)* - A transcript of the recorded presentation in PDF format.
+
 ## Scripts
 
 **01_Setup** *(.R)* - Code used to load in data and define functions for analysis and plotting.
@@ -32,17 +57,7 @@ Climate change may significantly alter how organisms disperse, with implications
 
 **S1_Extras** *(.R)* - Supplementary code not used in the main analyses.
 
-## Media
-
-**Presentation** *(.pptx)* - A PowerPoint presentation (for ESA 2021) regarding this research.
-
-**Presentation** *(.pdf)* - A PDF version of the above PowerPoint slides.
-
-**Transcript** *(.docx)* - A transcript of the recorded presentation in docx format.
-
-**Transcript** *(.pdf)* - A transcript of the recorded presentation in PDF format.
-
-## Writing
+## Other
 
 **WarmingHeightsMS_v11_Ecology** *(.docx)* - Latest version of the manuscript for this research, submitted to *Ecology*.
 
